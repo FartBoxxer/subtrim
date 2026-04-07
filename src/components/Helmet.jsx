@@ -31,3 +31,15 @@ export function Helmet({ title, description }){
   },[title,description]);
   return null;
 }
+
+export function JsonLd({ data }){
+  useEffect(()=>{
+    const script=document.createElement('script');
+    script.type='application/ld+json';
+    script.textContent=JSON.stringify(data);
+    script.setAttribute('data-jsonld','dynamic');
+    document.head.appendChild(script);
+    return()=>{script.remove()};
+  },[data]);
+  return null;
+}

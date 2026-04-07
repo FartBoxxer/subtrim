@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { TIERS, SERVICE_CATS, CATS, COMPARE_PAIRS } from '../data/serviceData';
 import { CANCEL_GUIDES } from '../data/cancelGuides';
 import { COMPARE_DATA } from '../data/compareData';
-import { Helmet } from '../components/Helmet';
+import { Helmet, JsonLd } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 const B={border:"none",borderRadius:10,padding:"10px 18px",cursor:"pointer",fontSize:13,fontWeight:600,fontFamily:"inherit",transition:"all 0.15s"};
@@ -43,6 +43,14 @@ export default function CompareIndex(){
       title="Compare Subscriptions Side by Side | SubTrim"
       description="Compare any two subscriptions side by side. See plans, pricing, features, pros & cons to decide which to keep."
     />
+    <JsonLd data={{
+      "@context":"https://schema.org","@type":"WebApplication",
+      name:"SubTrim Compare Tool",
+      url:"https://subtrim.dev/compare",
+      applicationCategory:"UtilityApplication",
+      description:"Compare any two subscriptions side by side — plans, pricing, features, pros and cons.",
+      offers:{"@type":"Offer",price:"0",priceCurrency:"USD"}
+    }}/>
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:1000,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>
       <div style={{display:"flex",gap:12,alignItems:"center"}}>
@@ -90,7 +98,7 @@ export default function CompareIndex(){
       {/* Results */}
       {bothPicked&&<>
         {/* Price cards */}
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:28}}>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:16,marginBottom:28}}>
           {[[pickA,tiersA,catA,cheapA],[pickB,tiersB,catB,cheapB]].map(([name,tiers,info,cheap],idx)=>(
             <div key={idx} style={{background:SF,borderRadius:16,padding:24}}>
               <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:16}}>
@@ -124,7 +132,8 @@ export default function CompareIndex(){
         {/* Stats table */}
         <div style={{background:SF,borderRadius:16,padding:24,marginBottom:28}}>
           <h2 style={{fontSize:17,fontWeight:700,margin:"0 0 14px"}}>Quick Comparison</h2>
-          <table style={{width:"100%",borderCollapse:"collapse",fontSize:14}}>
+          <div style={{overflowX:"auto",WebkitOverflowScrolling:"touch"}}>
+          <table style={{width:"100%",borderCollapse:"collapse",fontSize:14,minWidth:480}}>
             <thead><tr style={{borderBottom:`1px solid ${EL}`}}>
               <th style={{textAlign:"left",padding:"10px 0",color:MT,fontWeight:500}}></th>
               <th style={{textAlign:"center",padding:"10px 0",fontWeight:600}}>{pickA}</th>
@@ -170,13 +179,15 @@ export default function CompareIndex(){
               ))}
             </tbody>
           </table>
+          </div>
         </div>
 
         {/* Feature comparison */}
         {allFeatures.length>0&&(
           <div style={{background:SF,borderRadius:16,padding:24,marginBottom:28}}>
             <h2 style={{fontSize:17,fontWeight:700,margin:"0 0 14px"}}>Feature Comparison</h2>
-            <table style={{width:"100%",borderCollapse:"collapse",fontSize:14}}>
+            <div style={{overflowX:"auto",WebkitOverflowScrolling:"touch"}}>
+            <table style={{width:"100%",borderCollapse:"collapse",fontSize:14,minWidth:480}}>
               <thead><tr style={{borderBottom:`1px solid ${EL}`}}>
                 <th style={{textAlign:"left",padding:"10px 0",color:MT,fontWeight:500}}>Feature</th>
                 <th style={{textAlign:"center",padding:"10px 0",fontWeight:600,width:80}}>{pickA}</th>
@@ -194,12 +205,13 @@ export default function CompareIndex(){
                 })}
               </tbody>
             </table>
+            </div>
           </div>
         )}
 
         {/* Pros & Cons */}
         {(dataA?.pros||dataB?.pros)&&(
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:28}}>
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:16,marginBottom:28}}>
             {[{name:pickA,data:dataA,info:catA},{name:pickB,data:dataB,info:catB}].map(({name,data,info},idx)=>(
               <div key={idx} style={{background:SF,borderRadius:16,padding:20}}>
                 <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>

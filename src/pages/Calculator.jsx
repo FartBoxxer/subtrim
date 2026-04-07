@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Helmet } from '../components/Helmet';
+import { Helmet, JsonLd } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 const fm=n=>'$'+Number(n).toFixed(2);
@@ -43,6 +43,14 @@ export default function Calculator(){
       title="Subscription Cost Calculator — How Much Do You Spend? | SubTrim"
       description="Calculate your total monthly and yearly subscription spending. Add your services to see the real cost of your subscriptions."
     />
+    <JsonLd data={{
+      "@context":"https://schema.org","@type":"WebApplication",
+      name:"Subscription Cost Calculator",
+      url:"https://subtrim.dev/calculator",
+      applicationCategory:"FinanceApplication",
+      description:"Calculate your total monthly and yearly subscription spending. See what your subscriptions really cost.",
+      offers:{"@type":"Offer",price:"0",priceCurrency:"USD"}
+    }}/>
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:900,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>
       <Link to="/app" style={{background:G,color:"#000",border:"none",borderRadius:10,padding:"10px 22px",fontSize:14,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Track for Free</Link>

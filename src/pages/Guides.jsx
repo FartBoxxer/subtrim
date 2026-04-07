@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { CANCEL_GUIDES } from '../data/cancelGuides';
-import { Helmet } from '../components/Helmet';
+import { Helmet, JsonLd } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 const B={border:"none",borderRadius:10,padding:"10px 18px",cursor:"pointer",fontSize:13,fontWeight:600,fontFamily:"inherit",transition:"all 0.15s"};
@@ -30,6 +30,13 @@ export default function GuidesIndex(){
       title="Cancellation Guides — How to Cancel Any Subscription | SubTrim"
       description={`Step-by-step cancellation guides for ${guides.length}+ subscriptions. Find out how to cancel Netflix, Spotify, Adobe, Planet Fitness, and more.`}
     />
+    <JsonLd data={{
+      "@context":"https://schema.org","@type":"ItemList",
+      name:"Subscription Cancellation Guides",
+      description:`Step-by-step guides for cancelling ${guides.length}+ popular subscriptions.`,
+      numberOfItems:guides.length,
+      itemListElement:guides.slice(0,20).map((g,i)=>({"@type":"ListItem",position:i+1,url:`https://subtrim.dev/guides/cancel/${g.slug}`,name:`How to Cancel ${g.name}`}))
+    }}/>
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:1000,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>
       <Link to="/app" style={{background:G,color:"#000",border:"none",borderRadius:10,padding:"10px 22px",fontSize:14,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Try SubTrim Free</Link>

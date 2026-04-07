@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { createClient } from '@supabase/supabase-js';
-import html2canvas from 'html2canvas';
+// html2canvas loaded dynamically when needed (large dep)
 import { CANCEL_GUIDES } from './data/cancelGuides';
 
 let supabase = null;
@@ -450,7 +450,7 @@ export default function App(){
   const getDowngrade=(name,cost)=>{const tiers=TIERS[name];if(!tiers)return null;const sorted=[...tiers].sort((a,b)=>a.p-b.p);const cheaper=sorted.filter(tr=>tr.p<cost);if(!cheaper.length)return null;const best=cheaper[cheaper.length-1];return{name:best.n,price:best.p,save:cost-best.p}};
 
   // Export audit report as image
-  const exportReport=async()=>{if(!reportRef.current)return;try{const canvas=await html2canvas(reportRef.current,{backgroundColor:'#0d0d0d',scale:2,useCORS:true});canvas.toBlob(blob=>{if(!blob)return;if(navigator.share&&navigator.canShare){navigator.share({files:[new File([blob],'subtrim-audit.png',{type:'image/png'})],title:'My SubTrim Audit'}).catch(()=>{})}else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='subtrim-audit.png';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}},'image/png')}catch{notify('Failed to export report')}};
+  const exportReport=async()=>{if(!reportRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(reportRef.current,{backgroundColor:'#0d0d0d',scale:2,useCORS:true});canvas.toBlob(blob=>{if(!blob)return;if(navigator.share&&navigator.canShare){navigator.share({files:[new File([blob],'subtrim-audit.png',{type:'image/png'})],title:'My SubTrim Audit'}).catch(()=>{})}else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='subtrim-audit.png';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}},'image/png')}catch{notify('Failed to export report')}};
 
   const simSave=Object.entries(simT).filter(([,v])=>v).reduce((a,[id])=>{const s=act.find(x=>x.id===id);return a+(s?s.cost:0)},0);
   const sorted=[...reg].sort((a,b)=>sort==="cost"?b.cost-a.cost:sort==="category"?a.cat.localeCompare(b.cat):dU(a.renewal)-dU(b.renewal));

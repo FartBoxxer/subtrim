@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { CANCEL_GUIDES } from '../data/cancelGuides';
-import { Helmet } from '../components/Helmet';
+import { Helmet, JsonLd } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 
@@ -32,6 +32,14 @@ export default function CancelGuide(){
       title={`How to Cancel ${name} (${new Date().getFullYear()}) — Step-by-Step Guide | SubTrim`}
       description={`Cancel your ${name} subscription in ${guide.steps.length} easy steps. ${guide.difficulty==='easy'?'Takes under 2 minutes.':guide.difficulty==='medium'?'Takes about 5 minutes.':'May require contacting support.'}`}
     />
+    <JsonLd data={{
+      "@context":"https://schema.org","@type":"HowTo",
+      name:`How to Cancel ${name}`,
+      description:`Step-by-step guide to cancel your ${name} subscription.`,
+      totalTime:guide.difficulty==='easy'?'PT2M':guide.difficulty==='medium'?'PT5M':'PT15M',
+      step:guide.steps.map((s,i)=>({"@type":"HowToStep",position:i+1,text:s})),
+      ...(guide.url?{url:guide.url}:{})
+    }}/>
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:800,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>
       <Link to="/app" style={{background:G,color:"#000",border:"none",borderRadius:10,padding:"10px 22px",fontSize:14,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Try SubTrim Free</Link>
