@@ -41,7 +41,7 @@ export default function Calculator(){
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
       title="Subscription Cost Calculator — How Much Do You Spend? | SubTrim"
-      description="Calculate your total monthly and yearly subscription spending. Add your services to see the real cost of your subscriptions."
+      description="Add up all your subscriptions and see what you're really spending each month and year. The total is probably worse than you think."
     />
     <JsonLd data={{
       "@context":"https://schema.org","@type":"WebApplication",
@@ -59,7 +59,7 @@ export default function Calculator(){
     <div style={{maxWidth:800,margin:"0 auto",padding:"40px 24px 80px"}}>
       <div style={{marginBottom:36}}>
         <h1 style={{fontSize:32,fontWeight:800,lineHeight:1.2,margin:"0 0 8px"}}>Subscription Cost Calculator</h1>
-        <p style={{fontSize:16,color:MT,margin:0,lineHeight:1.5}}>Select your subscriptions to see what you're really spending each month and year.</p>
+        <p style={{fontSize:16,color:MT,margin:0,lineHeight:1.5}}>Tap the ones you pay for. The total might surprise you.</p>
       </div>
 
       {/* Total display */}
@@ -126,9 +126,9 @@ export default function Calculator(){
         <div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:14,padding:20,marginBottom:32}}>
           <div style={{fontSize:15,fontWeight:700,color:G,marginBottom:4}}>💡 Insight</div>
           <p style={{fontSize:14,color:MT,lineHeight:1.5,margin:0}}>
-            You spend {fm(annual)} per year on {items.length} subscriptions.
-            That's {fm(annual/52)} per week, or the equivalent of {Math.round(annual/5)} cups of coffee.
-            {monthly>100?' Consider running a usage audit to find potential savings.':''}
+            {fm(annual)}/year on {items.length} subscriptions.
+            That's {fm(annual/52)} every week — or about {Math.round(annual/5)} cups of coffee a year.
+            {monthly>100?" Might be worth running an audit to see what's actually pulling its weight.":''}
           </p>
         </div>
       )}
@@ -136,8 +136,8 @@ export default function Calculator(){
       {/* CTA */}
       <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center"}}>
         <div style={{fontSize:28,marginBottom:8}}>✂️</div>
-        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Want to Actually Cut Costs?</h3>
-        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>SubTrim goes beyond tracking — it audits your usage, finds overlaps, and recommends exactly what to keep, cancel, or downgrade.</p>
+        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Now what?</h3>
+        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>Knowing the total is step one. SubTrim looks at which ones you actually use and tells you where to cut. Takes about 3 minutes.</p>
         <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free</Link>
       </div>
     </div>

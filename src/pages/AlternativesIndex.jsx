@@ -13,7 +13,7 @@ export default function AlternativesIndex(){
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
       title="Find Cheaper Alternatives to Any Subscription | SubTrim"
-      description="Browse alternatives to popular subscriptions. Find cheaper or better options for Netflix, Spotify, ChatGPT, Adobe, and more."
+      description="Spending too much on a subscription? We found cheaper options for Netflix, Spotify, ChatGPT, Adobe, and more."
     />
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:1000,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>
@@ -28,7 +28,7 @@ export default function AlternativesIndex(){
       <div style={{textAlign:"center",marginBottom:40}}>
         <div style={{fontSize:40,marginBottom:12}}>🔄</div>
         <h1 style={{fontSize:32,fontWeight:800,margin:"0 0 8px"}}>Find Cheaper Alternatives</h1>
-        <p style={{fontSize:16,color:MT,margin:0,lineHeight:1.5}}>Paying too much? See what else is out there — ranked by price, features, and value.</p>
+        <p style={{fontSize:16,color:MT,margin:0,lineHeight:1.5}}>Spending too much on something? There's probably a cheaper option. Here's what we found.</p>
       </div>
 
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(280px,1fr))",gap:16}}>
@@ -58,8 +58,8 @@ export default function AlternativesIndex(){
       {/* CTA */}
       <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center",marginTop:40}}>
         <div style={{fontSize:28,marginBottom:8}}>✂️</div>
-        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Track All Your Subscriptions</h3>
-        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>SubTrim audits every subscription, finds overlaps, and tells you exactly what to keep — for free.</p>
+        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Want the full picture?</h3>
+        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>Add all your subs to SubTrim and we'll find the overlaps, flag what you're not using, and help you cut the fat.</p>
         <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free</Link>
       </div>
     </div>

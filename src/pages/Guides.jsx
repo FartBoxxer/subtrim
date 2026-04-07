@@ -51,7 +51,7 @@ export default function GuidesIndex(){
           <span style={{color:TX}}>Cancellation Guides</span>
         </div>
         <h1 style={{fontSize:32,fontWeight:800,lineHeight:1.2,margin:"0 0 8px"}}>How to Cancel Any Subscription</h1>
-        <p style={{fontSize:16,color:MT,margin:"0 0 24px",lineHeight:1.5}}>Step-by-step guides for {guides.length}+ services. No more hunting through settings menus.</p>
+        <p style={{fontSize:16,color:MT,margin:"0 0 24px",lineHeight:1.5}}>{guides.length}+ services. We found the cancel buttons so you don't have to dig through 8 menus.</p>
 
         {/* Stats bar */}
         <div style={{display:"flex",gap:16,flexWrap:"wrap",marginBottom:24}}>
@@ -105,7 +105,7 @@ export default function GuidesIndex(){
       <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center",marginTop:40}}>
         <div style={{fontSize:28,marginBottom:8}}>✂️</div>
         <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Track What You Keep</h3>
-        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>After you cancel what you don't need, use SubTrim to track and optimize what's left.</p>
+        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>Done cancelling? Add what's left to SubTrim and make sure you're not overpaying on the rest.</p>
         <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free</Link>
       </div>
     </div>

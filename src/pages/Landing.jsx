@@ -131,12 +131,12 @@ export default function Landing(){
     <section style={{maxWidth:1000,margin:"0 auto",padding:"40px 24px 80px"}}>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:20}}>
         {[
-          {e:"📊",t:"Usage Audit",d:"3 questions per subscription. Get instant keep, cancel, or downgrade recommendations based on how you actually use each service."},
-          {e:"🔍",t:"Overlap Detector",d:"Flags when you're paying for multiple services that do the same thing — like two music streamers or three cloud storage plans."},
-          {e:"💰",t:"Promo Aggregator",d:"Real-time deals and discounts for your subscriptions. Never miss a price drop or a better plan."},
-          {e:"📅",t:"Renewal Calendar",d:"See every upcoming charge at a glance. No more surprise renewals."},
-          {e:"🏠",t:"Household Sharing",d:"Track shared subscriptions with family or roommates. See who's paying for what."},
-          {e:"📈",t:"SubScore",d:"One number (0-100) that tracks your subscription efficiency over time. Gamified optimization."},
+          {e:"📊",t:"Usage Audit",d:"Answer 3 quick questions per sub and we'll tell you what to keep, cancel, or downgrade. No guesswork."},
+          {e:"🔍",t:"Overlap Detector",d:"Paying for two music streamers? Three cloud storage plans? We'll catch it."},
+          {e:"💰",t:"Promo Aggregator",d:"Active deals and discounts for stuff you already pay for. We pull them so you don't have to Google it."},
+          {e:"📅",t:"Renewal Calendar",d:"See what's charging you next and when. No more \"wait, when did I get billed for that?\""},
+          {e:"🏠",t:"Household Sharing",d:"Split tracking with roommates or family. See who's paying for what across the house."},
+          {e:"📈",t:"SubScore",d:"A single 0–100 score for how well you're managing your subs. Basically a credit score, but for subscriptions."},
         ].map((f,i)=>(
           <div key={i} style={{background:SF,borderRadius:16,padding:28}}>
             <div style={{fontSize:28,marginBottom:12}}>{f.e}</div>
@@ -153,9 +153,9 @@ export default function Landing(){
         <h2 style={{fontSize:28,fontWeight:800,marginBottom:40}}>How It Works</h2>
         <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(200px,1fr))",gap:32}}>
           {[
-            {n:"1",t:"Add Your Subs",d:"Pick from 75+ known services or add custom ones."},
-            {n:"2",t:"Run the Audit",d:"Answer 3 quick questions per subscription."},
-            {n:"3",t:"Get Results",d:"See exactly what to keep, cancel, or downgrade — and how much you'll save."},
+            {n:"1",t:"Add Your Subs",d:"Pick from 75+ services or add your own. Takes about a minute."},
+            {n:"2",t:"Run the Audit",d:"3 questions per sub. How often do you use it? Would you miss it? That kind of thing."},
+            {n:"3",t:"See What to Cut",d:"We crunch the numbers and tell you what's worth keeping and what's dead weight."},
           ].map((s,i)=>(
             <div key={i}>
               <div style={{width:48,height:48,borderRadius:"50%",background:G+"22",color:G,display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,fontWeight:800,margin:"0 auto 14px"}}>{s.n}</div>
@@ -172,9 +172,9 @@ export default function Landing(){
       <h2 style={{fontSize:24,fontWeight:800,textAlign:"center",marginBottom:32}}>Why SubTrim?</h2>
       <div style={{display:"flex",flexDirection:"column",gap:20}}>
         {[
-          {q:"Don't apps like Rocket Money already do this?",a:"They track subscriptions. We analyze them. SubTrim tells you exactly what to keep, cancel, or downgrade based on your actual usage — something no other tool does."},
-          {q:"Is this actually free?",a:"Yes. SubTrim is completely free to use. No premium upsell, no hidden fees, no percentage of your savings taken."},
-          {q:"How is this different from a spreadsheet?",a:"A spreadsheet can't detect overlapping services, run a usage audit, find cheaper alternatives, or calculate your optimization score. SubTrim does all of that in under 3 minutes."},
+          {q:"Don't apps like Rocket Money already do this?",a:"Rocket Money tells you what you're subscribed to. Cool. SubTrim tells you which ones are actually worth keeping — based on how much you use them, not just that they exist."},
+          {q:"Is this actually free?",a:"Yep. Fully free. We don't take a cut of your savings, there's no premium tier, and we're not going to upsell you on anything."},
+          {q:"How is this different from a spreadsheet?",a:"Your spreadsheet doesn't know you're paying for Spotify AND Apple Music. It can't tell you that you haven't opened Hulu in 3 months. SubTrim can — and it takes about 3 minutes to set up."},
         ].map((item,i)=>(
           <div key={i} style={{background:SF,borderRadius:14,padding:"24px 28px"}}>
             <div style={{fontSize:15,fontWeight:700,marginBottom:8,color:TX}}>{item.q}</div>
@@ -188,10 +188,10 @@ export default function Landing(){
     <section style={{padding:"48px 24px",borderTop:"1px solid #1a1a1a",borderBottom:"1px solid #1a1a1a"}}>
       <div style={{maxWidth:900,margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:24,textAlign:"center"}}>
         {[
-          {v:"$273",l:"avg monthly spend",s:"per American on subscriptions"},
-          {v:"12+",l:"avg subscriptions",s:"per household in 2026"},
-          {v:"$86",l:"avg annual waste",s:"on unused or forgotten services"},
-          {v:"3 min",l:"to find savings",s:"with SubTrim's audit tool"},
+          {v:"$273",l:"avg monthly spend",s:"per American household"},
+          {v:"12+",l:"subscriptions",s:"per household on average"},
+          {v:"$86",l:"wasted per year",s:"on stuff people forget they have"},
+          {v:"3 min",l:"to run an audit",s:"and find out what to cut"},
         ].map((s,i)=>(
           <div key={i}>
             <div style={{fontSize:32,fontWeight:800,color:G}}>{s.v}</div>
@@ -205,13 +205,13 @@ export default function Landing(){
     {/* Tools — clean CTA cards */}
     <section style={{maxWidth:1000,margin:"0 auto",padding:"64px 24px"}}>
       <h2 style={{fontSize:24,fontWeight:800,textAlign:"center",marginBottom:8}}>Free Tools</h2>
-      <p style={{fontSize:14,color:MT,textAlign:"center",marginBottom:32}}>Everything you need to take control of your subscriptions.</p>
+      <p style={{fontSize:14,color:MT,textAlign:"center",marginBottom:32}}>Stuff that's actually useful. No account needed for these.</p>
       <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:16}}>
         {[
-          {e:"📖",t:"Cancellation Guides",d:"Step-by-step instructions for 50+ services. Never get stuck in a cancellation maze again.",to:"/guides",btn:"Browse Guides"},
-          {e:"⚖️",t:"Compare Services",d:"Side-by-side pricing, features, and pros & cons for any two subscriptions.",to:"/compare",btn:"Compare Now"},
-          {e:"🔄",t:"Find Alternatives",d:"Paying too much? Discover cheaper options ranked by price and features.",to:"/alternatives",btn:"Find Alternatives"},
-          {e:"🧮",t:"Cost Calculator",d:"Add up your subscriptions to see the real monthly and annual total.",to:"/calculator",btn:"Calculate Costs"},
+          {e:"📖",t:"Cancellation Guides",d:"50+ services with actual step-by-step instructions. Because some of these companies really don't want you to leave.",to:"/guides",btn:"Browse Guides"},
+          {e:"⚖️",t:"Compare Services",d:"Trying to pick between two services? We break down the pricing, features, and trade-offs so you can stop overthinking it.",to:"/compare",btn:"Compare Now"},
+          {e:"🔄",t:"Find Alternatives",d:"Spending too much on something? There's probably a cheaper option that does the same thing.",to:"/alternatives",btn:"Find Alternatives"},
+          {e:"🧮",t:"Cost Calculator",d:"Add up all your subscriptions. The total is probably worse than you think.",to:"/calculator",btn:"Calculate Costs"},
         ].map((c,i)=>(
           <div key={i} style={{background:SF,borderRadius:16,padding:28,display:"flex",flexDirection:"column"}}>
             <div style={{fontSize:28,marginBottom:12}}>{c.e}</div>
@@ -237,8 +237,8 @@ export default function Landing(){
     <section style={{padding:"72px 24px",textAlign:"center"}}>
       <div style={{maxWidth:560,margin:"0 auto"}}>
         <div style={{fontSize:48,marginBottom:16}}>✂️</div>
-        <h2 style={{fontSize:28,fontWeight:800,lineHeight:1.3,marginBottom:12}}>Stop Overpaying for Subscriptions</h2>
-        <p style={{fontSize:16,color:MT,lineHeight:1.6,marginBottom:28}}>Join thousands of people who use SubTrim to audit their subscriptions, find savings, and take control of recurring costs.</p>
+        <h2 style={{fontSize:28,fontWeight:800,lineHeight:1.3,marginBottom:12}}>You're probably paying for something you don't use</h2>
+        <p style={{fontSize:16,color:MT,lineHeight:1.6,marginBottom:28}}>Most people are. SubTrim finds it, tells you about it, and helps you decide what to do about it. Takes a few minutes.</p>
         <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 40px",textDecoration:"none",display:"inline-block",borderRadius:12}}>Get Started — It's Free</Link>
       </div>
     </section>
@@ -248,8 +248,8 @@ export default function Landing(){
       <div style={{maxWidth:520,margin:"0 auto"}}>
         <div style={{textAlign:"center",marginBottom:32}}>
           <div style={{fontSize:28,marginBottom:8}}>💬</div>
-          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 8px"}}>Get in Touch</h2>
-          <p style={{fontSize:14,color:MT,margin:0,lineHeight:1.5}}>Questions, feedback, or just want to say hi? We'd love to hear from you.</p>
+          <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 8px"}}>Say Hi</h2>
+          <p style={{fontSize:14,color:MT,margin:0,lineHeight:1.5}}>Bug report, feature idea, or just want to chat — we read everything.</p>
         </div>
         {cfStatus==='sent'?(
           <div style={{textAlign:"center",background:G+"11",border:`1px solid ${G}33`,borderRadius:14,padding:32}}>

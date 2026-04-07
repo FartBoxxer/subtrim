@@ -8,7 +8,7 @@ export default function NotFound(){
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif",display:"flex",flexDirection:"column"}}>
     <Helmet
       title="Page Not Found | SubTrim"
-      description="The page you're looking for doesn't exist. Head back to SubTrim to track, audit, and optimize your subscriptions."
+      description="This page doesn't exist. Head back to SubTrim to audit your subscriptions and find savings."
     />
 
     {/* Nav */}
@@ -28,7 +28,7 @@ export default function NotFound(){
         <div style={{fontSize:14,fontWeight:700,color:G,letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>404</div>
         <h1 style={{fontSize:32,fontWeight:800,margin:"0 0 12px",lineHeight:1.2}}>Page Not Found</h1>
         <p style={{fontSize:16,color:MT,margin:"0 0 36px",lineHeight:1.6}}>
-          Looks like this subscription got cancelled. The page you're looking for doesn't exist or has been moved.
+          Looks like this page got cancelled. It either doesn't exist or it moved somewhere else.
         </p>
 
         <div style={{display:"flex",flexDirection:"column",gap:12,alignItems:"center"}}>

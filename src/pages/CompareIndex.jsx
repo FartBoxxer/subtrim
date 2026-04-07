@@ -41,7 +41,7 @@ export default function CompareIndex(){
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
       title="Compare Subscriptions Side by Side | SubTrim"
-      description="Compare any two subscriptions side by side. See plans, pricing, features, pros & cons to decide which to keep."
+      description="Pick any two subscriptions and see the pricing, features, and trade-offs side by side. Helps you figure out which one's worth keeping."
     />
     <JsonLd data={{
       "@context":"https://schema.org","@type":"WebApplication",
@@ -62,7 +62,7 @@ export default function CompareIndex(){
     <div style={{maxWidth:900,margin:"0 auto",padding:"40px 24px 80px"}}>
       <div style={{textAlign:"center",marginBottom:40}}>
         <h1 style={{fontSize:32,fontWeight:800,margin:"0 0 8px"}}>Compare Any Two Subscriptions</h1>
-        <p style={{fontSize:16,color:MT,margin:0}}>Pick two services to see plans, pricing, features, and our recommendation side by side.</p>
+        <p style={{fontSize:16,color:MT,margin:0}}>Pick two services. We'll show you the pricing, features, and which one's actually the better deal.</p>
       </div>
 
       {/* Selectors */}
@@ -270,8 +270,8 @@ export default function CompareIndex(){
       {/* CTA */}
       <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center",marginTop:40}}>
         <div style={{fontSize:28,marginBottom:8}}>✂️</div>
-        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Can't Decide? Let SubTrim Help</h3>
-        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>Add your subscriptions and run a usage audit. We'll tell you exactly what to keep based on how you actually use them.</p>
+        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Still not sure?</h3>
+        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>Add both to SubTrim and run the audit. It'll tell you which one you actually use more — no more guessing.</p>
         <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free</Link>
       </div>
     </div>

@@ -634,7 +634,7 @@ export default function App(){
         </div>
 
         <div style={{textAlign:"center",marginTop:d?36:24}}>
-          <p style={{fontSize:d?18:14,color:t.mt,marginBottom:d?20:14,lineHeight:1.5}}>The average person wastes <strong style={{color:t.tx}}>{fm(saved*12)}/year</strong> on subscriptions they barely use.</p>
+          <p style={{fontSize:d?18:14,color:t.mt,marginBottom:d?20:14,lineHeight:1.5}}>Most people waste about <strong style={{color:t.tx}}>{fm(saved*12)}/year</strong> on subs they barely touch.</p>
           <button onClick={()=>goAuth("signup")} style={{...B,background:t.acc,color:"#000",fontSize:d?18:15,fontWeight:700,padding:d?"16px 40px":"14px 32px",borderRadius:12,width:"100%",maxWidth:320}}>Find Your Savings — Free</button>
           <p style={{fontSize:d?13:11,color:t.dm,marginTop:10}}>No credit card. Takes 2 minutes.</p>
         </div>
@@ -643,7 +643,7 @@ export default function App(){
       {/* Minimal features below receipt */}
       <section style={{maxWidth:d?800:400,margin:"0 auto",padding:d?"20px 20px 60px":"16px 20px 40px"}}>
         <div style={d?{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}:{display:"flex",flexDirection:"column",gap:8}}>
-          {[{e:"🧠",t:"Smart Audit",d:"3 questions per sub. Instant keep/cancel/downgrade."},{e:"🔍",t:"Overlap Finder",d:"Flags duplicate services automatically."},{e:"📊",t:"SubScore",d:"One number to track your efficiency."}].map((f,i)=>
+          {[{e:"🧠",t:"Smart Audit",d:"3 questions per sub. We tell you what to cut."},{e:"🔍",t:"Overlap Finder",d:"Spots when you're double-paying for the same thing."},{e:"📊",t:"SubScore",d:"One number that shows how well you're doing."}].map((f,i)=>
             <div key={i} style={{background:t.sf,borderRadius:10,padding:d?"20px":"14px 16px",display:"flex",gap:d?0:12,flexDirection:d?"column":"row",alignItems:d?"flex-start":"center"}}>
               <div style={{fontSize:d?24:20,marginBottom:d?8:0}}>{f.e}</div>
               <div><div style={{fontSize:d?15:13,fontWeight:700}}>{f.t}</div><div style={{fontSize:d?13:11,color:t.mt,marginTop:2}}>{f.d}</div></div>
@@ -694,7 +694,7 @@ export default function App(){
         <div style={{textAlign:"center",marginBottom:36}}>
           <div style={{fontSize:48,marginBottom:10}}>✂️</div>
           <div style={{fontSize:28,fontWeight:800,letterSpacing:"-0.5px"}}>SubTrim</div>
-          <div style={{fontSize:14,color:t.mt,marginTop:6}}>Take control of your subscriptions</div>
+          <div style={{fontSize:14,color:t.mt,marginTop:6}}>Figure out what's worth keeping</div>
         </div>
 
         <div style={{display:"flex",background:t.sf,borderRadius:10,padding:3,marginBottom:20}}>

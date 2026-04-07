@@ -103,8 +103,8 @@ export default function Alternatives(){
       {/* CTA */}
       <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center"}}>
         <div style={{fontSize:28,marginBottom:8}}>✂️</div>
-        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Track All Your Subscriptions</h3>
-        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>SubTrim helps you audit every subscription, find overlaps, and save hundreds per year — for free.</p>
+        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Want to audit everything?</h3>
+        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>SubTrim looks at all your subs, not just this one. Add them in, run the audit, and see what's actually worth keeping.</p>
         <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free</Link>
       </div>
     </article>
