@@ -126,8 +126,8 @@ export default function Compare(){
       {/* Cancel guide links */}
       {(guideA||guideB)&&(
         <div style={{display:"flex",gap:12,marginBottom:32,flexWrap:"wrap"}}>
-          {guideA&&<Link to={`/guides/cancel-${nameA.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:EL,borderRadius:10,padding:"12px 18px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {nameA} →</Link>}
-          {guideB&&<Link to={`/guides/cancel-${nameB.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:EL,borderRadius:10,padding:"12px 18px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {nameB} →</Link>}
+          {guideA&&<Link to={`/guides/cancel/${nameA.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:EL,borderRadius:10,padding:"12px 18px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {nameA} →</Link>}
+          {guideB&&<Link to={`/guides/cancel/${nameB.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:EL,borderRadius:10,padding:"12px 18px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {nameB} →</Link>}
         </div>
       )}
 

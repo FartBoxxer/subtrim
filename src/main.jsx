@@ -56,7 +56,7 @@ createRoot(document.getElementById("root")).render(
           <Routes>
             <Route path="/" element={<Landing />} />
             <Route path="/app" element={<App />} />
-            <Route path="/guides/cancel-:service" element={<CancelGuide />} />
+            <Route path="/guides/cancel/:service" element={<CancelGuide />} />
             <Route path="/compare/:slug" element={<Compare />} />
             <Route path="/calculator" element={<Calculator />} />
             {/* Fallback — show the app (handles its own auth) */}

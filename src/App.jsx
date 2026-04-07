@@ -494,7 +494,7 @@ export default function App(){
   // ═══ LANDING PAGES ═══
   const goAuth=(mode)=>{setShowAuth(true);setAuthMode(mode||"signup")};
   const LpNav=()=><nav style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:d?"20px 48px":"16px 20px",maxWidth:1200,margin:"0 auto"}}>
-    <div style={{display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:22}}>✂️</span><span style={{fontSize:20,fontWeight:800,letterSpacing:"-0.5px"}}>SubTrim</span></div>
+    <a href="/" style={{display:"flex",alignItems:"center",gap:8,textDecoration:"none",color:t.tx}}><span style={{fontSize:22}}>✂️</span><span style={{fontSize:20,fontWeight:800,letterSpacing:"-0.5px"}}>SubTrim</span></a>
     <div style={{display:"flex",gap:8}}>
       <button onClick={()=>goAuth("login")} style={{...B,background:"transparent",color:t.mt2,fontSize:d?14:12,padding:d?"10px 20px":"8px 14px"}}>Log In</button>
       <button onClick={()=>goAuth("signup")} style={{...B,background:t.acc,color:"#000",fontSize:d?14:12,fontWeight:700,padding:d?"10px 24px":"8px 16px",borderRadius:8}}>Get Started Free</button>
@@ -1221,7 +1221,7 @@ export default function App(){
     {isMobile&&(
       <div style={{position:"sticky",top:0,zIndex:50,background:t.abg,borderBottom:`1px solid ${t.bd}`,backdropFilter:"blur(10px)",WebkitBackdropFilter:"blur(10px)"}}>
         <div style={{maxWidth:480,margin:"0 auto",padding:"10px 16px",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <div style={{display:"flex",alignItems:"center",gap:6}}><span style={{fontSize:16}}>✂️</span><span style={{fontSize:15,fontWeight:800,letterSpacing:"-0.5px"}}>SubTrim</span></div>
+          <a href="/" style={{display:"flex",alignItems:"center",gap:6,textDecoration:"none",color:t.tx}}><span style={{fontSize:16}}>✂️</span><span style={{fontSize:15,fontWeight:800,letterSpacing:"-0.5px"}}>SubTrim</span></a>
           <div onClick={()=>setPg("account")} style={{cursor:"pointer"}}><Av bg={av.bg} size={28}/></div>
         </div>
       </div>
