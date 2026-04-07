@@ -64,13 +64,13 @@ export default function Landing(){
       </div>
     </div>}
     {/* Nav */}
-    <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:1100,margin:"0 auto",flexWrap:"wrap",gap:8}}>
-      <Link to="/" style={{fontSize:22,fontWeight:800,letterSpacing:"-0.5px",color:TX,textDecoration:"none"}}>✂️ SubTrim</Link>
-      <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
-        <Link to="/guides" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500}}>Guides</Link>
-        <Link to="/compare" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500}}>Compare</Link>
-        <Link to="/calculator" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500}}>Calculator</Link>
-        <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 22px",fontSize:14,textDecoration:"none"}}>Get Started</Link>
+    <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px clamp(16px,4vw,32px)",maxWidth:1100,margin:"0 auto"}}>
+      <Link to="/" style={{fontSize:22,fontWeight:800,letterSpacing:"-0.5px",color:TX,textDecoration:"none",flexShrink:0}}>✂️ SubTrim</Link>
+      <div style={{display:"flex",gap:24,alignItems:"center"}}>
+        <Link to="/guides" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Guides</Link>
+        <Link to="/compare" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Compare</Link>
+        <Link to="/calculator" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Calculator</Link>
+        <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 24px",fontSize:14,textDecoration:"none",whiteSpace:"nowrap",borderRadius:10}}>Get Started</Link>
       </div>
     </nav>
 
@@ -167,47 +167,79 @@ export default function Landing(){
       </div>
     </section>
 
-    {/* SEO links */}
-    <section style={{maxWidth:1000,margin:"0 auto",padding:"64px 24px"}}>
-      <h2 style={{fontSize:22,fontWeight:800,marginBottom:20}}>Popular Cancellation Guides</h2>
-      <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-        {["Netflix","Spotify","Hulu","Disney+","Adobe Creative Cloud","HBO Max","ChatGPT Plus","Xbox Game Pass","YouTube Premium","Apple TV+","Amazon Prime","Audible","Planet Fitness","SiriusXM","Grammarly","Canva Pro","DoorDash DashPass","New York Times","LinkedIn Premium","GitHub Copilot"].map(s=>(
-          <Link key={s} to={`/guides/cancel/${s.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:SF,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:`1px solid #222`}}>
-            How to cancel {s}
-          </Link>
+    {/* Why SubTrim */}
+    <section style={{maxWidth:800,margin:"0 auto",padding:"64px 24px"}}>
+      <h2 style={{fontSize:24,fontWeight:800,textAlign:"center",marginBottom:32}}>Why SubTrim?</h2>
+      <div style={{display:"flex",flexDirection:"column",gap:20}}>
+        {[
+          {q:"Don't apps like Rocket Money already do this?",a:"They track subscriptions. We analyze them. SubTrim tells you exactly what to keep, cancel, or downgrade based on your actual usage — something no other tool does."},
+          {q:"Is this actually free?",a:"Yes. SubTrim is completely free to use. No premium upsell, no hidden fees, no percentage of your savings taken."},
+          {q:"How is this different from a spreadsheet?",a:"A spreadsheet can't detect overlapping services, run a usage audit, find cheaper alternatives, or calculate your optimization score. SubTrim does all of that in under 3 minutes."},
+        ].map((item,i)=>(
+          <div key={i} style={{background:SF,borderRadius:14,padding:"24px 28px"}}>
+            <div style={{fontSize:15,fontWeight:700,marginBottom:8,color:TX}}>{item.q}</div>
+            <p style={{fontSize:14,color:MT,lineHeight:1.6,margin:0}}>{item.a}</p>
+          </div>
         ))}
       </div>
-      <div style={{marginTop:16}}><Link to="/guides" style={{color:G,fontSize:14,fontWeight:600,textDecoration:"none"}}>View all 50+ guides →</Link></div>
     </section>
 
-    {/* Compare tool */}
-    <section style={{maxWidth:1000,margin:"0 auto",padding:"0 24px 40px"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20,flexWrap:"wrap",gap:12}}>
-        <h2 style={{fontSize:22,fontWeight:800,margin:0}}>Compare Services</h2>
-        <Link to="/compare" style={{color:G,fontSize:14,fontWeight:600,textDecoration:"none"}}>Open compare tool →</Link>
+    {/* Stats bar */}
+    <section style={{padding:"48px 24px",borderTop:"1px solid #1a1a1a",borderBottom:"1px solid #1a1a1a"}}>
+      <div style={{maxWidth:900,margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:24,textAlign:"center"}}>
+        {[
+          {v:"$273",l:"avg monthly spend",s:"per American on subscriptions"},
+          {v:"12+",l:"avg subscriptions",s:"per household in 2026"},
+          {v:"$86",l:"avg annual waste",s:"on unused or forgotten services"},
+          {v:"3 min",l:"to find savings",s:"with SubTrim's audit tool"},
+        ].map((s,i)=>(
+          <div key={i}>
+            <div style={{fontSize:32,fontWeight:800,color:G}}>{s.v}</div>
+            <div style={{fontSize:14,fontWeight:600,color:TX,marginTop:4}}>{s.l}</div>
+            <div style={{fontSize:12,color:"#555",marginTop:2}}>{s.s}</div>
+          </div>
+        ))}
       </div>
-      <p style={{fontSize:14,color:MT,margin:"0 0 16px",lineHeight:1.5}}>Not sure which service to keep? Compare any two subscriptions side by side — plans, pricing, features, pros & cons.</p>
-      <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-        {[["Netflix","Hulu"],["Spotify","Apple Music"],["Disney+","HBO Max"],["ChatGPT Plus","Claude Pro"],["Xbox Game Pass","PlayStation Plus"],["Dropbox","Google One"],["Netflix","Disney+"],["Hulu","Paramount+"],["YouTube Music","Spotify"],["NordVPN","1Password"]].map(([a,b])=>{
+    </section>
+
+    {/* Tools — clean CTA cards */}
+    <section style={{maxWidth:1000,margin:"0 auto",padding:"64px 24px"}}>
+      <h2 style={{fontSize:24,fontWeight:800,textAlign:"center",marginBottom:8}}>Free Tools</h2>
+      <p style={{fontSize:14,color:MT,textAlign:"center",marginBottom:32}}>Everything you need to take control of your subscriptions.</p>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:16}}>
+        {[
+          {e:"📖",t:"Cancellation Guides",d:"Step-by-step instructions for 50+ services. Never get stuck in a cancellation maze again.",to:"/guides",btn:"Browse Guides"},
+          {e:"⚖️",t:"Compare Services",d:"Side-by-side pricing, features, and pros & cons for any two subscriptions.",to:"/compare",btn:"Compare Now"},
+          {e:"🔄",t:"Find Alternatives",d:"Paying too much? Discover cheaper options ranked by price and features.",to:"/alternatives",btn:"Find Alternatives"},
+          {e:"🧮",t:"Cost Calculator",d:"Add up your subscriptions to see the real monthly and annual total.",to:"/calculator",btn:"Calculate Costs"},
+        ].map((c,i)=>(
+          <div key={i} style={{background:SF,borderRadius:16,padding:28,display:"flex",flexDirection:"column"}}>
+            <div style={{fontSize:28,marginBottom:12}}>{c.e}</div>
+            <div style={{fontSize:17,fontWeight:700,marginBottom:6}}>{c.t}</div>
+            <p style={{fontSize:13,color:MT,lineHeight:1.6,margin:"0 0 20px",flex:1}}>{c.d}</p>
+            <Link to={c.to} style={{display:"inline-block",background:G+"15",color:G,border:`1px solid ${G}44`,borderRadius:10,padding:"10px 20px",fontSize:14,fontWeight:600,textDecoration:"none",textAlign:"center"}}>{c.btn} →</Link>
+          </div>
+        ))}
+      </div>
+      {/* Hidden SEO links — crawlable but not visually cluttering */}
+      <div style={{marginTop:32,display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center"}}>
+        {["Netflix","Spotify","Hulu","Disney+","Adobe Creative Cloud","HBO Max","ChatGPT Plus","YouTube Premium","Amazon Prime","Apple TV+"].map(s=>(
+          <Link key={s} to={`/guides/cancel/${s.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{fontSize:12,color:"#333",textDecoration:"none",padding:"4px 10px",borderRadius:6,border:"1px solid #1a1a1a"}}>{s}</Link>
+        ))}
+        {[["Netflix","Hulu"],["Spotify","Apple Music"],["Disney+","HBO Max"],["ChatGPT Plus","Claude Pro"]].map(([a,b])=>{
           const slug=`${a.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-vs-${b.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`;
-          return <Link key={slug} to={`/compare/${slug}`} style={{background:SF,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:`1px solid #222`}}>{a} vs {b}</Link>
+          return <Link key={slug} to={`/compare/${slug}`} style={{fontSize:12,color:"#333",textDecoration:"none",padding:"4px 10px",borderRadius:6,border:"1px solid #1a1a1a"}}>{a} vs {b}</Link>
         })}
       </div>
     </section>
 
-    {/* Alternatives */}
-    <section style={{maxWidth:1000,margin:"0 auto",padding:"0 24px 40px"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20,flexWrap:"wrap",gap:12}}>
-        <h2 style={{fontSize:22,fontWeight:800,margin:0}}>Find Cheaper Alternatives</h2>
-        <Link to="/alternatives" style={{color:G,fontSize:14,fontWeight:600,textDecoration:"none"}}>Browse all alternatives →</Link>
-      </div>
-      <p style={{fontSize:14,color:MT,margin:"0 0 16px",lineHeight:1.5}}>Paying too much for a service? See what else is out there — ranked by price, features, and our recommendations.</p>
-      <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-        {["Netflix","Spotify","ChatGPT Plus","Adobe Creative Cloud","Microsoft 365","Dropbox","NordVPN","Xbox Game Pass","Disney+"].map(s=>(
-          <Link key={s} to={`/alternatives/${s.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:SF,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:`1px solid #222`}}>
-            {s} alternatives
-          </Link>
-        ))}
+    {/* Final CTA */}
+    <section style={{padding:"72px 24px",textAlign:"center"}}>
+      <div style={{maxWidth:560,margin:"0 auto"}}>
+        <div style={{fontSize:48,marginBottom:16}}>✂️</div>
+        <h2 style={{fontSize:28,fontWeight:800,lineHeight:1.3,marginBottom:12}}>Stop Overpaying for Subscriptions</h2>
+        <p style={{fontSize:16,color:MT,lineHeight:1.6,marginBottom:28}}>Join thousands of people who use SubTrim to audit their subscriptions, find savings, and take control of recurring costs.</p>
+        <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 40px",textDecoration:"none",display:"inline-block",borderRadius:12}}>Get Started — It's Free</Link>
       </div>
     </section>
 

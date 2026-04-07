@@ -123,7 +123,7 @@ export default function App(){
   const[authInfo,setAuthInfo]=useState("");
   const[authLoading,setAuthLoading]=useState(false);
   const[sessionLoading,setSessionLoading]=useState(true);
-  const[showAuth,setShowAuth]=useState(false);
+  const[showAuth,setShowAuth]=useState(true);
   const[onboarding,setOnboarding]=useState(false);
   const[obPicks,setObPicks]=useState({});
   const[obLoading,setObLoading]=useState(false);
@@ -690,7 +690,7 @@ export default function App(){
     <div style={{background:t.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Inter',sans-serif",color:t.tx,padding:20}}>
       <style>{`*{box-sizing:border-box;margin:0}input::placeholder{color:${t.dm}}`}</style>
       <div style={{width:"100%",maxWidth:400}}>
-        <button onClick={()=>setShowAuth(false)} style={{...B,background:"none",color:t.mt,fontSize:14,padding:"0 0 16px",display:"flex",alignItems:"center",gap:6}}>← Back</button>
+        <a href="/" style={{...B,background:"none",color:t.mt,fontSize:14,padding:"0 0 16px",display:"flex",alignItems:"center",gap:6,textDecoration:"none"}}>← Back</a>
         <div style={{textAlign:"center",marginBottom:36}}>
           <div style={{fontSize:48,marginBottom:10}}>✂️</div>
           <div style={{fontSize:28,fontWeight:800,letterSpacing:"-0.5px"}}>SubTrim</div>
