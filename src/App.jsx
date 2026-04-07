@@ -176,6 +176,8 @@ export default function App(){
   const[deleteText,setDeleteText]=useState("");
   const[deleting,setDeleting]=useState(false);
   const[resetMode,setResetMode]=useState(false);
+  const[recoveryMode,setRecoveryMode]=useState(false);
+  const[newPass,setNewPass]=useState("");
   const[dataLoading,setDataLoading]=useState(false);
   const[obSearch,setObSearch]=useState("");
   const[removing,setRemoving]=useState(null);
@@ -200,8 +202,9 @@ export default function App(){
       setUser(session?.user??null);
       setSessionLoading(false);clearTimeout(timeout);
     }).catch(()=>{setSessionLoading(false);clearTimeout(timeout)});
-    const{data:{subscription}}=supabase.auth.onAuthStateChange((_event,session)=>{
+    const{data:{subscription}}=supabase.auth.onAuthStateChange((event,session)=>{
       setUser(session?.user??null);
+      if(event==='PASSWORD_RECOVERY'){setRecoveryMode(true);setShowAuth(true)}
     });
     return()=>{subscription.unsubscribe();clearTimeout(timeout)};
   },[]);
@@ -574,6 +577,34 @@ export default function App(){
 
   if(!user&&!showAuth) return <Landing/>;
 
+  if(recoveryMode) return(
+    <div style={{background:t.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Inter',sans-serif",color:t.tx,padding:20}}>
+      <style>{`*{box-sizing:border-box;margin:0}input::placeholder{color:${t.dm}}`}</style>
+      <div style={{width:"100%",maxWidth:400}}>
+        <div style={{textAlign:"center",marginBottom:32}}>
+          <div style={{fontSize:48,marginBottom:10}}>🔑</div>
+          <div style={{fontSize:24,fontWeight:800}}>Set New Password</div>
+          <div style={{fontSize:14,color:t.mt,marginTop:8}}>Choose a new password for your account</div>
+        </div>
+        <div style={{display:"flex",flexDirection:"column",gap:12}}>
+          <input value={newPass} onChange={e=>setNewPass(e.target.value)} placeholder="New password (6+ characters)" type="password" style={{width:"100%",padding:"14px 16px",borderRadius:10,border:`1px solid ${t.bd2}`,background:t.sf,color:t.tx,fontSize:15,outline:"none",fontFamily:"inherit",boxSizing:"border-box"}}/>
+          {authErr&&<div style={{fontSize:13,color:"#e74c3c",textAlign:"center"}}>{authErr}</div>}
+          {authInfo&&<div style={{fontSize:13,color:t.acc,textAlign:"center",background:t.acc+"11",padding:"10px 14px",borderRadius:8}}>{authInfo}</div>}
+          <button onClick={async()=>{
+            if(newPass.length<6){setAuthErr("Password must be 6+ characters");return}
+            setAuthLoading(true);setAuthErr("");
+            const{error}=await supabase.auth.updateUser({password:newPass});
+            setAuthLoading(false);
+            if(error){setAuthErr(error.message);return}
+            setRecoveryMode(false);setNewPass("");setAuthErr("");setAuthInfo("");
+            notify("✅ Password updated successfully!");
+          }} disabled={authLoading} style={{...B,background:t.acc,color:"#000",padding:"14px",fontSize:15,fontWeight:700,borderRadius:10,width:"100%",opacity:authLoading?0.6:1}}>
+            {authLoading?"Updating...":"Update Password"}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 
   if(!user&&showAuth) return(
     <div style={{background:t.bg,minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Inter',sans-serif",color:t.tx,padding:20}}>
@@ -606,24 +637,28 @@ export default function App(){
         </div>
 
         {authMode==="login"&&!resetMode&&<div style={{textAlign:"center",marginTop:12}}>
-          <span onClick={()=>setResetMode(true)} style={{fontSize:13,color:t.dm2,cursor:"pointer",borderBottom:`1px dashed ${t.dm}44`}}>Forgot password?</span>
+          <span onClick={()=>{setResetMode(true);setAuthErr("");setAuthInfo("")}} style={{fontSize:13,color:t.dm2,cursor:"pointer",borderBottom:`1px dashed ${t.dm}44`}}>Forgot password?</span>
         </div>}
-        {resetMode&&<div style={{background:t.sf,borderRadius:10,padding:d?"16px":"14px",marginTop:12,border:`1px solid ${t.bd2}`}}>
-          <div style={{fontSize:13,color:t.mt,marginBottom:10}}>Enter your email and we'll send a password reset link.</div>
+        {resetMode&&<div style={{background:t.sf,borderRadius:14,padding:d?"20px":"16px",marginTop:12,border:`1px solid ${t.bd2}`}}>
+          <div style={{fontSize:15,fontWeight:700,marginBottom:6}}>Reset Password</div>
+          <div style={{fontSize:13,color:t.mt,marginBottom:12,lineHeight:1.5}}>Enter the email address you signed up with. We'll send you a link to reset your password.</div>
+          <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="your@email.com" type="email" style={{width:"100%",padding:"12px 14px",borderRadius:10,border:`1px solid ${t.bd2}`,background:t.el,color:t.tx,fontSize:14,outline:"none",fontFamily:"inherit",boxSizing:"border-box",marginBottom:10}}/>
+          {authErr&&<div style={{fontSize:12,color:"#e74c3c",textAlign:"center",marginBottom:8}}>{authErr}</div>}
+          {authInfo&&<div style={{fontSize:12,color:t.acc,textAlign:"center",background:t.acc+"11",padding:"8px 12px",borderRadius:8,marginBottom:8}}>{authInfo}</div>}
           <button onClick={async()=>{
-            if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){setAuthErr("Enter a valid email first");return}
-            setAuthLoading(true);setAuthErr("");
-            const{error}=await supabase.auth.resetPasswordForEmail(email.trim(),{redirectTo:'https://subtrim.dev'});
+            if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){setAuthErr("Enter a valid email address");return}
+            setAuthLoading(true);setAuthErr("");setAuthInfo("");
+            const{error}=await supabase.auth.resetPasswordForEmail(email.trim(),{redirectTo:'https://subtrim.dev/app'});
             setAuthLoading(false);
             if(error){setAuthErr(error.message);return}
-            setAuthErr("");setResetMode(false);notify("Reset link sent! Check your email.");
+            setAuthErr("");setAuthInfo("✉️ Reset link sent! Check your inbox (and spam folder). The link will expire in 24 hours.");
           }} disabled={authLoading} style={{...B,width:"100%",background:t.acc,color:"#000",fontWeight:700,fontSize:14,borderRadius:10,padding:"12px",opacity:authLoading?0.6:1}}>{authLoading?"Sending...":"Send Reset Link"}</button>
-          <div style={{textAlign:"center",marginTop:8}}><span onClick={()=>{setResetMode(false);setAuthErr("")}} style={{fontSize:12,color:t.dm2,cursor:"pointer"}}>Cancel</span></div>
+          <div style={{textAlign:"center",marginTop:10}}><span onClick={()=>{setResetMode(false);setAuthErr("");setAuthInfo("")}} style={{fontSize:13,color:t.mt,cursor:"pointer"}}>← Back to login</span></div>
         </div>}
-        <div style={{textAlign:"center",marginTop:resetMode?10:18,fontSize:13,color:t.dm}}>
+        {!resetMode&&<div style={{textAlign:"center",marginTop:18,fontSize:13,color:t.dm}}>
           {authMode==="login"?"Don't have an account? ":"Already have one? "}
-          <span onClick={()=>{setAuthMode(authMode==="login"?"signup":"login");setAuthErr("");setResetMode(false)}} style={{color:t.acc,cursor:"pointer",fontWeight:600}}>{authMode==="login"?"Sign Up":"Log In"}</span>
-        </div>
+          <span onClick={()=>{setAuthMode(authMode==="login"?"signup":"login");setAuthErr("");setAuthInfo("");setResetMode(false)}} style={{color:t.acc,cursor:"pointer",fontWeight:600}}>{authMode==="login"?"Sign Up":"Log In"}</span>
+        </div>}
       </div>
     </div>
   );
