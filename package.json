@@ -1,0 +1,22 @@
+{
+  "name": "subtrim",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.101.1",
+    "html2canvas": "^1.4.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router-dom": "^7.14.0"
+  },
+  "devDependencies": {
+    "@resvg/resvg-js": "^2.4.1",
+    "@vitejs/plugin-react": "^4.4.1",
+    "vite": "^6.3.1"
+  }
+}
