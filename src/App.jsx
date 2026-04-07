@@ -120,6 +120,7 @@ export default function App(){
   const[pass,setPass]=useState("");
   const[name,setName]=useState("");
   const[authErr,setAuthErr]=useState("");
+  const[authInfo,setAuthInfo]=useState("");
   const[authLoading,setAuthLoading]=useState(false);
   const[sessionLoading,setSessionLoading]=useState(true);
   const[showAuth,setShowAuth]=useState(false);
@@ -193,6 +194,7 @@ export default function App(){
 
   // Session persistence
   useEffect(()=>{
+    if(!supabase){setSessionLoading(false);return}
     const timeout=setTimeout(()=>setSessionLoading(false),3000);
     supabase.auth.getSession().then(({data:{session}})=>{
       setUser(session?.user??null);
@@ -457,7 +459,7 @@ export default function App(){
 
   // ═══ AUTH SCREEN ═══
   const handleAuth=async()=>{
-    setAuthLoading(true);setAuthErr("");
+    setAuthLoading(true);setAuthErr("");setAuthInfo("");
     if(!email||!pass){setAuthErr("Please fill in all fields");setAuthLoading(false);return}
     if(authMode==="signup"&&!name.trim()){setAuthErr("Please enter your name");setAuthLoading(false);return}
     if(authMode==="signup"&&name.trim().length>24){setAuthErr("Name must be 24 characters or less");setAuthLoading(false);return}
@@ -467,7 +469,7 @@ export default function App(){
       if(authMode==="signup"){
         const{data,error}=await supabase.auth.signUp({email:email.trim(),password:pass,options:{data:{display_name:(name.trim()||email.split("@")[0]).slice(0,24)}}});
         if(error){setAuthErr(error.message);setAuthLoading(false);return}
-        if(!data.session){setAuthErr("Check your email to confirm your account");setAuthLoading(false);return}
+        if(!data.session){setAuthInfo("✉️ Check your email to confirm your account");setAuthLoading(false);return}
       }else{
         const{error}=await supabase.auth.signInWithPassword({email:email.trim(),password:pass});
         if(error){setAuthErr(error.message);setAuthLoading(false);return}
@@ -597,6 +599,7 @@ export default function App(){
           <input value={email} onChange={e=>setEmail(e.target.value)} placeholder="Email" type="email" maxLength={64} style={{width:"100%",padding:"14px 16px",borderRadius:10,border:`1px solid ${t.bd2}`,background:t.sf,color:t.tx,fontSize:15,outline:"none",fontFamily:"inherit",boxSizing:"border-box"}}/>
           <input value={pass} onChange={e=>setPass(e.target.value)} placeholder="Password" type="password" style={{width:"100%",padding:"14px 16px",borderRadius:10,border:`1px solid ${t.bd2}`,background:t.sf,color:t.tx,fontSize:15,outline:"none",fontFamily:"inherit",boxSizing:"border-box"}}/>
           {authErr&&<div style={{fontSize:13,color:"#e74c3c",textAlign:"center"}}>{authErr}</div>}
+          {authInfo&&<div style={{fontSize:13,color:t.acc,textAlign:"center",background:t.acc+"11",padding:"10px 14px",borderRadius:8}}>{authInfo}</div>}
           <button onClick={handleAuth} disabled={authLoading} style={{...B,background:t.acc,color:"#000",padding:"14px",fontSize:15,fontWeight:700,borderRadius:10,width:"100%",opacity:authLoading?0.6:1}}>
             {authLoading?"...":(authMode==="login"?"Log In":"Create Account")}
           </button>
