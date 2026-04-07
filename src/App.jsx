@@ -3,9 +3,12 @@ import { createClient } from '@supabase/supabase-js';
 import html2canvas from 'html2canvas';
 import { CANCEL_GUIDES } from './data/cancelGuides';
 
-const supabase = (import.meta.env.VITE_SUPABASE_URL && import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY)
-  ? createClient(import.meta.env.VITE_SUPABASE_URL, import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY)
-  : null
+let supabase = null;
+try {
+  const _url = import.meta.env.VITE_SUPABASE_URL;
+  const _key = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+  if (_url && _key) supabase = createClient(_url, _key);
+} catch(e) { console.warn('Supabase init skipped:', e.message); }
 
 const CATS = {
   streaming:{l:"Streaming",c:"#e74c3c",e:"🎬"},music:{l:"Music",c:"#9b59b6",e:"🎵"},
