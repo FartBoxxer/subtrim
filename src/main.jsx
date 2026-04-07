@@ -1,8 +1,7 @@
 import { StrictMode, Component, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import App from "./App.jsx";
-
+const App = lazy(() => import("./App.jsx"));
 const Landing = lazy(() => import("./pages/Landing.jsx"));
 const CancelGuide = lazy(() => import("./pages/CancelGuide.jsx"));
 const Compare = lazy(() => import("./pages/Compare.jsx"));
