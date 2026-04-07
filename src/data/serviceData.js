@@ -37,6 +37,7 @@ export const CATS = {
   fitness:{l:"Fitness",c:"#e67e22",e:"💪"},news:{l:"News",c:"#1abc9c",e:"📰"},
   creative:{l:"Creative",c:"#f39c12",e:"🎨"},security:{l:"Security",c:"#607d8b",e:"🔒"},
   ai:{l:"AI",c:"#8b5cf6",e:"🤖"},cloud:{l:"Cloud",c:"#06b6d4",e:"☁️"},
+  vpn:{l:"VPN",c:"#607d8b",e:"🛡️"},passwords:{l:"Passwords",c:"#78909c",e:"🔑"},
   lifestyle:{l:"Lifestyle",c:"#ec4899",e:"✨"},education:{l:"Education",c:"#14b8a6",e:"📚"},
 };
 
@@ -50,7 +51,7 @@ export const SERVICE_CATS={
   'ChatGPT Plus':'ai','Claude Pro':'ai',
   'Adobe Creative Cloud':'creative',
   'Microsoft 365':'productivity','Notion':'productivity',
-  'NordVPN':'security','1Password':'security',
+  'NordVPN':'vpn','1Password':'passwords',
   'Dropbox':'cloud','Google One':'cloud','iCloud+':'cloud',
 };
 
@@ -62,6 +63,5 @@ export const COMPARE_PAIRS=[
   ['ChatGPT Plus','Claude Pro'],
   ['Xbox Game Pass','PlayStation Plus'],
   ['Dropbox','Google One'],['Dropbox','iCloud+'],['Google One','iCloud+'],
-  ['NordVPN','1Password'],
   ['Microsoft 365','Notion'],
 ];

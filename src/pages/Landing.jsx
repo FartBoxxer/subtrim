@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
 
@@ -21,6 +21,9 @@ export default function Landing(){
   const[cfStatus,setCfStatus]=useState('');
   const[cfSending,setCfSending]=useState(false);
   const[showSavings,setShowSavings]=useState(false);
+  const[menuOpen,setMenuOpen]=useState(false);
+  const receiptRef=useRef(null);
+  const shareReceipt=async()=>{if(!receiptRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(receiptRef.current,{backgroundColor:'#0d0d0d',scale:2,useCORS:true});canvas.toBlob(blob=>{if(!blob)return;if(navigator.share&&navigator.canShare){navigator.share({files:[new File([blob],'subtrim-statement.png',{type:'image/png'})],title:'SubTrim Monthly Statement'}).catch(()=>{})}else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='subtrim-statement.png';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}},'image/png')}catch{}};
 
   const total=RECEIPT_ITEMS.reduce((a,i)=>a+i.p,0);
   const saved=RECEIPT_ITEMS.filter(i=>i.cut).reduce((a,i)=>a+i.p,0);
@@ -52,7 +55,7 @@ export default function Landing(){
 
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
-    <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}`}</style>
+    <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}@media(max-width:600px){.lp-nav-links{display:none!important}.lp-hamburger{display:flex!important}}@media(min-width:601px){.lp-mobile-menu{display:none!important}}`}</style>
     {/* Dev banner */}
     {showBanner&&<div style={{background:'linear-gradient(135deg,#00d48a18,#3498db18)',borderBottom:'1px solid #00d48a33',padding:'14px 24px',position:'relative'}}>
       <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center',gap:12,flexWrap:'wrap'}}>
@@ -65,18 +68,27 @@ export default function Landing(){
       </div>
     </div>}
     {/* Nav */}
-    <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px clamp(16px,4vw,32px)",maxWidth:1100,margin:"0 auto"}}>
+    <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px clamp(16px,4vw,32px)",maxWidth:1100,margin:"0 auto",position:"relative"}}>
       <Link to="/" style={{fontSize:22,fontWeight:800,letterSpacing:"-0.5px",color:TX,textDecoration:"none",flexShrink:0}}>✂️ SubTrim</Link>
-      <div style={{display:"flex",gap:24,alignItems:"center"}}>
+      <div className="lp-nav-links" style={{display:"flex",gap:24,alignItems:"center"}}>
         <Link to="/guides" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Guides</Link>
         <Link to="/compare" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Compare</Link>
         <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 24px",fontSize:14,textDecoration:"none",whiteSpace:"nowrap",borderRadius:10}}>Get Started</Link>
       </div>
+      <button className="lp-hamburger" onClick={()=>setMenuOpen(!menuOpen)} style={{display:"none",alignItems:"center",justifyContent:"center",background:"none",border:"none",color:TX,fontSize:24,cursor:"pointer",padding:4}}>
+        {menuOpen?"✕":"☰"}
+      </button>
     </nav>
+    {menuOpen&&<div className="lp-mobile-menu" style={{background:SF,borderBottom:"1px solid #1a1a1a",padding:"12px 24px",display:"flex",flexDirection:"column",gap:12}}>
+      <Link to="/guides" onClick={()=>setMenuOpen(false)} style={{color:MT,fontSize:15,textDecoration:"none",fontWeight:500,padding:"8px 0"}}>Guides</Link>
+      <Link to="/compare" onClick={()=>setMenuOpen(false)} style={{color:MT,fontSize:15,textDecoration:"none",fontWeight:500,padding:"8px 0"}}>Compare</Link>
+      <Link to="/alternatives" onClick={()=>setMenuOpen(false)} style={{color:MT,fontSize:15,textDecoration:"none",fontWeight:500,padding:"8px 0"}}>Alternatives</Link>
+      <Link to="/app" onClick={()=>setMenuOpen(false)} style={{...B,background:G,color:"#000",padding:"12px 24px",fontSize:15,textDecoration:"none",textAlign:"center",borderRadius:10}}>Get Started</Link>
+    </div>}
 
     {/* Hero — Receipt */}
     <section style={{padding:"60px 24px 40px",maxWidth:520,margin:"0 auto"}}>
-      <div style={{background:"#0f0f0f",border:"1px solid #1a1a1a",borderRadius:2,padding:"40px clamp(16px,5vw,36px)",position:"relative",boxShadow:"0 20px 60px rgba(0,0,0,0.5)"}}>
+      <div ref={receiptRef} style={{background:"#0f0f0f",border:"1px solid #1a1a1a",borderRadius:2,padding:"40px clamp(16px,5vw,36px)",position:"relative",boxShadow:"0 20px 60px rgba(0,0,0,0.5)"}}>
         {/* Torn top */}
         <div style={{position:"absolute",top:-1,left:0,right:0,height:6,background:BG,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")"}}/>
         <div style={{textAlign:"center",marginBottom:28}}>
@@ -126,6 +138,7 @@ export default function Landing(){
         <div style={{position:"absolute",bottom:-1,left:0,right:0,height:6,background:BG,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")"}}/>
       </div>
       <div style={{textAlign:"center",marginTop:32}}>
+        <button onClick={shareReceipt} style={{...B,background:SF,color:MT,fontSize:13,borderRadius:8,border:"1px solid #222",padding:"8px 20px",marginBottom:16}}>📤 Share This</button>
         <p style={{fontSize:18,color:MT,marginBottom:20,lineHeight:1.5}}>The average American wastes <strong style={{color:TX}}>{fm(saved*12)}/year</strong> on subscriptions they barely use.</p>
         <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 36px",textDecoration:"none",display:"inline-block"}}>Find Your Savings (Free)</Link>
         <p style={{fontSize:13,color:"#555",marginTop:14}}>No credit card. Takes 2 minutes.</p>

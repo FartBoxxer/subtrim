@@ -189,6 +189,7 @@ export default function App(){
   const[currency,setCurrency]=useState(()=>localStorage.getItem('st_cur')||'USD');
   const fm=useCallback(n=>mkFmt(currency).format(Number(n)),[currency]);
   const reportRef=useRef(null);
+  const receiptRef=useRef(null);
 
   // Household state
   const[household,setHousehold]=useState(null);
@@ -531,6 +532,7 @@ export default function App(){
 
   // Export audit report as image
   const exportReport=async()=>{if(!reportRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(reportRef.current,{backgroundColor:'#0d0d0d',scale:2,useCORS:true});canvas.toBlob(blob=>{if(!blob)return;if(navigator.share&&navigator.canShare){navigator.share({files:[new File([blob],'subtrim-audit.png',{type:'image/png'})],title:'My SubTrim Audit'}).catch(()=>{})}else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='subtrim-audit.png';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}},'image/png')}catch{notify('Failed to export report')}};
+  const shareReceipt=async()=>{if(!receiptRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(receiptRef.current,{backgroundColor:theme==='dark'?'#0d0d0d':'#ffffff',scale:2,useCORS:true});canvas.toBlob(blob=>{if(!blob)return;if(navigator.share&&navigator.canShare){navigator.share({files:[new File([blob],'subtrim-statement.png',{type:'image/png'})],title:'My SubTrim Monthly Statement'}).catch(()=>{})}else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='subtrim-statement.png';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}},'image/png')}catch{notify('Failed to export statement')}};
 
   const simSave=Object.entries(simT).filter(([,v])=>v).reduce((a,[id])=>{const s=act.find(x=>x.id===id);return a+(s?s.cost:0)},0);
   const sorted=[...reg].sort((a,b)=>sort==="cost"?b.cost-a.cost:sort==="category"?a.cat.localeCompare(b.cat):dU(a.renewal)-dU(b.renewal));
@@ -762,7 +764,7 @@ export default function App(){
     return(<div style={{display:"flex",flexDirection:"column",gap:d?18:14}}>
     {/* ═══ MONTHLY STATEMENT RECEIPT ═══ */}
     <div style={{maxWidth:d?520:undefined,margin:d?"0 auto":undefined,width:"100%"}}>
-      <div style={{background:theme==="dark"?"#0f0f0f":"#fafaf8",border:`1px solid ${theme==="dark"?"#1a1a1a":"#e8e8e4"}`,borderRadius:2,padding:d?"40px 36px":"28px 24px",position:"relative",boxShadow:theme==="dark"?"0 20px 60px rgba(0,0,0,0.5)":"0 20px 60px rgba(0,0,0,0.08)"}}>
+      <div ref={receiptRef} style={{background:theme==="dark"?"#0f0f0f":"#fafaf8",border:`1px solid ${theme==="dark"?"#1a1a1a":"#e8e8e4"}`,borderRadius:2,padding:d?"40px 36px":"28px 24px",position:"relative",boxShadow:theme==="dark"?"0 20px 60px rgba(0,0,0,0.5)":"0 20px 60px rgba(0,0,0,0.08)"}}>
         {/* Torn top */}
         <div style={{position:"absolute",top:-1,left:0,right:0,height:6,background:t.bg,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")"}}/>
         <div style={{textAlign:"center",marginBottom:d?28:20}}>
@@ -801,9 +803,10 @@ export default function App(){
         <div style={{position:"absolute",bottom:-1,left:0,right:0,height:6,background:t.bg,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")"}}/>
       </div>
 
-      {/* Average person stat */}
+      {/* Share + avg stat */}
       <div style={{textAlign:"center",marginTop:d?24:16}}>
-        <p style={{fontSize:d?16:13,color:t.mt,lineHeight:1.6}}>The average American spends <strong style={{color:t.tx}}>{fm(273)}/mo</strong> on subscriptions.{act.length>0&&<>{' '}You spend <strong style={{color:mTot>273?"#ef4444":t.acc}}>{fm(mTot)}/mo</strong> — {mTot>273?`${fm(mTot-273)} above`:`${fm(273-mTot)} below`} average.</>}</p>
+        {act.length>0&&<button onClick={shareReceipt} style={{...B,background:t.sf,color:t.mt2,fontSize:d?13:11,borderRadius:8,border:`1px solid ${t.bd2}`,padding:d?"8px 20px":"7px 16px",marginBottom:12}}>📤 Share Statement</button>}
+        <p style={{fontSize:d?16:13,color:t.mt,lineHeight:1.6}}>The average American spends <strong style={{color:t.tx}}>{fm(273)}/mo</strong> on subscriptions.{act.length>0&&<>{' '}You spend <strong style={{color:mTot>273?"#ef4444":t.acc}}>{fm(mTot)}/mo</strong>, {mTot>273?`${fm(mTot-273)} above`:`${fm(273-mTot)} below`} average.</>}</p>
       </div>
 
       {/* Category breakdown */}
