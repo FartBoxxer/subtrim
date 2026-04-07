@@ -11,12 +11,12 @@ try {
 } catch(e) { console.warn('Supabase init skipped:', e.message); }
 
 const CATS = {
-  streaming:{l:"Streaming",c:"#e74c3c",e:"🎬"},music:{l:"Music",c:"#9b59b6",e:"🎵"},
+  streaming:{l:"Streaming",c:"#e74c3c",e:"🎬"},music:{l:"Music",c:"#a855f7",e:"🎵"},
   gaming:{l:"Gaming",c:"#2ecc71",e:"🎮"},productivity:{l:"Productivity",c:"#3498db",e:"💼"},
   fitness:{l:"Fitness",c:"#e67e22",e:"💪"},news:{l:"News",c:"#1abc9c",e:"📰"},
   creative:{l:"Creative",c:"#f39c12",e:"🎨"},security:{l:"Security",c:"#607d8b",e:"🔒"},
   food:{l:"Food",c:"#e91e63",e:"🍕"},ai_tools:{l:"AI Tools",c:"#00bcd4",e:"🤖"},
-  lifestyle:{l:"Lifestyle",c:"#8e44ad",e:"✨"},
+  lifestyle:{l:"Lifestyle",c:"#ec4899",e:"✨"},
 };
 
 const TIERS={
@@ -373,9 +373,10 @@ export default function App(){
     if(!supabase||!user||!hhCreateName.trim())return;
     setHhLoading(true);
     const code=Math.random().toString(36).substring(2,8).toUpperCase();
-    const{data:hh,error}=await supabase.from('households').insert({name:hhCreateName.trim(),created_by:user.id,invite_code:code}).select().single();
+    const hhId=crypto.randomUUID();
+    const{error}=await supabase.from('households').insert({id:hhId,name:hhCreateName.trim(),created_by:user.id,invite_code:code});
     if(error){notify("Failed to create household: "+error.message);setHhLoading(false);return}
-    const{error:e2}=await supabase.from('household_members').insert({household_id:hh.id,user_id:user.id,role:'owner'});
+    const{error:e2}=await supabase.from('household_members').insert({household_id:hhId,user_id:user.id,role:'owner'});
     if(e2){notify("Created household but failed to add you: "+e2.message);setHhLoading(false);return}
     await hhRefresh();setHhView("idle");setHhCreateName("");setHhLoading(false);notify("Household created!");pop();
   };

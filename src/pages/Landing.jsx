@@ -20,6 +20,7 @@ export default function Landing(){
   const[cfMsg,setCfMsg]=useState('');
   const[cfStatus,setCfStatus]=useState('');
   const[cfSending,setCfSending]=useState(false);
+  const[showSavings,setShowSavings]=useState(false);
 
   const total=RECEIPT_ITEMS.reduce((a,i)=>a+i.p,0);
   const saved=RECEIPT_ITEMS.filter(i=>i.cut).reduce((a,i)=>a+i.p,0);
@@ -97,9 +98,24 @@ export default function Landing(){
           <span style={{fontSize:14,color:MT}}>Subtotal</span>
           <span style={{fontSize:14,color:MT,textDecoration:"line-through"}}>{fm(total)}/mo</span>
         </div>
-        <div style={{display:"flex",justifyContent:"space-between",padding:"8px 0",animation:"fadeIn 0.5s ease 1.4s both"}}>
-          <span style={{fontSize:14,color:"#ef4444",fontWeight:600}}>✂️ SubTrim savings</span>
-          <span style={{fontSize:14,color:"#ef4444",fontWeight:700}}>-{fm(saved)}/mo</span>
+        <div style={{position:"relative",animation:"fadeIn 0.5s ease 1.4s both"}} onMouseEnter={()=>setShowSavings(true)} onMouseLeave={()=>setShowSavings(false)}>
+          <div style={{display:"flex",justifyContent:"space-between",padding:"8px 0",cursor:"pointer"}}>
+            <span style={{fontSize:14,color:"#ef4444",fontWeight:600}}>✂️ SubTrim savings</span>
+            <span style={{fontSize:14,color:"#ef4444",fontWeight:700}}>-{fm(saved)}/mo</span>
+          </div>
+          {showSavings&&<div style={{position:"absolute",left:0,right:0,top:"100%",background:"#1a1a1a",border:"1px solid #333",borderRadius:10,padding:"12px 16px",zIndex:10,animation:"fadeIn 0.15s ease"}}>
+            <div style={{fontSize:11,color:MT,fontWeight:600,marginBottom:8,textTransform:"uppercase",letterSpacing:1}}>Savings breakdown</div>
+            {RECEIPT_ITEMS.filter(i=>i.cut).map((item,i)=>(
+              <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"4px 0",fontSize:13}}>
+                <span style={{color:"#ccc"}}>{item.n}</span>
+                <span style={{color:"#ef4444",fontWeight:600}}>-{fm(item.p)}</span>
+              </div>
+            ))}
+            <div style={{borderTop:"1px solid #333",marginTop:6,paddingTop:6,display:"flex",justifyContent:"space-between",fontSize:13,fontWeight:700}}>
+              <span style={{color:"#ccc"}}>Total saved</span>
+              <span style={{color:"#ef4444"}}>{fm(saved)}/mo ({fm(saved*12)}/yr)</span>
+            </div>
+          </div>}
         </div>
         <div style={{display:"flex",justifyContent:"space-between",padding:"12px 0 4px",borderTop:"2px solid #222",animation:"fadeIn 0.5s ease 1.6s both"}}>
           <span style={{fontSize:20,fontWeight:800}}>New Total</span>

@@ -23,6 +23,7 @@ export const TIERS={
   'NordVPN':[{n:'Basic',p:12.99},{n:'Plus',p:13.99},{n:'Complete',p:14.99}],
   'Dropbox':[{n:'Plus',p:11.99},{n:'Professional',p:22},{n:'Family',p:19.99}],
   '1Password':[{n:'Individual',p:2.99},{n:'Family',p:4.99}],
+  'Apple TV+':[{n:'Monthly',p:9.99},{n:'Apple One Individual',p:19.95},{n:'Apple One Family',p:25.95}],
   'Crunchyroll':[{n:'Fan',p:7.99},{n:'Mega Fan',p:9.99},{n:'Ultimate Fan',p:14.99}],
   'Amazon Prime Video':[{n:'Prime Video Only',p:8.99},{n:'Amazon Prime',p:14.99}],
   'Google One':[{n:'100 GB',p:2.99},{n:'2 TB',p:9.99}],
@@ -31,7 +32,7 @@ export const TIERS={
 };
 
 export const CATS = {
-  streaming:{l:"Streaming",c:"#e74c3c",e:"🎬"},music:{l:"Music",c:"#9b59b6",e:"🎵"},
+  streaming:{l:"Streaming",c:"#e74c3c",e:"🎬"},music:{l:"Music",c:"#a855f7",e:"🎵"},
   gaming:{l:"Gaming",c:"#2ecc71",e:"🎮"},productivity:{l:"Productivity",c:"#3498db",e:"💼"},
   fitness:{l:"Fitness",c:"#e67e22",e:"💪"},news:{l:"News",c:"#1abc9c",e:"📰"},
   creative:{l:"Creative",c:"#f39c12",e:"🎨"},security:{l:"Security",c:"#607d8b",e:"🔒"},
@@ -42,7 +43,7 @@ export const CATS = {
 // Category mapping for each service (for compare pages)
 export const SERVICE_CATS={
   'Netflix':'streaming','Hulu':'streaming','Disney+':'streaming','HBO Max':'streaming',
-  'Paramount+':'streaming','Peacock':'streaming','YouTube Premium':'streaming',
+  'Paramount+':'streaming','Peacock':'streaming','Apple TV+':'streaming','YouTube Premium':'streaming',
   'Amazon Prime Video':'streaming','Crunchyroll':'streaming',
   'Spotify':'music','Apple Music':'music','Tidal':'music','YouTube Music':'music',
   'Xbox Game Pass':'gaming','PlayStation Plus':'gaming',

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
-import { TIERS, SERVICE_CATS, CATS, COMPARE_PAIRS } from '../data/serviceData';
+import { TIERS, SERVICE_CATS, CATS } from '../data/serviceData';
 import { CANCEL_GUIDES } from '../data/cancelGuides';
 import { COMPARE_DATA } from '../data/compareData';
 import { Helmet, JsonLd } from '../components/Helmet';
@@ -249,23 +249,13 @@ export default function CompareIndex(){
         )}
 
         {/* Cancel guides + alternatives links */}
-        <div style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:28}}>
-          {guideA&&<Link to={`/guides/cancel/${slug(pickA)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {pickA} →</Link>}
-          {guideB&&<Link to={`/guides/cancel/${slug(pickB)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {pickB} →</Link>}
-          <Link to={`/alternatives/${slug(pickA)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222"}}>{pickA} alternatives</Link>
-          <Link to={`/alternatives/${slug(pickB)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222"}}>{pickB} alternatives</Link>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:10,marginBottom:28}}>
+          {guideA&&<Link to={`/guides/cancel/${slug(pickA)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222",textAlign:"center",whiteSpace:"nowrap"}}>Cancel {pickA} →</Link>}
+          {guideB&&<Link to={`/guides/cancel/${slug(pickB)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222",textAlign:"center",whiteSpace:"nowrap"}}>Cancel {pickB} →</Link>}
+          <Link to={`/alternatives/${slug(pickA)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222",textAlign:"center",whiteSpace:"nowrap"}}>{pickA} alts</Link>
+          <Link to={`/alternatives/${slug(pickB)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222",textAlign:"center",whiteSpace:"nowrap"}}>{pickB} alts</Link>
         </div>
       </>}
-
-      {/* Popular comparisons */}
-      <div style={{marginTop:48}}>
-        <h2 style={{fontSize:20,fontWeight:800,marginBottom:16}}>Popular Comparisons</h2>
-        <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-          {COMPARE_PAIRS.map(([a,b])=>(
-            <Link key={`${a}-${b}`} to={`/compare/${slug(a)}-vs-${slug(b)}`} style={{background:SF,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222"}}>{a} vs {b}</Link>
-          ))}
-        </div>
-      </div>
 
       {/* CTA */}
       <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center",marginTop:40}}>
