@@ -114,14 +114,29 @@ export default function Landing(){
       <div style={{marginTop:16}}><Link to="/guides" style={{color:G,fontSize:14,fontWeight:600,textDecoration:"none"}}>View all 50+ guides →</Link></div>
     </section>
 
-    {/* Popular comparisons */}
-    <section style={{maxWidth:1000,margin:"0 auto",padding:"0 24px 64px"}}>
-      <h2 style={{fontSize:22,fontWeight:800,marginBottom:20}}>Compare Services</h2>
+    {/* Compare tool */}
+    <section style={{maxWidth:1000,margin:"0 auto",padding:"0 24px 40px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20,flexWrap:"wrap",gap:12}}>
+        <h2 style={{fontSize:22,fontWeight:800,margin:0}}>Compare Services</h2>
+        <Link to="/compare" style={{color:G,fontSize:14,fontWeight:600,textDecoration:"none"}}>Open compare tool →</Link>
+      </div>
       <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
         {[["Netflix","Hulu"],["Spotify","Apple Music"],["Disney+","HBO Max"],["ChatGPT Plus","Claude Pro"],["Xbox Game Pass","PlayStation Plus"],["Dropbox","Google One"]].map(([a,b])=>{
           const slug=`${a.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-vs-${b.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`;
           return <Link key={slug} to={`/compare/${slug}`} style={{background:SF,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:`1px solid #222`}}>{a} vs {b}</Link>
         })}
+      </div>
+    </section>
+
+    {/* Alternatives */}
+    <section style={{maxWidth:1000,margin:"0 auto",padding:"0 24px 64px"}}>
+      <h2 style={{fontSize:22,fontWeight:800,marginBottom:20}}>Find Alternatives</h2>
+      <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
+        {["Netflix","Spotify","ChatGPT Plus","Adobe Creative Cloud","Microsoft 365","Dropbox","NordVPN","Xbox Game Pass","Disney+"].map(s=>(
+          <Link key={s} to={`/alternatives/${s.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:SF,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:`1px solid #222`}}>
+            {s} alternatives
+          </Link>
+        ))}
       </div>
     </section>
 
