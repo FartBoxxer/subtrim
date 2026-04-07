@@ -3,6 +3,14 @@ import { Link } from 'react-router-dom';
 
 const G='#00d48a',BG='#0d0d0d',SF='#141414',EL='#1f1f1f',MT='#888',TX='#fff';
 const B={border:"none",borderRadius:10,padding:"14px 28px",cursor:"pointer",fontSize:15,fontWeight:700,fontFamily:"inherit",transition:"all 0.15s"};
+const fm=n=>'$'+Number(n).toFixed(2);
+
+const RECEIPT_ITEMS=[
+  {n:"Netflix",p:15.49,cut:false},{n:"Spotify",p:10.99,cut:false},{n:"Hulu",p:17.99,cut:true},
+  {n:"Disney+",p:13.99,cut:false},{n:"YouTube Premium",p:13.99,cut:true},{n:"HBO Max",p:15.99,cut:false},
+  {n:"iCloud+",p:2.99,cut:false},{n:"ChatGPT Plus",p:20,cut:false},{n:"Adobe CC",p:54.99,cut:true},
+  {n:"Xbox Game Pass",p:19.99,cut:false},
+];
 
 export default function Landing(){
   const[showBanner,setShowBanner]=useState(true);
@@ -11,6 +19,9 @@ export default function Landing(){
   const[cfMsg,setCfMsg]=useState('');
   const[cfStatus,setCfStatus]=useState('');
   const[cfSending,setCfSending]=useState(false);
+
+  const total=RECEIPT_ITEMS.reduce((a,i)=>a+i.p,0);
+  const saved=RECEIPT_ITEMS.filter(i=>i.cut).reduce((a,i)=>a+i.p,0);
 
   const handleContact=async(e)=>{
     e.preventDefault();
@@ -29,6 +40,7 @@ export default function Landing(){
 
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
+    <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}`}</style>
     {/* Dev banner */}
     {showBanner&&<div style={{background:'linear-gradient(135deg,#00d48a18,#3498db18)',borderBottom:'1px solid #00d48a33',padding:'14px 24px',position:'relative'}}>
       <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center',gap:12,flexWrap:'wrap'}}>
@@ -45,20 +57,53 @@ export default function Landing(){
       <Link to="/" style={{fontSize:22,fontWeight:800,letterSpacing:"-0.5px",color:TX,textDecoration:"none"}}>✂️ SubTrim</Link>
       <div style={{display:"flex",gap:12,alignItems:"center"}}>
         <Link to="/guides" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500}}>Guides</Link>
+        <Link to="/compare" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500}}>Compare</Link>
         <Link to="/calculator" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500}}>Calculator</Link>
         <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 22px",fontSize:14,textDecoration:"none"}}>Get Started</Link>
       </div>
     </nav>
 
-    {/* Hero */}
-    <section style={{textAlign:"center",padding:"80px 24px 60px",maxWidth:720,margin:"0 auto"}}>
-      <div style={{fontSize:52,marginBottom:16}}>✂️</div>
-      <h1 style={{fontSize:42,fontWeight:800,lineHeight:1.15,margin:"0 0 20px",letterSpacing:"-1px"}}>Stop Overpaying for<br/><span style={{color:G}}>Subscriptions</span></h1>
-      <p style={{fontSize:18,color:MT,lineHeight:1.6,maxWidth:540,margin:"0 auto 36px"}}>SubTrim tracks every subscription, audits your usage, finds overlaps, and tells you exactly what to keep, cancel, or downgrade.</p>
-      <div style={{display:"flex",gap:12,justifyContent:"center",flexWrap:"wrap"}}>
-        <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 36px",textDecoration:"none"}}>Start Free — No Card Required</Link>
+    {/* Hero — Receipt */}
+    <section style={{padding:"60px 24px 40px",maxWidth:520,margin:"0 auto"}}>
+      <div style={{background:"#0f0f0f",border:"1px solid #1a1a1a",borderRadius:2,padding:"40px 36px",position:"relative",boxShadow:"0 20px 60px rgba(0,0,0,0.5)"}}>
+        {/* Torn top */}
+        <div style={{position:"absolute",top:-1,left:0,right:0,height:6,background:BG,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")"}}/>
+        <div style={{textAlign:"center",marginBottom:28}}>
+          <div style={{fontSize:16,fontWeight:800,letterSpacing:3,textTransform:"uppercase",color:"#444"}}>Monthly Statement</div>
+          <div style={{fontSize:32,fontWeight:800,marginTop:8}}>✂️ SubTrim</div>
+          <div style={{fontSize:13,color:"#444",marginTop:4,fontFamily:"monospace"}}>— — — — — — — — — — — — — —</div>
+        </div>
+        <div style={{fontFamily:"'Inter',monospace"}}>
+          {RECEIPT_ITEMS.map((item,i)=>(
+            <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px dashed #1a1a1a",position:"relative",animation:`dropIn 0.3s ease ${i*0.08}s both`}}>
+              <span style={{fontSize:15,color:item.cut?"#555":"#ccc",textDecoration:item.cut?"line-through":"none"}}>{item.n}</span>
+              <span style={{fontSize:15,fontWeight:600,fontVariantNumeric:"tabular-nums",color:item.cut?"#555":"#ccc",textDecoration:item.cut?"line-through":"none"}}>{fm(item.p)}</span>
+              {item.cut&&<div style={{position:"absolute",top:"50%",left:0,height:2,background:"#ef4444",animation:`cutLine 0.4s ease ${0.8+i*0.08}s both`}}/>}
+            </div>
+          ))}
+        </div>
+        <div style={{fontFamily:"monospace",fontSize:13,color:"#444",textAlign:"center",margin:"16px 0",letterSpacing:2}}>— — — — — — — — — — — — — —</div>
+        <div style={{display:"flex",justifyContent:"space-between",padding:"8px 0",animation:"fadeIn 0.5s ease 1.2s both"}}>
+          <span style={{fontSize:14,color:MT}}>Subtotal</span>
+          <span style={{fontSize:14,color:MT,textDecoration:"line-through"}}>{fm(total)}/mo</span>
+        </div>
+        <div style={{display:"flex",justifyContent:"space-between",padding:"8px 0",animation:"fadeIn 0.5s ease 1.4s both"}}>
+          <span style={{fontSize:14,color:"#ef4444",fontWeight:600}}>✂️ SubTrim savings</span>
+          <span style={{fontSize:14,color:"#ef4444",fontWeight:700}}>-{fm(saved)}/mo</span>
+        </div>
+        <div style={{display:"flex",justifyContent:"space-between",padding:"12px 0 4px",borderTop:"2px solid #222",animation:"fadeIn 0.5s ease 1.6s both"}}>
+          <span style={{fontSize:20,fontWeight:800}}>New Total</span>
+          <span style={{fontSize:20,fontWeight:800,color:G}}>{fm(total-saved)}/mo</span>
+        </div>
+        <div style={{textAlign:"right",fontSize:13,color:G,fontWeight:600,animation:"fadeIn 0.5s ease 1.8s both"}}>You save {fm(saved*12)}/year</div>
+        {/* Torn bottom */}
+        <div style={{position:"absolute",bottom:-1,left:0,right:0,height:6,background:BG,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")"}}/>
       </div>
-      <p style={{fontSize:13,color:"#555",marginTop:14}}>Free forever. Your data stays yours.</p>
+      <div style={{textAlign:"center",marginTop:32}}>
+        <p style={{fontSize:18,color:MT,marginBottom:20,lineHeight:1.5}}>The average American wastes <strong style={{color:TX}}>{fm(saved*12)}/year</strong> on subscriptions they barely use.</p>
+        <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 36px",textDecoration:"none",display:"inline-block"}}>Find Your Savings — Free</Link>
+        <p style={{fontSize:13,color:"#555",marginTop:14}}>No credit card. Takes 2 minutes.</p>
+      </div>
     </section>
 
     {/* Features */}
@@ -120,8 +165,9 @@ export default function Landing(){
         <h2 style={{fontSize:22,fontWeight:800,margin:0}}>Compare Services</h2>
         <Link to="/compare" style={{color:G,fontSize:14,fontWeight:600,textDecoration:"none"}}>Open compare tool →</Link>
       </div>
+      <p style={{fontSize:14,color:MT,margin:"0 0 16px",lineHeight:1.5}}>Not sure which service to keep? Compare any two subscriptions side by side — plans, pricing, features, pros & cons.</p>
       <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-        {[["Netflix","Hulu"],["Spotify","Apple Music"],["Disney+","HBO Max"],["ChatGPT Plus","Claude Pro"],["Xbox Game Pass","PlayStation Plus"],["Dropbox","Google One"]].map(([a,b])=>{
+        {[["Netflix","Hulu"],["Spotify","Apple Music"],["Disney+","HBO Max"],["ChatGPT Plus","Claude Pro"],["Xbox Game Pass","PlayStation Plus"],["Dropbox","Google One"],["Netflix","Disney+"],["Hulu","Paramount+"],["YouTube Music","Spotify"],["NordVPN","1Password"]].map(([a,b])=>{
           const slug=`${a.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-vs-${b.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`;
           return <Link key={slug} to={`/compare/${slug}`} style={{background:SF,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:`1px solid #222`}}>{a} vs {b}</Link>
         })}
@@ -129,8 +175,12 @@ export default function Landing(){
     </section>
 
     {/* Alternatives */}
-    <section style={{maxWidth:1000,margin:"0 auto",padding:"0 24px 64px"}}>
-      <h2 style={{fontSize:22,fontWeight:800,marginBottom:20}}>Find Alternatives</h2>
+    <section style={{maxWidth:1000,margin:"0 auto",padding:"0 24px 40px"}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20,flexWrap:"wrap",gap:12}}>
+        <h2 style={{fontSize:22,fontWeight:800,margin:0}}>Find Cheaper Alternatives</h2>
+        <Link to="/alternatives" style={{color:G,fontSize:14,fontWeight:600,textDecoration:"none"}}>Browse all alternatives →</Link>
+      </div>
+      <p style={{fontSize:14,color:MT,margin:"0 0 16px",lineHeight:1.5}}>Paying too much for a service? See what else is out there — ranked by price, features, and our recommendations.</p>
       <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
         {["Netflix","Spotify","ChatGPT Plus","Adobe Creative Cloud","Microsoft 365","Dropbox","NordVPN","Xbox Game Pass","Disney+"].map(s=>(
           <Link key={s} to={`/alternatives/${s.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:SF,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:`1px solid #222`}}>
@@ -184,6 +234,8 @@ export default function Landing(){
       <div style={{fontSize:14,fontWeight:700,marginBottom:8}}>✂️ SubTrim</div>
       <div style={{display:"flex",gap:16,justifyContent:"center",flexWrap:"wrap",marginBottom:12}}>
         <Link to="/guides" style={{color:MT,fontSize:12,textDecoration:"none"}}>Guides</Link>
+        <Link to="/compare" style={{color:MT,fontSize:12,textDecoration:"none"}}>Compare</Link>
+        <Link to="/alternatives" style={{color:MT,fontSize:12,textDecoration:"none"}}>Alternatives</Link>
         <Link to="/calculator" style={{color:MT,fontSize:12,textDecoration:"none"}}>Calculator</Link>
         <a href="#contact" style={{color:MT,fontSize:12,textDecoration:"none"}}>Contact</a>
         <Link to="/app" style={{color:MT,fontSize:12,textDecoration:"none"}}>Sign Up</Link>

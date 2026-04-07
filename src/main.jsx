@@ -10,6 +10,7 @@ const Calculator = lazy(() => import("./pages/Calculator.jsx"));
 const Guides = lazy(() => import("./pages/Guides.jsx"));
 const CompareIndex = lazy(() => import("./pages/CompareIndex.jsx"));
 const Alternatives = lazy(() => import("./pages/Alternatives.jsx"));
+const AlternativesIndex = lazy(() => import("./pages/AlternativesIndex.jsx"));
 
 const Loading = () => (
   <div style={{background:"#0d0d0d",minHeight:"100vh",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"'Inter',system-ui,sans-serif",color:"#888"}}>
@@ -63,6 +64,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/guides/cancel/:service" element={<CancelGuide />} />
             <Route path="/compare" element={<CompareIndex />} />
             <Route path="/compare/:slug" element={<Compare />} />
+            <Route path="/alternatives" element={<AlternativesIndex />} />
             <Route path="/alternatives/:service" element={<Alternatives />} />
             <Route path="/calculator" element={<Calculator />} />
             {/* Fallback — show the app (handles its own auth) */}

@@ -680,36 +680,69 @@ export default function App(){
       </div>
     </div>);
     return(<div style={{display:"flex",flexDirection:"column",gap:d?18:14}}>
-    {/* Stats row */}
-    <div style={isMobile?{}:{display:"flex",gap:28,alignItems:"center",background:t.sf,borderRadius:16,padding:"28px 32px"}}>
-      <div style={{textAlign:isMobile?"center":"left",padding:isMobile?"8px 0 4px":0,flex:isMobile?undefined:1}}>
-        <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
-          <div style={{fontSize:d?13:11,color:t.mt,fontWeight:500,textTransform:"uppercase",letterSpacing:1}}>Total Subscriptions</div>
-          <div style={{display:"flex",background:t.el,borderRadius:6,padding:1}}>
-            {["monthly","annual"].map(v=><button key={v} onClick={()=>setCostView(v)} style={{...B,padding:d?"3px 10px":"2px 8px",fontSize:d?11:9,borderRadius:5,background:costView===v?t.acc:"transparent",color:costView===v?"#000":t.dm,fontWeight:costView===v?700:400}}>{v==="monthly"?"/mo":"/yr"}</button>)}
-          </div>
+    {/* ═══ MONTHLY STATEMENT RECEIPT ═══ */}
+    <div style={{maxWidth:d?520:undefined,margin:d?"0 auto":undefined,width:"100%"}}>
+      <div style={{background:theme==="dark"?"#0f0f0f":"#fafaf8",border:`1px solid ${theme==="dark"?"#1a1a1a":"#e8e8e4"}`,borderRadius:2,padding:d?"40px 36px":"28px 24px",position:"relative",boxShadow:theme==="dark"?"0 20px 60px rgba(0,0,0,0.5)":"0 20px 60px rgba(0,0,0,0.08)"}}>
+        {/* Torn top */}
+        <div style={{position:"absolute",top:-1,left:0,right:0,height:6,background:t.bg,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")"}}/>
+        <div style={{textAlign:"center",marginBottom:d?28:20}}>
+          <div style={{fontSize:d?16:13,fontWeight:800,letterSpacing:3,textTransform:"uppercase",color:theme==="dark"?"#444":"#999"}}>Monthly Statement</div>
+          <div style={{fontSize:d?32:24,fontWeight:800,marginTop:8}}>✂️ SubTrim</div>
+          <div style={{fontSize:d?12:10,color:theme==="dark"?"#444":"#aaa",marginTop:4}}>{new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})} · {act.length} subscription{act.length!==1?"s":""}</div>
+          <div style={{fontSize:d?13:11,color:theme==="dark"?"#444":"#aaa",marginTop:4,fontFamily:"monospace"}}>— — — — — — — — — — — — — —</div>
         </div>
-        <div style={{fontSize:d?52:38,fontWeight:700,letterSpacing:"-1px"}}>{fm(costView==="annual"?mTot*12:mTot)}</div>
-        <div style={{fontSize:d?14:12,color:t.mt,marginTop:4}}>{costView==="annual"?`${fm(mTot)}/mo`:`${fm(mTot*12)}/yr`} · {act.length} active{saved>0&&<span> · <span onClick={()=>setShowSavedTip(v=>!v)} style={{color:t.acc,cursor:"pointer",borderBottom:`1px dashed ${t.acc}44`}}>{fm(saved)} saved</span></span>}</div>
-        {showSavedTip&&<div style={{fontSize:d?12:10,color:t.mt,marginTop:6,background:t.el,padding:d?"10px 14px":"8px 12px",borderRadius:8,lineHeight:1.5}}>Estimated savings from subscriptions you've removed — calculated as each removed sub's monthly cost × months since removal. <span onClick={()=>setShowSavedTip(false)} style={{color:t.acc,cursor:"pointer",marginLeft:4}}>Got it</span></div>}
+        {/* Line items */}
+        <div style={{fontFamily:"'Inter',monospace"}}>
+          {act.length===0&&<div style={{textAlign:"center",padding:d?"20px 0":"14px 0",color:t.dm,fontSize:d?14:12}}>No subscriptions yet. Tap + to add one.</div>}
+          {sorted.map((s,i)=>{const c=CATS[s.cat]||{e:"📦"};return(
+            <div key={s.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:d?"10px 0":"7px 0",borderBottom:`1px dashed ${theme==="dark"?"#1a1a1a":"#e0e0dd"}`}}>
+              <span style={{fontSize:d?15:13,color:theme==="dark"?"#ccc":"#333",display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:d?14:12}}>{c.e}</span>{s.name}</span>
+              <span style={{fontSize:d?15:13,fontWeight:600,fontVariantNumeric:"tabular-nums",color:theme==="dark"?"#ccc":"#333"}}>{fm(s.cost)}</span>
+            </div>
+          )})}
+        </div>
+        {act.length>0&&<>
+          <div style={{fontFamily:"monospace",fontSize:d?13:11,color:theme==="dark"?"#444":"#aaa",textAlign:"center",margin:"16px 0",letterSpacing:2}}>— — — — — — — — — — — — — —</div>
+          <div style={{display:"flex",justifyContent:"space-between",padding:"8px 0"}}>
+            <span style={{fontSize:d?14:12,color:t.mt}}>Subtotal</span>
+            <span style={{fontSize:d?14:12,color:t.mt}}>{fm(mTot)}/mo</span>
+          </div>
+          {saved>0&&<div style={{display:"flex",justifyContent:"space-between",padding:"8px 0"}}>
+            <span style={{fontSize:d?14:12,color:t.acc,fontWeight:600}}>✂️ SubTrim savings</span>
+            <span style={{fontSize:d?14:12,color:t.acc,fontWeight:700}}>{fm(saved)} total saved</span>
+          </div>}
+          <div style={{display:"flex",justifyContent:"space-between",padding:"12px 0 4px",borderTop:`2px solid ${theme==="dark"?"#222":"#ddd"}`}}>
+            <span style={{fontSize:d?20:16,fontWeight:800}}>Monthly Total</span>
+            <span style={{fontSize:d?20:16,fontWeight:800,color:t.acc}}>{fm(mTot)}/mo</span>
+          </div>
+          <div style={{textAlign:"right",fontSize:d?13:11,color:t.mt}}>{fm(mTot*12)}/year</div>
+        </>}
+        {/* Torn bottom */}
+        <div style={{position:"absolute",bottom:-1,left:0,right:0,height:6,background:t.bg,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")"}}/>
       </div>
 
-      {hasAudit&&<div style={{display:"flex",justifyContent:"center",padding:isMobile?"4px 0":0,flexShrink:0}}>
-        <Ring s={score} size={d?130:90} bg={t.bd} tc={t.tx}/>
-      </div>}
+      {/* Average person stat */}
+      <div style={{textAlign:"center",marginTop:d?24:16}}>
+        <p style={{fontSize:d?16:13,color:t.mt,lineHeight:1.6}}>The average American spends <strong style={{color:t.tx}}>{fm(273)}/mo</strong> on subscriptions.{act.length>0&&<>{' '}You spend <strong style={{color:mTot>273?"#ef4444":t.acc}}>{fm(mTot)}/mo</strong> — {mTot>273?`${fm(mTot-273)} above`:`${fm(273-mTot)} below`} average.</>}</p>
+      </div>
 
-      <div style={{flex:isMobile?undefined:1}}>
+      {/* Category breakdown */}
+      {catList.length>0&&<div style={{marginTop:d?16:12}}>
         <div style={{display:"flex",gap:2,height:d?8:6,borderRadius:4,overflow:"hidden",marginBottom:10}}>
           {catList.map((c,i)=><div key={i} style={{flex:c.pct,background:c.c,minWidth:3}}/>)}
         </div>
-        <div style={{display:"flex",gap:d?12:8,flexWrap:"wrap"}}>
+        <div style={{display:"flex",gap:d?12:8,flexWrap:"wrap",justifyContent:"center"}}>
           {catList.map((c,i)=>(
             <div key={i} style={{display:"flex",alignItems:"center",gap:5,fontSize:d?12:10,color:t.mt}}>
               <div style={{width:d?9:7,height:d?9:7,borderRadius:2,background:c.c}}/>{c.l} <span style={{color:t.tx,fontWeight:600}}>{fm(c.v)}</span>
             </div>
           ))}
         </div>
-      </div>
+      </div>}
+
+      {hasAudit&&<div style={{display:"flex",justifyContent:"center",marginTop:d?16:12}}>
+        <Ring s={score} size={d?110:80} bg={t.bd} tc={t.tx}/>
+      </div>}
     </div>
 
     {/* Alerts */}
@@ -721,21 +754,6 @@ export default function App(){
           <button onClick={()=>dismiss("reaudit")} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.mt,fontSize:d?12:11,borderRadius:6}}>Ignore</button>
           <button onClick={()=>permDismiss("reaudit")} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.dm,fontSize:d?11:10,borderRadius:6}}>Don't Show Again</button>
         </div>
-      </div>
-    )}
-    {olaps.length>0&&(
-      <div style={{background:t.sf,borderRadius:12,padding:d?"14px 18px":"10px 14px",borderLeft:"3px solid #e67e22"}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:olaps.length>1?8:0,flexWrap:"wrap",gap:6}}>
-          <span style={{fontSize:d?14:12,color:t.tx2}}>🔍 <strong>{olaps.length}</strong> overlap{olaps.length>1?"s":""} detected</span>
-          <button onClick={()=>setPg("audit")} style={{...B,padding:d?"6px 14px":"4px 10px",background:"#e67e22",color:"#000",fontSize:d?12:11,borderRadius:6}}>Review in Audit</button>
-        </div>
-        {olaps.map(o=><div key={o.k} style={{display:"flex",alignItems:"center",gap:6,fontSize:d?13:11,color:t.mt,padding:"3px 0"}}>
-          <span style={{color:t.tx2,fontWeight:600}}>{o.a}</span>
-          <span style={{color:t.dm}}>&</span>
-          <span style={{color:t.tx2,fontWeight:600}}>{o.b}</span>
-          <span style={{fontSize:d?11:9,background:"#e67e2222",color:"#e67e22",padding:"2px 8px",borderRadius:4}}>{o.tag}</span>
-          <button onClick={()=>permDismiss("ol-"+o.k)} style={{...B,padding:"2px 6px",background:t.el,color:t.dm,fontSize:d?10:8,borderRadius:4,marginLeft:"auto"}}>Dismiss</button>
-        </div>)}
       </div>
     )}
     {/* Budget alerts disabled for now — re-enable by uncommenting

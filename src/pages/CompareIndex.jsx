@@ -112,6 +112,15 @@ export default function CompareIndex(){
           ))}
         </div>
 
+        {/* Savings highlight */}
+        {cheapA!==cheapB&&(
+          <div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:14,padding:20,marginBottom:28,textAlign:"center"}}>
+            <div style={{fontSize:13,color:MT,marginBottom:4}}>💰 Switching to the cheaper option saves you</div>
+            <div style={{fontSize:32,fontWeight:800,color:G}}>{fm(Math.abs(cheapA-cheapB))}<span style={{fontSize:14,color:MT}}>/mo</span></div>
+            <div style={{fontSize:14,color:G,fontWeight:600,marginTop:4}}>That's {fm(Math.abs(cheapA-cheapB)*12)}/year by choosing {cheapA<cheapB?pickA:pickB}</div>
+          </div>
+        )}
+
         {/* Stats table */}
         <div style={{background:SF,borderRadius:16,padding:24,marginBottom:28}}>
           <h2 style={{fontSize:17,fontWeight:700,margin:"0 0 14px"}}>Quick Comparison</h2>
@@ -128,14 +137,24 @@ export default function CompareIndex(){
                 <td style={{padding:"11px 0",textAlign:"center",fontWeight:600,color:cheapB<=cheapA?G:TX}}>{fm(cheapB)}/mo{cheapB<cheapA?' ✓':''}</td>
               </tr>
               <tr style={{borderBottom:`1px solid ${EL}`}}>
-                <td style={{padding:"11px 0",color:MT}}>Annual Cost</td>
+                <td style={{padding:"11px 0",color:MT}}>Most Expensive</td>
+                <td style={{padding:"11px 0",textAlign:"center"}}>{fm(Math.max(...tiersA.map(t=>t.p)))}/mo</td>
+                <td style={{padding:"11px 0",textAlign:"center"}}>{fm(Math.max(...tiersB.map(t=>t.p)))}/mo</td>
+              </tr>
+              <tr style={{borderBottom:`1px solid ${EL}`}}>
+                <td style={{padding:"11px 0",color:MT}}>Annual Cost (cheapest)</td>
                 <td style={{padding:"11px 0",textAlign:"center"}}>{fm(cheapA*12)}/yr</td>
                 <td style={{padding:"11px 0",textAlign:"center"}}>{fm(cheapB*12)}/yr</td>
               </tr>
               <tr style={{borderBottom:`1px solid ${EL}`}}>
-                <td style={{padding:"11px 0",color:MT}}>Plans</td>
+                <td style={{padding:"11px 0",color:MT}}>Plan Options</td>
                 <td style={{padding:"11px 0",textAlign:"center"}}>{tiersA.length}</td>
                 <td style={{padding:"11px 0",textAlign:"center"}}>{tiersB.length}</td>
+              </tr>
+              <tr style={{borderBottom:`1px solid ${EL}`}}>
+                <td style={{padding:"11px 0",color:MT}}>Category</td>
+                <td style={{padding:"11px 0",textAlign:"center"}}><span style={{background:catA.c+"22",color:catA.c,padding:"3px 10px",borderRadius:6,fontSize:12,fontWeight:600}}>{catA.e} {catA.l}</span></td>
+                <td style={{padding:"11px 0",textAlign:"center"}}><span style={{background:catB.c+"22",color:catB.c,padding:"3px 10px",borderRadius:6,fontSize:12,fontWeight:600}}>{catB.e} {catB.l}</span></td>
               </tr>
               <tr style={{borderBottom:`1px solid ${EL}`}}>
                 <td style={{padding:"11px 0",color:MT}}>Cancellation</td>
@@ -153,21 +172,49 @@ export default function CompareIndex(){
           </table>
         </div>
 
+        {/* Feature comparison */}
+        {allFeatures.length>0&&(
+          <div style={{background:SF,borderRadius:16,padding:24,marginBottom:28}}>
+            <h2 style={{fontSize:17,fontWeight:700,margin:"0 0 14px"}}>Feature Comparison</h2>
+            <table style={{width:"100%",borderCollapse:"collapse",fontSize:14}}>
+              <thead><tr style={{borderBottom:`1px solid ${EL}`}}>
+                <th style={{textAlign:"left",padding:"10px 0",color:MT,fontWeight:500}}>Feature</th>
+                <th style={{textAlign:"center",padding:"10px 0",fontWeight:600,width:80}}>{pickA}</th>
+                <th style={{textAlign:"center",padding:"10px 0",fontWeight:600,width:80}}>{pickB}</th>
+              </tr></thead>
+              <tbody>
+                {allFeatures.map((f,i)=>{
+                  const hasA=dataA?.features?.includes(f);
+                  const hasB=dataB?.features?.includes(f);
+                  return(<tr key={i} style={{borderBottom:`1px solid ${EL}`}}>
+                    <td style={{padding:"11px 0",color:TX,fontSize:13}}>{f}</td>
+                    <td style={{padding:"11px 0",textAlign:"center",fontSize:16}}>{hasA?<span style={{color:G}}>✓</span>:<span style={{color:"#444"}}>—</span>}</td>
+                    <td style={{padding:"11px 0",textAlign:"center",fontSize:16}}>{hasB?<span style={{color:G}}>✓</span>:<span style={{color:"#444"}}>—</span>}</td>
+                  </tr>);
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+
         {/* Pros & Cons */}
         {(dataA?.pros||dataB?.pros)&&(
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:16,marginBottom:28}}>
             {[{name:pickA,data:dataA,info:catA},{name:pickB,data:dataB,info:catB}].map(({name,data,info},idx)=>(
               <div key={idx} style={{background:SF,borderRadius:16,padding:20}}>
-                <div style={{fontSize:15,fontWeight:700,marginBottom:12}}>{name}</div>
+                <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:12}}>
+                  <div style={{width:28,height:28,borderRadius:"50%",background:info.c+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14}}>{info.e}</div>
+                  <div style={{fontSize:15,fontWeight:700}}>{name}</div>
+                </div>
                 {data?.pros&&<div style={{marginBottom:12}}>
-                  <div style={{fontSize:11,fontWeight:600,color:G,marginBottom:4}}>PROS</div>
-                  {data.pros.map((p,i)=><div key={i} style={{fontSize:12,color:MT,padding:"4px 0",display:"flex",gap:6}}><span style={{color:G}}>+</span>{p}</div>)}
+                  <div style={{fontSize:11,fontWeight:600,color:G,marginBottom:6,letterSpacing:1}}>PROS</div>
+                  {data.pros.map((p,i)=><div key={i} style={{fontSize:13,color:MT,padding:"5px 0",display:"flex",gap:8,lineHeight:1.4}}><span style={{color:G,flexShrink:0}}>+</span>{p}</div>)}
                 </div>}
                 {data?.cons&&<div>
-                  <div style={{fontSize:11,fontWeight:600,color:"#ef4444",marginBottom:4}}>CONS</div>
-                  {data.cons.map((c,i)=><div key={i} style={{fontSize:12,color:MT,padding:"4px 0",display:"flex",gap:6}}><span style={{color:"#ef4444"}}>−</span>{c}</div>)}
+                  <div style={{fontSize:11,fontWeight:600,color:"#ef4444",marginBottom:6,letterSpacing:1}}>CONS</div>
+                  {data.cons.map((c,i)=><div key={i} style={{fontSize:13,color:MT,padding:"5px 0",display:"flex",gap:8,lineHeight:1.4}}><span style={{color:"#ef4444",flexShrink:0}}>−</span>{c}</div>)}
                 </div>}
-                {!data&&<div style={{fontSize:12,color:"#444"}}>Detailed data coming soon</div>}
+                {!data&&<div style={{fontSize:13,color:"#444",padding:8}}>Detailed data coming soon</div>}
               </div>
             ))}
           </div>
@@ -189,13 +236,13 @@ export default function CompareIndex(){
           </div>
         )}
 
-        {/* Cancel guides */}
-        {(guideA||guideB)&&(
-          <div style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:28}}>
-            {guideA&&<Link to={`/guides/cancel/${slug(pickA)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {pickA} →</Link>}
-            {guideB&&<Link to={`/guides/cancel/${slug(pickB)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {pickB} →</Link>}
-          </div>
-        )}
+        {/* Cancel guides + alternatives links */}
+        <div style={{display:"flex",gap:10,flexWrap:"wrap",marginBottom:28}}>
+          {guideA&&<Link to={`/guides/cancel/${slug(pickA)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {pickA} →</Link>}
+          {guideB&&<Link to={`/guides/cancel/${slug(pickB)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {pickB} →</Link>}
+          <Link to={`/alternatives/${slug(pickA)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222"}}>{pickA} alternatives</Link>
+          <Link to={`/alternatives/${slug(pickB)}`} style={{background:EL,borderRadius:10,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222"}}>{pickB} alternatives</Link>
+        </div>
       </>}
 
       {/* Popular comparisons */}
