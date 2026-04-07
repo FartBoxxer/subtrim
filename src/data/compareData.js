@@ -1,0 +1,141 @@
+// Rich comparison data for SEO compare pages
+// Features: key features each service offers
+// Pros/cons: balanced view
+// Stats: market data points
+// bestFor: one-liner recommendation
+
+export const COMPARE_DATA = {
+  'Netflix': {
+    features: ['Ad-free streaming (Standard+)', '4K HDR & Dolby Atmos', 'Download for offline', 'Multiple profiles', 'Games included', 'Global content library'],
+    pros: ['Largest original content library', 'Excellent recommendation algorithm', 'Works on every device', 'No annual contract'],
+    cons: ['No live TV or sports', 'Price increases frequently', 'Content rotates out', 'Ad tier has limited catalog'],
+    stats: { subscribers: '260M+', countries: '190+', titles: '17,000+', founded: '1997' },
+    bestFor: 'Best for binge-watchers who want the widest variety of original series and films.',
+  },
+  'Hulu': {
+    features: ['Next-day TV episodes', 'Live TV add-on available', 'Bundleable with Disney+ & ESPN+', 'Download for offline (No Ads)', 'Multiple profiles', 'Add-on channels (HBO, Showtime)'],
+    pros: ['Next-day access to current TV shows', 'Cheaper entry price than Netflix', 'Disney+ bundle is great value', 'Live TV option'],
+    cons: ['Ad tier has frequent ads', 'Smaller original content library', 'US only', 'Interface can be cluttered'],
+    stats: { subscribers: '50M+', countries: '1 (US)', titles: '5,000+', founded: '2007' },
+    bestFor: 'Best for cord-cutters who want current-season TV shows the day after they air.',
+  },
+  'Disney+': {
+    features: ['Disney, Marvel, Star Wars, Pixar, Nat Geo', '4K HDR included on all plans', 'Download for offline', 'GroupWatch feature', 'IMAX Enhanced content', 'Bundleable with Hulu & ESPN+'],
+    pros: ['Unmatched family content', 'All Marvel & Star Wars in one place', '4K included at no extra cost', 'Great value bundle with Hulu'],
+    cons: ['Smaller catalog than Netflix', 'Limited mature content', 'Fewer new releases per month', 'Some content only on Premium tier'],
+    stats: { subscribers: '150M+', countries: '60+', titles: '1,200+', founded: '2019' },
+    bestFor: 'Best for families and fans of Disney, Marvel, Star Wars, and Pixar franchises.',
+  },
+  'HBO Max': {
+    features: ['HBO originals + Warner Bros films', 'Same-day theatrical releases (select)', '4K HDR on Ultimate plan', 'Download for offline', 'Multiple profiles', 'Ad-free option'],
+    pros: ['Highest-quality originals (Emmy-winning)', 'Warner Bros movies added quickly', 'Strong documentary selection', 'DC Universe content'],
+    cons: ['Smaller catalog overall', 'Higher base price', '4K only on top tier', 'Interface can be buggy'],
+    stats: { subscribers: '100M+', countries: '60+', titles: '3,000+', founded: '2020' },
+    bestFor: 'Best for viewers who prioritize prestige, award-winning content over quantity.',
+  },
+  'Spotify': {
+    features: ['100M+ songs', 'Podcasts included', 'Offline downloads', 'AI DJ & personalized mixes', 'Collaborative playlists', 'Cross-device listening'],
+    pros: ['Best music discovery algorithm', 'Largest podcast library', 'Free tier available', 'Works everywhere'],
+    cons: ['Audio quality capped at 320kbps', 'Artist payouts are low', 'Lyrics not always available', 'Free tier has ads & no offline'],
+    stats: { subscribers: '220M+ paid', countries: '180+', songs: '100M+', founded: '2006' },
+    bestFor: 'Best for music discovery and casual listeners who also enjoy podcasts.',
+  },
+  'Apple Music': {
+    features: ['100M+ songs', 'Lossless & Spatial Audio', 'Music videos', 'Apple ecosystem integration', 'Live radio stations', 'Collaborative playlists'],
+    pros: ['Lossless audio at no extra cost', 'Spatial Audio with Dolby Atmos', 'Clean interface', 'Better artist payouts than Spotify'],
+    cons: ['No free tier', 'Weaker podcast integration', 'Discovery algorithm not as strong', 'Android app less polished'],
+    stats: { subscribers: '88M+', countries: '167', songs: '100M+', founded: '2015' },
+    bestFor: 'Best for audiophiles and Apple ecosystem users who want lossless quality.',
+  },
+  'YouTube Music': {
+    features: ['Official songs + user uploads', 'Music videos integrated', 'Smart recommendations', 'Offline downloads', 'Background play', 'Bundled with YouTube Premium'],
+    pros: ['Includes unofficial remixes & covers', 'Music video integration', 'YouTube Premium bundle adds ad-free YouTube', 'Good discovery'],
+    cons: ['Interface can be confusing', 'Library organization is weaker', 'Audio quality lower than competitors', 'Less curated playlists'],
+    stats: { subscribers: '80M+', countries: '100+', songs: '100M+', founded: '2015' },
+    bestFor: 'Best for YouTube users who want music + ad-free video in one subscription.',
+  },
+  'Tidal': {
+    features: ['HiFi & Master quality audio', '100M+ songs', 'Music videos', 'Artist-owned platform', 'Offline downloads', 'DJ integration'],
+    pros: ['Best audio quality available', 'Higher artist payouts', 'Exclusive releases', 'DJ/production tool integration'],
+    cons: ['Smaller user base = less social features', 'Higher price for HiFi Plus', 'Fewer podcasts', 'Algorithm not as refined'],
+    stats: { subscribers: '5M+', countries: '60+', songs: '100M+', founded: '2014' },
+    bestFor: 'Best for audiophiles who want the highest quality audio and support fair artist pay.',
+  },
+  'ChatGPT Plus': {
+    features: ['GPT-4o access', 'DALL-E image generation', 'Code interpreter', 'Custom GPTs', 'Web browsing', 'File upload & analysis'],
+    pros: ['Most versatile AI assistant', 'Huge ecosystem of plugins & GPTs', 'Strong at coding & analysis', 'Frequent updates'],
+    cons: ['Rate limits even on Plus', 'Pro tier is very expensive ($200)', 'Can hallucinate facts', 'Privacy concerns with data training'],
+    stats: { users: '200M+ weekly', launched: '2022', models: 'GPT-4o, o1, o3', company: 'OpenAI' },
+    bestFor: 'Best for general-purpose AI use, especially creative writing and coding tasks.',
+  },
+  'Claude Pro': {
+    features: ['Claude Opus & Sonnet access', 'Extended context window', 'File & image analysis', 'Artifacts (code, docs)', 'Projects with persistent context', 'Priority access'],
+    pros: ['Strongest at nuanced reasoning', 'Longer context window', 'More thoughtful responses', 'Better at following complex instructions'],
+    cons: ['Smaller plugin ecosystem', 'No image generation', 'Fewer integrations than ChatGPT', 'Rate limits on heavy usage'],
+    stats: { launched: '2023', models: 'Opus, Sonnet, Haiku', company: 'Anthropic', context: '200K tokens' },
+    bestFor: 'Best for complex analysis, long documents, coding, and tasks requiring careful reasoning.',
+  },
+  'Xbox Game Pass': {
+    features: ['400+ games', 'Day-one first-party releases', 'Cloud gaming (Ultimate)', 'EA Play included (Ultimate)', 'PC + Console options', 'Online multiplayer (Ultimate)'],
+    pros: ['Incredible value for volume gamers', 'Day-one Microsoft exclusives', 'Cloud gaming on phones/tablets', 'Includes EA Play'],
+    cons: ['Games can leave the catalog', 'Best games need Ultimate tier', 'Download sizes are large', 'Not all third-party games included'],
+    stats: { subscribers: '34M+', games: '400+', platforms: 'Xbox, PC, Cloud', launched: '2017' },
+    bestFor: 'Best for gamers who play many different titles and want day-one access to Microsoft exclusives.',
+  },
+  'PlayStation Plus': {
+    features: ['Online multiplayer', 'Monthly free games (Essential)', 'Game catalog (Extra)', 'Classic games (Premium)', 'Cloud streaming (Premium)', 'Game trials (Premium)'],
+    pros: ['Required for online play anyway', 'Monthly games are solid quality', 'Classic game library is nostalgic', 'Cloud streaming works well'],
+    cons: ['Online play locked behind paywall', 'Catalog smaller than Game Pass', 'No day-one first-party games', 'Classic game selection varies'],
+    stats: { subscribers: '47M+', games: '700+ (Premium)', platforms: 'PS4, PS5, PC', launched: '2010' },
+    bestFor: 'Best for PlayStation owners who want online multiplayer and a rotating game library.',
+  },
+  'Dropbox': {
+    features: ['Cloud storage', 'File sync across devices', 'Smart Sync (save disk space)', 'Paper (docs)', 'Transfer (large files)', 'Backup'],
+    pros: ['Reliable syncing', 'Works on all platforms', 'Strong file sharing', 'Good third-party integrations'],
+    cons: ['Free tier only 2GB', 'More expensive than alternatives', 'No built-in office suite', 'Storage caps are lower'],
+    stats: { users: '700M+', storage: 'Up to 3TB', platforms: 'All', founded: '2007' },
+    bestFor: 'Best for professionals who need reliable cross-platform file sync and sharing.',
+  },
+  'Google One': {
+    features: ['Google Drive/Photos/Gmail storage', 'VPN included (2TB+)', 'Google Photos editing tools', 'Family sharing', 'Google Store rewards', 'Expert support'],
+    pros: ['Cheapest per-GB pricing', 'Integrates with Google ecosystem', 'VPN included at higher tiers', 'Easy family sharing'],
+    cons: ['Less useful outside Google ecosystem', 'No desktop sync app (use Drive)', 'Privacy concerns', 'Limited file sharing features'],
+    stats: { storage: 'Up to 2TB', starting: '$2.99/mo', family: 'Up to 5 members', founded: '2018' },
+    bestFor: 'Best for Google users who need more storage for Drive, Photos, and Gmail.',
+  },
+  'iCloud+': {
+    features: ['iCloud Drive storage', 'Photos sync', 'Private Relay (VPN-like)', 'Hide My Email', 'Custom email domain', 'HomeKit Secure Video'],
+    pros: ['Seamless Apple integration', 'Private Relay for privacy', 'Cheapest tier is only $0.99', 'Family sharing included'],
+    cons: ['Only useful for Apple users', 'No Android/Windows sync', 'No standalone VPN', 'Less storage per dollar'],
+    stats: { storage: 'Up to 12TB', starting: '$0.99/mo', users: '850M+ iCloud users', founded: '2011' },
+    bestFor: 'Best for Apple ecosystem users who need Photos sync and device backup.',
+  },
+  'Adobe Creative Cloud': {
+    features: ['Photoshop, Illustrator, Premiere Pro', '20+ creative apps', '100GB cloud storage', 'Adobe Fonts', 'Adobe Stock integration', 'Cross-device sync'],
+    pros: ['Industry standard tools', 'Comprehensive creative suite', 'Regular feature updates', 'Massive learning resources'],
+    cons: ['Very expensive', 'Annual contract with cancellation fee', 'Resource-heavy apps', 'No permanent license option'],
+    stats: { subscribers: '30M+', apps: '20+', storage: '100GB', founded: '2012' },
+    bestFor: 'Best for creative professionals who need industry-standard design, photo, and video tools.',
+  },
+  'Microsoft 365': {
+    features: ['Word, Excel, PowerPoint, Outlook', '1TB OneDrive storage', 'Teams included', 'Publisher & Access (PC)', 'Copilot AI integration', 'Family plan (6 users)'],
+    pros: ['Essential for most workplaces', '1TB cloud storage included', 'Works offline', 'Family plan is great value'],
+    cons: ['Subscription-only model', 'Can be bloated', 'Mac version lacks some features', 'Competing with free Google Docs'],
+    stats: { subscribers: '80M+', storage: '1TB per user', platforms: 'All', founded: '2011' },
+    bestFor: 'Best for professionals and students who need the full Office suite with cloud storage.',
+  },
+  'Notion': {
+    features: ['Notes, docs, wikis', 'Databases & project management', 'AI assistant', 'Templates library', 'Team collaboration', 'API & integrations'],
+    pros: ['Incredibly flexible', 'All-in-one workspace', 'Great templates', 'Strong free tier'],
+    cons: ['Steep learning curve', 'Can be slow with large databases', 'Offline support is limited', 'Mobile app is cramped'],
+    stats: { users: '35M+', templates: '10,000+', platforms: 'All', founded: '2016' },
+    bestFor: 'Best for individuals and teams who want a flexible all-in-one workspace for notes, docs, and project management.',
+  },
+  'NordVPN': {
+    features: ['5,000+ servers in 60 countries', 'Double VPN', 'Threat Protection', 'Meshnet', 'No-logs policy', '6 devices simultaneously'],
+    pros: ['Fast speeds', 'Strong security features', 'No-logs audited', 'Good for streaming'],
+    cons: ['Monthly plan is expensive', 'Occasional connection drops', 'Owned by Nord Security (Lithuania)', 'Some servers are slow'],
+    stats: { servers: '5,800+', countries: '60', devices: '6', founded: '2012' },
+    bestFor: 'Best for users who want fast, reliable VPN with strong privacy features.',
+  },
+};

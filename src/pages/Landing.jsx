@@ -44,6 +44,7 @@ export default function Landing(){
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:1100,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:22,fontWeight:800,letterSpacing:"-0.5px",color:TX,textDecoration:"none"}}>✂️ SubTrim</Link>
       <div style={{display:"flex",gap:12,alignItems:"center"}}>
+        <Link to="/guides" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500}}>Guides</Link>
         <Link to="/calculator" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500}}>Calculator</Link>
         <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 22px",fontSize:14,textDecoration:"none"}}>Get Started</Link>
       </div>
@@ -110,6 +111,7 @@ export default function Landing(){
           </Link>
         ))}
       </div>
+      <div style={{marginTop:16}}><Link to="/guides" style={{color:G,fontSize:14,fontWeight:600,textDecoration:"none"}}>View all 50+ guides →</Link></div>
     </section>
 
     {/* Popular comparisons */}
@@ -166,6 +168,7 @@ export default function Landing(){
     <footer style={{borderTop:"1px solid #1a1a1a",padding:"32px 24px",textAlign:"center"}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:8}}>✂️ SubTrim</div>
       <div style={{display:"flex",gap:16,justifyContent:"center",flexWrap:"wrap",marginBottom:12}}>
+        <Link to="/guides" style={{color:MT,fontSize:12,textDecoration:"none"}}>Guides</Link>
         <Link to="/calculator" style={{color:MT,fontSize:12,textDecoration:"none"}}>Calculator</Link>
         <a href="#contact" style={{color:MT,fontSize:12,textDecoration:"none"}}>Contact</a>
         <Link to="/app" style={{color:MT,fontSize:12,textDecoration:"none"}}>Sign Up</Link>
