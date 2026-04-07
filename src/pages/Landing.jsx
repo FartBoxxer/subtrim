@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { createClient } from '@supabase/supabase-js';
 
 const G='#00d48a',BG='#0d0d0d',SF='#141414',EL='#1f1f1f',MT='#888',TX='#fff';
 const B={border:"none",borderRadius:10,padding:"14px 28px",cursor:"pointer",fontSize:15,fontWeight:700,fontFamily:"inherit",transition:"all 0.15s"};
@@ -22,6 +23,16 @@ export default function Landing(){
 
   const total=RECEIPT_ITEMS.reduce((a,i)=>a+i.p,0);
   const saved=RECEIPT_ITEMS.filter(i=>i.cut).reduce((a,i)=>a+i.p,0);
+  const[subCount,setSubCount]=useState(null);
+  useEffect(()=>{
+    try{
+      const url=import.meta.env.VITE_SUPABASE_URL;
+      const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      if(!url||!key)return;
+      const sb=createClient(url,key);
+      sb.from('subscriptions').select('id',{count:'exact',head:true}).then(({count})=>{if(count!=null)setSubCount(count)});
+    }catch{}
+  },[]);
 
   const handleContact=async(e)=>{
     e.preventDefault();
@@ -40,7 +51,7 @@ export default function Landing(){
 
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
-    <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}`}</style>
+    <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}`}</style>
     {/* Dev banner */}
     {showBanner&&<div style={{background:'linear-gradient(135deg,#00d48a18,#3498db18)',borderBottom:'1px solid #00d48a33',padding:'14px 24px',position:'relative'}}>
       <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center',gap:12,flexWrap:'wrap'}}>
@@ -105,6 +116,16 @@ export default function Landing(){
         <p style={{fontSize:13,color:"#555",marginTop:14}}>No credit card. Takes 2 minutes.</p>
       </div>
     </section>
+
+    {/* Social proof counter */}
+    {subCount!=null&&subCount>0&&(
+      <section style={{textAlign:"center",padding:"0 24px 20px"}}>
+        <div style={{display:"inline-flex",alignItems:"center",gap:12,background:SF,borderRadius:40,padding:"12px 28px",border:"1px solid #1a1a1a"}}>
+          <div style={{width:8,height:8,borderRadius:"50%",background:G,animation:"pulse 2s ease-in-out infinite"}}/>
+          <span style={{fontSize:15,color:TX}}><strong style={{color:G,fontSize:18}}>{subCount.toLocaleString()}</strong> subscriptions tracked globally</span>
+        </div>
+      </section>
+    )}
 
     {/* Features */}
     <section style={{maxWidth:1000,margin:"0 auto",padding:"40px 24px 80px"}}>

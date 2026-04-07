@@ -190,6 +190,14 @@ export default function App(){
   const fm=useCallback(n=>mkFmt(currency).format(Number(n)),[currency]);
   const reportRef=useRef(null);
 
+  // Household state
+  const[household,setHousehold]=useState(null);
+  const[hhMembers,setHhMembers]=useState([]);
+  const[hhLoading,setHhLoading]=useState(false);
+  const[hhCreateName,setHhCreateName]=useState("");
+  const[hhJoinCode,setHhJoinCode]=useState("");
+  const[hhView,setHhView]=useState("idle");
+
   useEffect(()=>{localStorage.setItem('st_av',JSON.stringify(av))},[av]);
 
   const[isMobile,setIsMobile]=useState(typeof window!=="undefined"?window.innerWidth<768:false);
@@ -212,7 +220,7 @@ export default function App(){
 
   // Fetch data when user logs in
   useEffect(()=>{
-    if(!user){setSubs([]);setLatestScore(0);setSavedAmt(0);setDataLoading(false);return}
+    if(!user){setSubs([]);setLatestScore(0);setSavedAmt(0);setHousehold(null);setHhMembers([]);setDataLoading(false);return}
     setDataLoading(true);
     const load=async()=>{
       // Fetch subs with tags for overlap detection
@@ -260,6 +268,24 @@ export default function App(){
         if(prof.theme&&prof.theme!=='system'){setTheme(prof.theme);localStorage.setItem('st_theme',prof.theme);document.body.style.background=TH[prof.theme]?.bg||'#0d0d0d'}
         if(prof.currency){setCurrency(prof.currency);localStorage.setItem('st_cur',prof.currency)}
       }
+      // Fetch household membership
+      const{data:myMembership}=await supabase.from('household_members')
+        .select('household_id, role, households(id, name, invite_code)')
+        .eq('user_id',user.id).maybeSingle();
+      if(myMembership?.households){
+        setHousehold({id:myMembership.households.id,name:myMembership.households.name,invite_code:myMembership.households.invite_code,role:myMembership.role});
+        const{data:members}=await supabase.from('household_members')
+          .select('user_id, role, profiles(display_name)')
+          .eq('household_id',myMembership.households.id);
+        const{data:memberSubs}=await supabase.from('subscriptions')
+          .select('user_id, custom_name, monthly_cost, known_services(name, category)')
+          .in('user_id',(members||[]).map(m=>m.user_id))
+          .is('archived_at',null).eq('is_private',false);
+        setHhMembers((members||[]).map(m=>({
+          ...m,name:m.profiles?.display_name||'Member',
+          subs:(memberSubs||[]).filter(s=>s.user_id===m.user_id).map(s=>({name:s.custom_name||s.known_services?.name||'Unknown',cost:Number(s.monthly_cost),cat:s.known_services?.category||'lifestyle'}))
+        })));
+      }else{setHousehold(null);setHhMembers([])}
       setDataLoading(false);
     };
     load();
@@ -322,6 +348,59 @@ export default function App(){
   const saveEmailPref=async(key,val)=>{const np={...emailPrefs,[key]:val};setEmailPrefs(np);if(user)await supabase.from('profiles').update({email_preferences:np}).eq('id',user.id)};
   // Save currency
   const saveCurrency=async(c)=>{setCurrency(c);localStorage.setItem('st_cur',c);if(user)await supabase.from('profiles').update({currency:c}).eq('id',user.id)};
+  // Household helpers
+  const hhRefresh=async()=>{
+    if(!supabase||!user)return;
+    const{data:myMembership}=await supabase.from('household_members')
+      .select('household_id, role, households(id, name, invite_code)')
+      .eq('user_id',user.id).maybeSingle();
+    if(myMembership?.households){
+      setHousehold({id:myMembership.households.id,name:myMembership.households.name,invite_code:myMembership.households.invite_code,role:myMembership.role});
+      const{data:members}=await supabase.from('household_members')
+        .select('user_id, role, profiles(display_name)')
+        .eq('household_id',myMembership.households.id);
+      const{data:memberSubs}=await supabase.from('subscriptions')
+        .select('user_id, custom_name, monthly_cost, known_services(name, category)')
+        .in('user_id',(members||[]).map(m=>m.user_id))
+        .is('archived_at',null).eq('is_private',false);
+      setHhMembers((members||[]).map(m=>({
+        ...m,name:m.profiles?.display_name||'Member',
+        subs:(memberSubs||[]).filter(s=>s.user_id===m.user_id).map(s=>({name:s.custom_name||s.known_services?.name||'Unknown',cost:Number(s.monthly_cost),cat:s.known_services?.category||'lifestyle'}))
+      })));
+    }else{setHousehold(null);setHhMembers([])}
+  };
+  const hhCreate=async()=>{
+    if(!supabase||!user||!hhCreateName.trim())return;
+    setHhLoading(true);
+    const code=Math.random().toString(36).substring(2,8).toUpperCase();
+    const{data:hh,error}=await supabase.from('households').insert({name:hhCreateName.trim(),created_by:user.id,invite_code:code}).select().single();
+    if(error){notify("Failed to create household: "+error.message);setHhLoading(false);return}
+    const{error:e2}=await supabase.from('household_members').insert({household_id:hh.id,user_id:user.id,role:'owner'});
+    if(e2){notify("Created household but failed to add you: "+e2.message);setHhLoading(false);return}
+    await hhRefresh();setHhView("idle");setHhCreateName("");setHhLoading(false);notify("Household created!");pop();
+  };
+  const hhJoin=async()=>{
+    if(!supabase||!user||!hhJoinCode.trim())return;
+    setHhLoading(true);
+    const{data:hh,error}=await supabase.from('households').select('id,name').eq('invite_code',hhJoinCode.trim().toUpperCase()).maybeSingle();
+    if(error||!hh){notify("No household found with that code");setHhLoading(false);return}
+    const{error:e2}=await supabase.from('household_members').insert({household_id:hh.id,user_id:user.id,role:'member'});
+    if(e2){notify(e2.message?.includes('duplicate')?"You're already in this household":"Failed to join: "+e2.message);setHhLoading(false);return}
+    await hhRefresh();setHhView("idle");setHhJoinCode("");setHhLoading(false);notify("Joined "+hh.name+"!");pop();
+  };
+  const hhLeave=async()=>{
+    if(!supabase||!user||!household)return;
+    setHhLoading(true);
+    await supabase.from('household_members').delete().eq('household_id',household.id).eq('user_id',user.id);
+    setHousehold(null);setHhMembers([]);setHhLoading(false);notify("Left household");
+  };
+  const hhDelete=async()=>{
+    if(!supabase||!user||!household||household.role!=='owner')return;
+    setHhLoading(true);
+    await supabase.from('household_members').delete().eq('household_id',household.id);
+    await supabase.from('households').delete().eq('id',household.id);
+    setHousehold(null);setHhMembers([]);setHhLoading(false);notify("Household deleted");
+  };
   // CSV export
   const exportCSV=()=>{
     const rows=[["Name","Category","Monthly Cost","Billing Cycle","Renewal Date","Labels","Notes"]];
@@ -1114,15 +1193,81 @@ export default function App(){
       </div>
     </div>}
 
-    {aTab==="household"&&<div style={{background:t.sf,borderRadius:14,padding:d?32:24,textAlign:"center"}}>
-      <div style={{fontSize:d?48:36,marginBottom:10}}>🏠</div>
-      <div style={{fontSize:d?18:14,fontWeight:700,marginBottom:6}}>Household</div>
-      <p style={{fontSize:d?14:12,color:t.mt,maxWidth:320,margin:"0 auto 16px"}}>Combine subs with family or roommates to find overlaps and save.</p>
-      <div style={{display:"flex",gap:8,justifyContent:"center"}}>
-        <button onClick={()=>notify("Household feature coming soon")} style={{...B,background:t.acc,color:"#000",borderRadius:8,fontSize:d?14:13,padding:d?"10px 24px":"10px 18px"}}>Create</button>
-        <button onClick={()=>notify("Household feature coming soon")} style={{...B,background:t.el,color:t.mt2,borderRadius:8,fontSize:d?14:13,padding:d?"10px 24px":"10px 18px"}}>Join</button>
+    {aTab==="household"&&(!household?<div style={{background:t.sf,borderRadius:14,padding:d?32:24,textAlign:"center"}}>
+      {hhView==="idle"&&<>
+        <div style={{fontSize:d?48:36,marginBottom:10}}>🏠</div>
+        <div style={{fontSize:d?18:14,fontWeight:700,marginBottom:6}}>Household</div>
+        <p style={{fontSize:d?14:12,color:t.mt,maxWidth:320,margin:"0 auto 16px"}}>Combine subs with family or roommates to find overlaps and save.</p>
+        <div style={{display:"flex",gap:8,justifyContent:"center"}}>
+          <button onClick={()=>setHhView("create")} style={{...B,background:t.acc,color:"#000",borderRadius:8,fontSize:d?14:13,padding:d?"10px 24px":"10px 18px"}}>Create</button>
+          <button onClick={()=>setHhView("join")} style={{...B,background:t.el,color:t.mt2,borderRadius:8,fontSize:d?14:13,padding:d?"10px 24px":"10px 18px"}}>Join</button>
+        </div>
+      </>}
+      {hhView==="create"&&<>
+        <div style={{fontSize:d?18:14,fontWeight:700,marginBottom:12}}>Create Household</div>
+        <input value={hhCreateName} onChange={e=>setHhCreateName(e.target.value)} placeholder="Household name" maxLength={40} style={{width:"100%",maxWidth:280,padding:"10px 14px",borderRadius:8,border:`1px solid ${t.bd2}`,background:t.el,color:t.tx,fontSize:d?14:13,fontFamily:"inherit",marginBottom:12,boxSizing:"border-box",outline:"none"}}/>
+        <div style={{display:"flex",gap:8,justifyContent:"center"}}>
+          <button onClick={()=>{setHhView("idle");setHhCreateName("")}} style={{...B,background:t.el,color:t.mt2,borderRadius:8,fontSize:d?14:13,padding:d?"10px 24px":"10px 18px"}}>Cancel</button>
+          <button onClick={hhCreate} disabled={hhLoading||!hhCreateName.trim()} style={{...B,background:t.acc,color:"#000",borderRadius:8,fontSize:d?14:13,padding:d?"10px 24px":"10px 18px",opacity:hhLoading||!hhCreateName.trim()?0.5:1}}>{hhLoading?"Creating...":"Create"}</button>
+        </div>
+      </>}
+      {hhView==="join"&&<>
+        <div style={{fontSize:d?18:14,fontWeight:700,marginBottom:12}}>Join Household</div>
+        <input value={hhJoinCode} onChange={e=>setHhJoinCode(e.target.value.toUpperCase())} placeholder="Invite code" maxLength={6} style={{width:"100%",maxWidth:200,padding:"10px 14px",borderRadius:8,border:`1px solid ${t.bd2}`,background:t.el,color:t.tx,fontSize:d?14:13,fontFamily:"inherit",marginBottom:12,boxSizing:"border-box",outline:"none",textAlign:"center",letterSpacing:4,fontWeight:700,textTransform:"uppercase"}}/>
+        <div style={{display:"flex",gap:8,justifyContent:"center"}}>
+          <button onClick={()=>{setHhView("idle");setHhJoinCode("")}} style={{...B,background:t.el,color:t.mt2,borderRadius:8,fontSize:d?14:13,padding:d?"10px 24px":"10px 18px"}}>Cancel</button>
+          <button onClick={hhJoin} disabled={hhLoading||hhJoinCode.length<6} style={{...B,background:t.acc,color:"#000",borderRadius:8,fontSize:d?14:13,padding:d?"10px 24px":"10px 18px",opacity:hhLoading||hhJoinCode.length<6?0.5:1}}>{hhLoading?"Joining...":"Join"}</button>
+        </div>
+      </>}
+    </div>:<div style={{display:"flex",flexDirection:"column",gap:d?12:10}}>
+      {/* Household header card */}
+      <div style={{background:t.sf,borderRadius:14,padding:d?24:18}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:12}}>
+          <div>
+            <div style={{fontSize:d?18:15,fontWeight:700}}>🏠 {household.name}</div>
+            <div style={{fontSize:d?12:10,color:t.mt,marginTop:2}}>{hhMembers.length} member{hhMembers.length!==1?"s":""} · {household.role==="owner"?"Owner":"Member"}</div>
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:8}}>
+            <div style={{background:t.el,borderRadius:8,padding:"6px 12px",fontFamily:"monospace",fontSize:d?14:12,fontWeight:700,letterSpacing:2,color:t.tx}}>{household.invite_code}</div>
+            <button onClick={()=>{navigator.clipboard.writeText(household.invite_code);notify("Invite code copied!")}} style={{...B,background:t.el,color:t.mt2,borderRadius:8,fontSize:d?12:10,padding:"6px 10px"}} title="Copy invite code">📋</button>
+          </div>
+        </div>
+        <div style={{fontSize:d?11:9,color:t.dm}}>Share the invite code with household members to join.</div>
       </div>
-    </div>}
+      {/* Total household spend */}
+      <div style={{background:t.sf,borderRadius:14,padding:d?20:14}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <div style={{fontSize:d?13:11,color:t.mt,fontWeight:600}}>Total Household Spend</div>
+          <div style={{fontSize:d?20:16,fontWeight:700,color:t.acc}}>{fm(hhMembers.reduce((a,m)=>a+m.subs.reduce((b,s)=>b+s.cost,0),0))}<span style={{fontSize:d?11:9,color:t.mt,fontWeight:400}}>/mo</span></div>
+        </div>
+      </div>
+      {/* Members list */}
+      {hhMembers.map(m=><div key={m.user_id} style={{background:t.sf,borderRadius:14,padding:d?20:14}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:m.subs.length?10:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <div style={{width:d?32:26,height:d?32:26,borderRadius:"50%",background:m.user_id===user?.id?t.acc:t.bd3,display:"flex",alignItems:"center",justifyContent:"center",fontSize:d?13:11,fontWeight:700,color:m.user_id===user?.id?"#000":t.tx}}>{m.name.charAt(0).toUpperCase()}</div>
+            <div>
+              <div style={{fontSize:d?14:12,fontWeight:600}}>{m.name}{m.user_id===user?.id?" (you)":""}</div>
+              <div style={{fontSize:d?11:9,color:t.dm}}>{m.role==="owner"?"Owner":"Member"} · {m.subs.length} sub{m.subs.length!==1?"s":""} · {fm(m.subs.reduce((a,s)=>a+s.cost,0))}/mo</div>
+            </div>
+          </div>
+        </div>
+        {m.subs.length>0&&<div style={{display:"flex",flexDirection:"column",gap:4,marginTop:6}}>
+          {m.subs.map((s,i)=><div key={i} style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"6px 10px",borderRadius:8,background:t.el}}>
+            <div style={{display:"flex",alignItems:"center",gap:8}}>
+              <span style={{fontSize:d?12:10}}>{CATS[s.cat]?.e||"✨"}</span>
+              <span style={{fontSize:d?13:11,color:t.tx2}}>{s.name}</span>
+            </div>
+            <span style={{fontSize:d?13:11,fontWeight:600,color:t.mt2}}>-{fm(s.cost)}</span>
+          </div>)}
+        </div>}
+      </div>)}
+      {/* Leave / Delete buttons */}
+      <div style={{display:"flex",gap:8,justifyContent:"center",marginTop:4}}>
+        <button onClick={hhLeave} disabled={hhLoading} style={{...B,background:t.el,color:"#ef4444",borderRadius:8,fontSize:d?13:11,padding:d?"10px 24px":"10px 18px",opacity:hhLoading?0.5:1}}>{hhLoading?"Leaving...":"Leave Household"}</button>
+        {household.role==="owner"&&<button onClick={hhDelete} disabled={hhLoading} style={{...B,background:"#ef444420",color:"#ef4444",borderRadius:8,fontSize:d?13:11,padding:d?"10px 24px":"10px 18px",opacity:hhLoading?0.5:1}}>{hhLoading?"Deleting...":"Delete Household"}</button>}
+      </div>
+    </div>)}
 
     {aTab==="data"&&<>
       <input ref={fileRef} type="file" accept=".csv" style={{display:"none"}} onChange={e=>{if(e.target.files[0])importCSV(e.target.files[0]);e.target.value=""}}/>
