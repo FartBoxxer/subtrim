@@ -150,6 +150,7 @@ export default function App(){
   const[dism,setDism]=useState(new Set());
   const[av,setAv]=useState(()=>{try{const s=localStorage.getItem('st_av');return s?JSON.parse(s):{id:"def",bg:"#00d48a"}}catch{return{id:"def",bg:"#00d48a"}}});
   const[avOptions,setAvOptions]=useState(()=>genPalettes());
+  const[avExpanded,setAvExpanded]=useState(false);
   const[hovCal,setHovCal]=useState(null);
   const[theme,setTheme]=useState(()=>localStorage.getItem('st_theme')||"dark");
   const[editId,setEditId]=useState(null);
@@ -1006,15 +1007,35 @@ export default function App(){
 
     {aTab==="profile"&&<>
       <div style={{background:t.sf,borderRadius:14,padding:d?20:14}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-          <div style={{fontSize:d?14:12,fontWeight:700}}>Choose your color</div>
-          <button onClick={()=>setAvOptions(genPalettes())} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.mt,fontSize:d?12:10,borderRadius:6}}>🎲 Shuffle</button>
-        </div>
-        <div style={{display:"grid",gridTemplateColumns:`repeat(${d?5:5},1fr)`,gap:d?12:8}}>{avOptions.map(a=>(
-          <button key={a.id} onClick={()=>setAv(a)} style={{display:"flex",alignItems:"center",justifyContent:"center",padding:d?6:4,borderRadius:12,background:av.id===a.id?t.el:"transparent",border:av.id===a.id?`2px solid ${t.acc}`:"2px solid transparent",cursor:"pointer",transition:"all 0.15s"}}>
-            <Av bg={a.bg} size={d?52:40} border="none"/>
-          </button>
-        ))}</div>
+        {av.id!=="def"?(<div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{display:"flex",alignItems:"center",gap:12}}>
+              <Av bg={av.bg} size={d?44:36} border="none"/>
+              <div style={{fontSize:d?13:11,color:t.mt}}>Profile color</div>
+            </div>
+            <button onClick={()=>setAvExpanded(prev=>!prev)} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.mt,fontSize:d?12:10,borderRadius:6}}>{avExpanded?"Hide":"Change"}</button>
+          </div>
+          {avExpanded&&<div style={{marginTop:12}}>
+            <div style={{display:"flex",justifyContent:"flex-end",marginBottom:8}}>
+              <button onClick={()=>setAvOptions(genPalettes())} style={{...B,padding:d?"4px 10px":"3px 8px",background:t.el,color:t.mt,fontSize:d?11:9,borderRadius:6}}>🎲 Shuffle</button>
+            </div>
+            <div style={{display:"grid",gridTemplateColumns:`repeat(${d?5:5},1fr)`,gap:d?12:8}}>{avOptions.map(a=>(
+              <button key={a.id} onClick={()=>setAv(a)} style={{display:"flex",alignItems:"center",justifyContent:"center",padding:d?6:4,borderRadius:12,background:av.id===a.id?t.el:"transparent",border:av.id===a.id?`2px solid ${t.acc}`:"2px solid transparent",cursor:"pointer",transition:"all 0.15s"}}>
+                <Av bg={a.bg} size={d?52:40} border="none"/>
+              </button>
+            ))}</div>
+          </div>}
+        </div>):(<div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+            <div style={{fontSize:d?14:12,fontWeight:700}}>Choose your color</div>
+            <button onClick={()=>setAvOptions(genPalettes())} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.mt,fontSize:d?12:10,borderRadius:6}}>🎲 Shuffle</button>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:`repeat(${d?5:5},1fr)`,gap:d?12:8}}>{avOptions.map(a=>(
+            <button key={a.id} onClick={()=>setAv(a)} style={{display:"flex",alignItems:"center",justifyContent:"center",padding:d?6:4,borderRadius:12,background:av.id===a.id?t.el:"transparent",border:av.id===a.id?`2px solid ${t.acc}`:"2px solid transparent",cursor:"pointer",transition:"all 0.15s"}}>
+              <Av bg={a.bg} size={d?52:40} border="none"/>
+            </button>
+          ))}</div>
+        </div>)}
       </div>
       <div style={{background:t.sf,borderRadius:14,padding:d?20:14}}>
         <div style={{fontSize:d?14:12,fontWeight:700,marginBottom:12}}>Appearance</div>
@@ -1027,23 +1048,11 @@ export default function App(){
         </div>
       </div>
       <div style={{background:t.sf,borderRadius:14,padding:d?20:14}}>
-        <div style={{fontSize:d?14:12,fontWeight:700,marginBottom:10}}>Currency</div>
-        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-          {CURRENCIES.map(c=>(
-            <button key={c.code} onClick={()=>saveCurrency(c.code)} style={{...B,padding:d?"8px 14px":"6px 10px",fontSize:d?13:11,borderRadius:8,background:currency===c.code?t.acc+"22":"transparent",color:currency===c.code?t.acc:t.mt,border:currency===c.code?`1px solid ${t.acc}`:`1px solid ${t.bd2}`,fontWeight:currency===c.code?700:500}}>{c.sym} {c.code}</button>
-          ))}
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div style={{fontSize:d?14:12,fontWeight:700}}>Email Notifications</div>
+          <span style={{fontSize:d?11:9,color:t.acc,background:t.acc+"18",padding:"3px 10px",borderRadius:6,fontWeight:600}}>Coming Soon</span>
         </div>
-        <div style={{fontSize:d?11:9,color:t.dm,marginTop:8}}>All amounts displayed in {currency}. Costs are stored as entered — no auto-conversion.</div>
-      </div>
-      <div style={{background:t.sf,borderRadius:14,padding:d?20:14}}>
-        <div style={{fontSize:d?14:12,fontWeight:700,marginBottom:10}}>Email Preferences</div>
-        {[{k:"monthly_digest",l:"Monthly digest"},{k:"promo_alerts",l:"Promo alerts"},{k:"price_change_alerts",l:"Price change alerts"},{k:"trial_reminders",l:"Trial reminders"}].map(p=><div key={p.k} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:d?"9px 0":"7px 0",borderBottom:`1px solid ${t.el}`,fontSize:d?14:12,color:t.mt3}}>
-          <span>{p.l}</span>
-          <button onClick={()=>saveEmailPref(p.k,!emailPrefs[p.k])} style={{width:d?44:38,height:d?24:20,borderRadius:12,background:emailPrefs[p.k]?t.acc:t.el,border:"none",cursor:"pointer",position:"relative",transition:"background 0.2s",padding:0}}>
-            <div style={{width:d?18:14,height:d?18:14,borderRadius:"50%",background:"#fff",position:"absolute",top:d?3:3,left:emailPrefs[p.k]?(d?23:21):(d?3:3),transition:"left 0.2s",boxShadow:"0 1px 3px rgba(0,0,0,0.3)"}}/>
-          </button>
-        </div>)}
-        <div style={{fontSize:d?11:9,color:t.dm,marginTop:8}}>Email delivery will be enabled in a future update. Your preferences are saved.</div>
+        <div style={{fontSize:d?12:10,color:t.dm,marginTop:8,lineHeight:1.5}}>Monthly digests, promo alerts, price change notifications, and trial reminders — all coming in a future update.</div>
       </div>
       <button onClick={()=>supabase.auth.signOut()} style={{...B,background:t.el,color:"#ef4444",fontSize:d?14:12,borderRadius:10,padding:d?"12px 18px":"10px 18px"}}>Log Out</button>
       {!deleteConfirm&&<button onClick={()=>setDeleteConfirm(true)} style={{...B,background:"#ef444411",color:"#ef4444",fontSize:d?13:11,borderRadius:10,border:"1px solid #ef444422"}}>Delete Account</button>}

@@ -70,7 +70,7 @@ export default function Landing(){
     <section style={{maxWidth:1000,margin:"0 auto",padding:"64px 24px"}}>
       <h2 style={{fontSize:22,fontWeight:800,marginBottom:20}}>Popular Cancellation Guides</h2>
       <div style={{display:"flex",gap:10,flexWrap:"wrap"}}>
-        {["Netflix","Spotify","Hulu","Disney+","Adobe Creative Cloud","HBO Max","ChatGPT Plus","Xbox Game Pass","YouTube Premium","Apple TV+"].map(s=>(
+        {["Netflix","Spotify","Hulu","Disney+","Adobe Creative Cloud","HBO Max","ChatGPT Plus","Xbox Game Pass","YouTube Premium","Apple TV+","Amazon Prime","Audible","Planet Fitness","SiriusXM","Grammarly","Canva Pro","DoorDash DashPass","New York Times","LinkedIn Premium","GitHub Copilot"].map(s=>(
           <Link key={s} to={`/guides/cancel-${s.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:SF,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:`1px solid #222`}}>
             How to cancel {s}
           </Link>
