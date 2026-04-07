@@ -635,7 +635,7 @@ export default function App(){
 
         <div style={{textAlign:"center",marginTop:d?36:24}}>
           <p style={{fontSize:d?18:14,color:t.mt,marginBottom:d?20:14,lineHeight:1.5}}>Most people waste about <strong style={{color:t.tx}}>{fm(saved*12)}/year</strong> on subs they barely touch.</p>
-          <button onClick={()=>goAuth("signup")} style={{...B,background:t.acc,color:"#000",fontSize:d?18:15,fontWeight:700,padding:d?"16px 40px":"14px 32px",borderRadius:12,width:"100%",maxWidth:320}}>Find Your Savings — Free</button>
+          <button onClick={()=>goAuth("signup")} style={{...B,background:t.acc,color:"#000",fontSize:d?18:15,fontWeight:700,padding:d?"16px 40px":"14px 32px",borderRadius:12,width:"100%",maxWidth:320}}>Find Your Savings (Free)</button>
           <p style={{fontSize:d?13:11,color:t.dm,marginTop:10}}>No credit card. Takes 2 minutes.</p>
         </div>
       </div>

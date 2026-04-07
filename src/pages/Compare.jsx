@@ -43,7 +43,7 @@ export default function Compare(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title={`${nameA} vs ${nameB} (${new Date().getFullYear()}) — Price & Feature Comparison | SubTrim`}
+      title={`${nameA} vs ${nameB} (${new Date().getFullYear()}) | Price & Feature Comparison | SubTrim`}
       description={`Compare ${nameA} (from ${fm(cheapestA)}/mo) vs ${nameB} (from ${fm(cheapestB)}/mo). Plans, pricing, features, pros & cons side by side.`}
     />
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:900,margin:"0 auto"}}>

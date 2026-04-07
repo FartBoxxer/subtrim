@@ -40,7 +40,7 @@ export default function Calculator(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title="Subscription Cost Calculator — How Much Do You Spend? | SubTrim"
+      title="Subscription Cost Calculator | How Much Do You Spend? | SubTrim"
       description="Add up all your subscriptions and see what you're really spending each month and year. The total is probably worse than you think."
     />
     <JsonLd data={{
@@ -127,7 +127,7 @@ export default function Calculator(){
           <div style={{fontSize:15,fontWeight:700,color:G,marginBottom:4}}>💡 Insight</div>
           <p style={{fontSize:14,color:MT,lineHeight:1.5,margin:0}}>
             {fm(annual)}/year on {items.length} subscriptions.
-            That's {fm(annual/52)} every week — or about {Math.round(annual/5)} cups of coffee a year.
+            That's {fm(annual/52)} every week, or about {Math.round(annual/5)} cups of coffee a year.
             {monthly>100?" Might be worth running an audit to see what's actually pulling its weight.":''}
           </p>
         </div>

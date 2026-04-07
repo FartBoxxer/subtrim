@@ -48,7 +48,7 @@ export default function CompareIndex(){
       name:"SubTrim Compare Tool",
       url:"https://subtrim.dev/compare",
       applicationCategory:"UtilityApplication",
-      description:"Compare any two subscriptions side by side — plans, pricing, features, pros and cons.",
+      description:"Compare any two subscriptions side by side. Plans, pricing, features, pros and cons.",
       offers:{"@type":"Offer",price:"0",priceCurrency:"USD"}
     }}/>
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:1000,margin:"0 auto"}}>
@@ -69,17 +69,17 @@ export default function CompareIndex(){
       <div style={{display:"flex",gap:16,alignItems:"center",justifyContent:"center",marginBottom:40,flexWrap:"wrap"}}>
         <div style={{flex:1,minWidth:200,maxWidth:300}}>
           <div style={{fontSize:12,color:MT,fontWeight:600,marginBottom:6,textAlign:"center"}}>Service A</div>
-          <select value={pickA} onChange={e=>setPickA(e.target.value)} style={{width:"100%",padding:"14px 16px",borderRadius:12,border:`2px solid ${pickA?catA.c:EL}`,background:SF,color:TX,fontSize:15,fontFamily:"inherit",cursor:"pointer",appearance:"none",textAlign:"center",fontWeight:600}}>
+          <select value={pickA} onChange={e=>{setPickA(e.target.value);if(pickB&&SERVICE_CATS[e.target.value]!==SERVICE_CATS[pickB])setPickB('')}} style={{width:"100%",padding:"14px 16px",borderRadius:12,border:`2px solid ${pickA?catA.c:EL}`,background:SF,color:TX,fontSize:15,fontFamily:"inherit",cursor:"pointer",appearance:"none",textAlign:"center",fontWeight:600}}>
             <option value="">Select a service...</option>
-            {ALL_SERVICES.filter(s=>s!==pickB).map(s=><option key={s} value={s}>{s}</option>)}
+            {ALL_SERVICES.map(s=><option key={s} value={s}>{s}</option>)}
           </select>
         </div>
         <div style={{fontSize:24,fontWeight:800,color:MT,padding:"20px 0 0"}}>vs</div>
         <div style={{flex:1,minWidth:200,maxWidth:300}}>
-          <div style={{fontSize:12,color:MT,fontWeight:600,marginBottom:6,textAlign:"center"}}>Service B</div>
-          <select value={pickB} onChange={e=>setPickB(e.target.value)} style={{width:"100%",padding:"14px 16px",borderRadius:12,border:`2px solid ${pickB?catB.c:EL}`,background:SF,color:TX,fontSize:15,fontFamily:"inherit",cursor:"pointer",appearance:"none",textAlign:"center",fontWeight:600}}>
-            <option value="">Select a service...</option>
-            {ALL_SERVICES.filter(s=>s!==pickA).map(s=><option key={s} value={s}>{s}</option>)}
+          <div style={{fontSize:12,color:MT,fontWeight:600,marginBottom:6,textAlign:"center"}}>Service B {pickA&&<span style={{color:"#555",fontWeight:400}}>({CATS[SERVICE_CATS[pickA]]?.l||'same category'})</span>}</div>
+          <select value={pickB} onChange={e=>setPickB(e.target.value)} disabled={!pickA} style={{width:"100%",padding:"14px 16px",borderRadius:12,border:`2px solid ${pickB?catB.c:EL}`,background:SF,color:TX,fontSize:15,fontFamily:"inherit",cursor:pickA?"pointer":"not-allowed",appearance:"none",textAlign:"center",fontWeight:600,opacity:pickA?1:0.5}}>
+            <option value="">{pickA?'Select a service...':'Pick Service A first'}</option>
+            {ALL_SERVICES.filter(s=>s!==pickA&&SERVICE_CATS[s]===SERVICE_CATS[pickA]).map(s=><option key={s} value={s}>{s}</option>)}
           </select>
         </div>
       </div>
@@ -271,7 +271,7 @@ export default function CompareIndex(){
       <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center",marginTop:40}}>
         <div style={{fontSize:28,marginBottom:8}}>✂️</div>
         <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Still not sure?</h3>
-        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>Add both to SubTrim and run the audit. It'll tell you which one you actually use more — no more guessing.</p>
+        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>Add both to SubTrim and run the audit. It'll tell you which one you actually use more. No more guessing.</p>
         <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free</Link>
       </div>
     </div>

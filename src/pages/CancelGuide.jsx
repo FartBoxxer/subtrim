@@ -29,7 +29,7 @@ export default function CancelGuide(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title={`How to Cancel ${name} (${new Date().getFullYear()}) — Step-by-Step Guide | SubTrim`}
+      title={`How to Cancel ${name} (${new Date().getFullYear()}) | Step-by-Step Guide | SubTrim`}
       description={`Cancel your ${name} subscription in ${guide.steps.length} easy steps. ${guide.difficulty==='easy'?'Takes under 2 minutes.':guide.difficulty==='medium'?'Takes about 5 minutes.':'May require contacting support.'}`}
     />
     <JsonLd data={{
@@ -56,7 +56,7 @@ export default function CancelGuide(){
         </div>
         <h1 style={{fontSize:32,fontWeight:800,lineHeight:1.2,margin:"0 0 12px"}}>How to Cancel {name}</h1>
         <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
-          <span style={{fontSize:13,padding:"4px 12px",borderRadius:6,background:diffColor+"22",color:diffColor,fontWeight:600}}>{guide.difficulty==='easy'?'Easy — 1-2 minutes':guide.difficulty==='medium'?'Medium — ~5 minutes':'Hard — may need support'}</span>
+          <span style={{fontSize:13,padding:"4px 12px",borderRadius:6,background:diffColor+"22",color:diffColor,fontWeight:600}}>{guide.difficulty==='easy'?'Easy (1-2 min)':guide.difficulty==='medium'?'Medium (~5 min)':'Hard (may need support)'}</span>
           <span style={{fontSize:13,color:MT}}>{guide.steps.length} steps</span>
           <span style={{fontSize:13,color:MT}}>Updated {new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})}</span>
         </div>
@@ -94,7 +94,7 @@ export default function CancelGuide(){
       <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center",marginTop:24}}>
         <div style={{fontSize:28,marginBottom:8}}>✂️</div>
         <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Track All Your Subscriptions</h3>
-        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>SubTrim helps you audit every subscription, find overlaps, and save hundreds per year — for free.</p>
+        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>SubTrim audits your subscriptions, finds overlaps, and saves you hundreds per year. Totally free.</p>
         <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free</Link>
       </div>
     </article>

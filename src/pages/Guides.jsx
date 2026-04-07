@@ -27,7 +27,7 @@ export default function GuidesIndex(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title="Cancellation Guides — How to Cancel Any Subscription | SubTrim"
+      title="Cancellation Guides | How to Cancel Any Subscription | SubTrim"
       description={`Step-by-step cancellation guides for ${guides.length}+ subscriptions. Find out how to cancel Netflix, Spotify, Adobe, Planet Fitness, and more.`}
     />
     <JsonLd data={{

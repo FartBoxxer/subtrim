@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-const DEFAULT_TITLE='SubTrim — Subscription Tracker & Optimizer | Cut Costs, Keep What Matters';
+const DEFAULT_TITLE='SubTrim | Subscription Tracker & Optimizer';
 const DEFAULT_DESC='SubTrim helps you track, audit, and optimize your subscriptions. Find overlaps, run usage audits, get keep/cancel/downgrade recommendations, and save hundreds per year.';
 
 function setMeta(name,content,attr='name'){
@@ -23,9 +23,9 @@ export function Helmet({ title, description }){
     return()=>{
       document.title=DEFAULT_TITLE;
       setMeta('description',DEFAULT_DESC);
-      setMeta('og:title','SubTrim — Track, Audit & Optimize Your Subscriptions','property');
+      setMeta('og:title','SubTrim | Track, Audit & Optimize Your Subscriptions','property');
       setMeta('og:description','Stop overpaying. SubTrim finds overlapping subscriptions, runs usage audits, and tells you exactly what to keep, cancel, or downgrade.','property');
-      setMeta('twitter:title','SubTrim — Subscription Tracker & Optimizer','name');
+      setMeta('twitter:title','SubTrim | Subscription Tracker & Optimizer','name');
       setMeta('twitter:description','Track, audit, and optimize your subscriptions. Find overlaps and save hundreds per year.','name');
     };
   },[title,description]);

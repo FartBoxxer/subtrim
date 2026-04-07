@@ -28,7 +28,7 @@ export default function Alternatives(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title={`Best ${name} Alternatives (${new Date().getFullYear()}) — Cheaper & Better Options | SubTrim`}
+      title={`Best ${name} Alternatives (${new Date().getFullYear()}) | Cheaper & Better Options | SubTrim`}
       description={`Looking to replace ${name}? Compare the best alternatives with pricing, features, and our recommendations.`}
     />
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:900,margin:"0 auto"}}>

@@ -8,7 +8,7 @@ export const TIERS={
   'HBO Max':[{n:'With Ads',p:9.99},{n:'No Ads',p:15.99},{n:'Ultimate',p:19.99}],
   'Paramount+':[{n:'Essential',p:5.99},{n:'With Showtime',p:11.99}],
   'Peacock':[{n:'Premium',p:5.99},{n:'Premium Plus',p:11.99}],
-  'Apple TV+':[{n:'Monthly',p:9.99},{n:'Apple One Individual',p:19.95},{n:'Apple One Family',p:25.95}],
+
   'YouTube Premium':[{n:'Individual',p:13.99},{n:'Family',p:22.99},{n:'Student',p:7.99}],
   'Spotify':[{n:'Individual',p:10.99},{n:'Duo',p:14.99},{n:'Family',p:16.99},{n:'Student',p:5.99}],
   'Apple Music':[{n:'Individual',p:10.99},{n:'Family',p:16.99},{n:'Student',p:5.99}],
@@ -42,7 +42,7 @@ export const CATS = {
 // Category mapping for each service (for compare pages)
 export const SERVICE_CATS={
   'Netflix':'streaming','Hulu':'streaming','Disney+':'streaming','HBO Max':'streaming',
-  'Paramount+':'streaming','Peacock':'streaming','Apple TV+':'streaming','YouTube Premium':'streaming',
+  'Paramount+':'streaming','Peacock':'streaming','YouTube Premium':'streaming',
   'Amazon Prime Video':'streaming','Crunchyroll':'streaming',
   'Spotify':'music','Apple Music':'music','Tidal':'music','YouTube Music':'music',
   'Xbox Game Pass':'gaming','PlayStation Plus':'gaming',

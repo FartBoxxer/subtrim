@@ -58,7 +58,7 @@ export default function Landing(){
         <span style={{fontSize:20}}>👀</span>
         <div style={{fontSize:14,color:TX,textAlign:'center',lineHeight:1.5}}>
           <strong>Wow. How did you find this?</strong>
-          <span style={{color:MT}}> — We're currently under development, so please don't freak out if things start drastically changing.</span>
+          <span style={{color:MT}}> We're currently under development, so please don't freak out if things start drastically changing.</span>
         </div>
         <button onClick={()=>setShowBanner(false)} style={{position:'absolute',right:16,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',color:MT,fontSize:18,cursor:'pointer',padding:4,lineHeight:1}}>×</button>
       </div>
@@ -69,7 +69,6 @@ export default function Landing(){
       <div style={{display:"flex",gap:24,alignItems:"center"}}>
         <Link to="/guides" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Guides</Link>
         <Link to="/compare" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Compare</Link>
-        <Link to="/calculator" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Calculator</Link>
         <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 24px",fontSize:14,textDecoration:"none",whiteSpace:"nowrap",borderRadius:10}}>Get Started</Link>
       </div>
     </nav>
@@ -112,7 +111,7 @@ export default function Landing(){
       </div>
       <div style={{textAlign:"center",marginTop:32}}>
         <p style={{fontSize:18,color:MT,marginBottom:20,lineHeight:1.5}}>The average American wastes <strong style={{color:TX}}>{fm(saved*12)}/year</strong> on subscriptions they barely use.</p>
-        <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 36px",textDecoration:"none",display:"inline-block"}}>Find Your Savings — Free</Link>
+        <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 36px",textDecoration:"none",display:"inline-block"}}>Find Your Savings (Free)</Link>
         <p style={{fontSize:13,color:"#555",marginTop:14}}>No credit card. Takes 2 minutes.</p>
       </div>
     </section>
@@ -172,9 +171,9 @@ export default function Landing(){
       <h2 style={{fontSize:24,fontWeight:800,textAlign:"center",marginBottom:32}}>Why SubTrim?</h2>
       <div style={{display:"flex",flexDirection:"column",gap:20}}>
         {[
-          {q:"Don't apps like Rocket Money already do this?",a:"Rocket Money tells you what you're subscribed to. Cool. SubTrim tells you which ones are actually worth keeping — based on how much you use them, not just that they exist."},
+          {q:"Don't apps like Rocket Money already do this?",a:"Rocket Money tells you what you're subscribed to. Cool. SubTrim tells you which ones are actually worth keeping, based on how much you use them, not just that they exist."},
           {q:"Is this actually free?",a:"Yep. Fully free. We don't take a cut of your savings, there's no premium tier, and we're not going to upsell you on anything."},
-          {q:"How is this different from a spreadsheet?",a:"Your spreadsheet doesn't know you're paying for Spotify AND Apple Music. It can't tell you that you haven't opened Hulu in 3 months. SubTrim can — and it takes about 3 minutes to set up."},
+          {q:"How is this different from a spreadsheet?",a:"Your spreadsheet doesn't know you're paying for Spotify AND Apple Music. It can't tell you that you haven't opened Hulu in 3 months. SubTrim can, and it takes about 3 minutes to set up."},
         ].map((item,i)=>(
           <div key={i} style={{background:SF,borderRadius:14,padding:"24px 28px"}}>
             <div style={{fontSize:15,fontWeight:700,marginBottom:8,color:TX}}>{item.q}</div>
@@ -206,12 +205,11 @@ export default function Landing(){
     <section style={{maxWidth:1000,margin:"0 auto",padding:"64px 24px"}}>
       <h2 style={{fontSize:24,fontWeight:800,textAlign:"center",marginBottom:8}}>Free Tools</h2>
       <p style={{fontSize:14,color:MT,textAlign:"center",marginBottom:32}}>Stuff that's actually useful. No account needed for these.</p>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(280px,1fr))",gap:16}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
         {[
           {e:"📖",t:"Cancellation Guides",d:"50+ services with actual step-by-step instructions. Because some of these companies really don't want you to leave.",to:"/guides",btn:"Browse Guides"},
           {e:"⚖️",t:"Compare Services",d:"Trying to pick between two services? We break down the pricing, features, and trade-offs so you can stop overthinking it.",to:"/compare",btn:"Compare Now"},
           {e:"🔄",t:"Find Alternatives",d:"Spending too much on something? There's probably a cheaper option that does the same thing.",to:"/alternatives",btn:"Find Alternatives"},
-          {e:"🧮",t:"Cost Calculator",d:"Add up all your subscriptions. The total is probably worse than you think.",to:"/calculator",btn:"Calculate Costs"},
         ].map((c,i)=>(
           <div key={i} style={{background:SF,borderRadius:16,padding:28,display:"flex",flexDirection:"column"}}>
             <div style={{fontSize:28,marginBottom:12}}>{c.e}</div>
@@ -221,16 +219,6 @@ export default function Landing(){
           </div>
         ))}
       </div>
-      {/* Hidden SEO links — crawlable but not visually cluttering */}
-      <div style={{marginTop:32,display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center"}}>
-        {["Netflix","Spotify","Hulu","Disney+","Adobe Creative Cloud","HBO Max","ChatGPT Plus","YouTube Premium","Amazon Prime","Apple TV+"].map(s=>(
-          <Link key={s} to={`/guides/cancel/${s.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{fontSize:12,color:"#333",textDecoration:"none",padding:"4px 10px",borderRadius:6,border:"1px solid #1a1a1a"}}>{s}</Link>
-        ))}
-        {[["Netflix","Hulu"],["Spotify","Apple Music"],["Disney+","HBO Max"],["ChatGPT Plus","Claude Pro"]].map(([a,b])=>{
-          const slug=`${a.toLowerCase().replace(/[^a-z0-9]+/g,'-')}-vs-${b.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`;
-          return <Link key={slug} to={`/compare/${slug}`} style={{fontSize:12,color:"#333",textDecoration:"none",padding:"4px 10px",borderRadius:6,border:"1px solid #1a1a1a"}}>{a} vs {b}</Link>
-        })}
-      </div>
     </section>
 
     {/* Final CTA */}
@@ -239,7 +227,7 @@ export default function Landing(){
         <div style={{fontSize:48,marginBottom:16}}>✂️</div>
         <h2 style={{fontSize:28,fontWeight:800,lineHeight:1.3,marginBottom:12}}>You're probably paying for something you don't use</h2>
         <p style={{fontSize:16,color:MT,lineHeight:1.6,marginBottom:28}}>Most people are. SubTrim finds it, tells you about it, and helps you decide what to do about it. Takes a few minutes.</p>
-        <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 40px",textDecoration:"none",display:"inline-block",borderRadius:12}}>Get Started — It's Free</Link>
+        <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 40px",textDecoration:"none",display:"inline-block",borderRadius:12}}>Get Started (It's Free)</Link>
       </div>
     </section>
 
@@ -249,7 +237,7 @@ export default function Landing(){
         <div style={{textAlign:"center",marginBottom:32}}>
           <div style={{fontSize:28,marginBottom:8}}>💬</div>
           <h2 style={{fontSize:24,fontWeight:800,margin:"0 0 8px"}}>Say Hi</h2>
-          <p style={{fontSize:14,color:MT,margin:0,lineHeight:1.5}}>Bug report, feature idea, or just want to chat — we read everything.</p>
+          <p style={{fontSize:14,color:MT,margin:0,lineHeight:1.5}}>Bug report, feature idea, or just want to chat. We read everything.</p>
         </div>
         {cfStatus==='sent'?(
           <div style={{textAlign:"center",background:G+"11",border:`1px solid ${G}33`,borderRadius:14,padding:32}}>
@@ -289,7 +277,6 @@ export default function Landing(){
         <Link to="/guides" style={{color:MT,fontSize:12,textDecoration:"none"}}>Guides</Link>
         <Link to="/compare" style={{color:MT,fontSize:12,textDecoration:"none"}}>Compare</Link>
         <Link to="/alternatives" style={{color:MT,fontSize:12,textDecoration:"none"}}>Alternatives</Link>
-        <Link to="/calculator" style={{color:MT,fontSize:12,textDecoration:"none"}}>Calculator</Link>
         <a href="#contact" style={{color:MT,fontSize:12,textDecoration:"none"}}>Contact</a>
         <Link to="/app" style={{color:MT,fontSize:12,textDecoration:"none"}}>Sign Up</Link>
       </div>
