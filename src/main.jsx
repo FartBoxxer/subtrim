@@ -13,6 +13,9 @@ const Alternatives = lazy(() => import("./pages/Alternatives.jsx"));
 const AlternativesIndex = lazy(() => import("./pages/AlternativesIndex.jsx"));
 const Privacy = lazy(() => import("./pages/Privacy.jsx"));
 const Terms = lazy(() => import("./pages/Terms.jsx"));
+const Demo = lazy(() => import("./pages/Demo.jsx"));
+const Blog = lazy(() => import("./pages/Blog.jsx"));
+const BlogPost = lazy(() => import("./pages/BlogPost.jsx"));
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 
 const Loading = () => (
@@ -70,6 +73,9 @@ createRoot(document.getElementById("root")).render(
             <Route path="/alternatives" element={<AlternativesIndex />} />
             <Route path="/alternatives/:service" element={<Alternatives />} />
             <Route path="/calculator" element={<Calculator />} />
+            <Route path="/demo" element={<Demo />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             {/* Fallback — 404 page */}

@@ -12,5 +12,10 @@ export default defineConfig({
         }
       }
     }
-  }
+  },
+  ssr: {
+    // Bundle all dependencies into the SSR output to avoid CJS/ESM interop issues.
+    // The SSR bundle is only used at build time for prerendering, not at runtime.
+    noExternal: true,
+  },
 });

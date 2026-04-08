@@ -1,5 +1,31 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/200.html" }
+  ],
+  "headers": [
+    {
+      "source": "/guides/cancel/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/compare/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/alternatives/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400" }
+      ]
+    },
+    {
+      "source": "/blog/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=86400, s-maxage=604800, stale-while-revalidate=86400" }
+      ]
+    }
   ]
 }

@@ -28,6 +28,10 @@ export default function Landing(){
   const total=RECEIPT_ITEMS.reduce((a,i)=>a+i.p,0);
   const saved=RECEIPT_ITEMS.filter(i=>i.cut).reduce((a,i)=>a+i.p,0);
   const[subCount,setSubCount]=useState(null);
+  const[userCount,setUserCount]=useState(null);
+  const[auditCount,setAuditCount]=useState(null);
+  const[waitEmail,setWaitEmail]=useState('');
+  const[waitStatus,setWaitStatus]=useState('');
   useEffect(()=>{
     try{
       const url=import.meta.env.VITE_SUPABASE_URL;
@@ -35,6 +39,8 @@ export default function Landing(){
       if(!url||!key)return;
       const sb=createClient(url,key);
       sb.from('subscriptions').select('id',{count:'exact',head:true}).then(({count})=>{if(count!=null)setSubCount(count)});
+      sb.from('profiles').select('id',{count:'exact',head:true}).then(({count})=>{if(count!=null)setUserCount(count)});
+      sb.from('usage_surveys').select('id',{count:'exact',head:true}).then(({count})=>{if(count!=null)setAuditCount(count)});
     }catch{}
   },[]);
 
@@ -145,12 +151,20 @@ export default function Landing(){
       </div>
     </section>
 
-    {/* Social proof counter */}
-    {subCount!=null&&subCount>0&&(
-      <section style={{textAlign:"center",padding:"0 24px 20px"}}>
-        <div style={{display:"inline-flex",alignItems:"center",gap:12,background:SF,borderRadius:40,padding:"12px 28px",border:"1px solid #1a1a1a"}}>
-          <div style={{width:8,height:8,borderRadius:"50%",background:G,animation:"pulse 2s ease-in-out infinite"}}/>
-          <span style={{fontSize:15,color:TX}}><strong style={{color:G,fontSize:18}}>{subCount.toLocaleString()}</strong> subscriptions tracked globally</span>
+    {/* Social proof */}
+    {(subCount>0||userCount>0||auditCount>0)&&(
+      <section style={{padding:"0 24px 32px"}}>
+        <div style={{maxWidth:600,margin:"0 auto",display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
+          {userCount>0&&<div style={{display:"flex",alignItems:"center",gap:8,background:SF,borderRadius:40,padding:"10px 22px",border:"1px solid #1a1a1a"}}>
+            <div style={{width:7,height:7,borderRadius:"50%",background:G,animation:"pulse 2s ease-in-out infinite"}}/>
+            <span style={{fontSize:14,color:MT}}><strong style={{color:TX}}>{userCount.toLocaleString()}</strong> users</span>
+          </div>}
+          {subCount>0&&<div style={{display:"flex",alignItems:"center",gap:8,background:SF,borderRadius:40,padding:"10px 22px",border:"1px solid #1a1a1a"}}>
+            <span style={{fontSize:14,color:MT}}><strong style={{color:TX}}>{subCount.toLocaleString()}</strong> subs tracked</span>
+          </div>}
+          {auditCount>0&&<div style={{display:"flex",alignItems:"center",gap:8,background:SF,borderRadius:40,padding:"10px 22px",border:"1px solid #1a1a1a"}}>
+            <span style={{fontSize:14,color:MT}}><strong style={{color:TX}}>{auditCount.toLocaleString()}</strong> audits run</span>
+          </div>}
         </div>
       </section>
     )}
@@ -250,6 +264,32 @@ export default function Landing(){
       </div>
     </section>
 
+    {/* Try Demo */}
+    <section style={{padding:"64px 24px",textAlign:"center",background:SF}}>
+      <div style={{maxWidth:560,margin:"0 auto"}}>
+        <div style={{fontSize:36,marginBottom:12}}>🧪</div>
+        <h2 style={{fontSize:24,fontWeight:800,marginBottom:8}}>Not sure yet? Try it first.</h2>
+        <p style={{fontSize:14,color:MT,lineHeight:1.6,marginBottom:24}}>Run through a sample audit with fake data. See exactly how SubTrim works before you create an account.</p>
+        <Link to="/demo" style={{...B,background:G+"18",color:G,fontSize:15,padding:"14px 36px",textDecoration:"none",display:"inline-block",borderRadius:12,border:`1px solid ${G}44`}}>Try the Demo</Link>
+      </div>
+    </section>
+
+    {/* Email capture */}
+    <section style={{padding:"64px 24px"}}>
+      <div style={{maxWidth:480,margin:"0 auto",textAlign:"center"}}>
+        <div style={{fontSize:28,marginBottom:12}}>📬</div>
+        <h2 style={{fontSize:22,fontWeight:800,marginBottom:6}}>Not ready to sign up?</h2>
+        <p style={{fontSize:14,color:MT,marginBottom:20,lineHeight:1.5}}>Drop your email and we'll send you a one-time heads up when we launch new features. No spam, no newsletters.</p>
+        {waitStatus==='sent'?<div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:12,padding:"20px 24px",fontSize:14,color:G,fontWeight:600}}>You're on the list. We'll keep it short.</div>:(
+          <form onSubmit={async e=>{e.preventDefault();if(!waitEmail.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(waitEmail)){setWaitStatus('Enter a valid email');return}setWaitStatus('sending');try{const url=import.meta.env.VITE_SUPABASE_URL;const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;if(url&&key){const sb=createClient(url,key);await sb.from('waitlist').insert({email:waitEmail.trim().toLowerCase()})}setWaitStatus('sent');setWaitEmail('')}catch{setWaitStatus('sent');setWaitEmail('')}}} style={{display:"flex",gap:8,maxWidth:400,margin:"0 auto"}}>
+            <input value={waitEmail} onChange={e=>setWaitEmail(e.target.value)} placeholder="your@email.com" type="email" style={{flex:1,padding:"14px 16px",borderRadius:10,border:"1px solid #222",background:EL,color:TX,fontSize:14,outline:"none",fontFamily:"inherit",boxSizing:"border-box"}}/>
+            <button type="submit" disabled={waitStatus==='sending'} style={{...B,background:G,color:"#000",padding:"14px 24px",fontSize:14,borderRadius:10,whiteSpace:"nowrap",opacity:waitStatus==='sending'?0.6:1}}>{waitStatus==='sending'?'...':'Notify Me'}</button>
+          </form>
+        )}
+        {waitStatus&&waitStatus!=='sent'&&waitStatus!=='sending'&&<div style={{fontSize:12,color:"#ef4444",marginTop:8}}>{waitStatus}</div>}
+      </div>
+    </section>
+
     {/* Final CTA */}
     <section style={{padding:"72px 24px",textAlign:"center"}}>
       <div style={{maxWidth:560,margin:"0 auto"}}>
@@ -306,6 +346,7 @@ export default function Landing(){
         <Link to="/guides" style={{color:MT,fontSize:12,textDecoration:"none"}}>Guides</Link>
         <Link to="/compare" style={{color:MT,fontSize:12,textDecoration:"none"}}>Compare</Link>
         <Link to="/alternatives" style={{color:MT,fontSize:12,textDecoration:"none"}}>Alternatives</Link>
+        <Link to="/blog" style={{color:MT,fontSize:12,textDecoration:"none"}}>Blog</Link>
         <a href="#contact" style={{color:MT,fontSize:12,textDecoration:"none"}}>Contact</a>
         <Link to="/app" style={{color:MT,fontSize:12,textDecoration:"none"}}>Sign Up</Link>
       </div>

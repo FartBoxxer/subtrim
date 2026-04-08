@@ -334,3 +334,15 @@ INSERT INTO public.price_changes (service_id, old_price, new_price, effective_da
 ((SELECT id FROM known_services WHERE name = 'Netflix'), 13.99, 15.49, '2026-01-15', '2025-11-20', 'https://netflix.com/pricing'),
 ((SELECT id FROM known_services WHERE name = 'Spotify'), 9.99, 10.99, '2026-06-01', '2026-03-20', 'https://spotify.com/premium'),
 ((SELECT id FROM known_services WHERE name = 'Apple TV+'), 6.99, 9.99, '2026-02-01', '2025-12-15', 'https://tv.apple.com');
+
+-- ==================== WAITLIST ====================
+
+CREATE TABLE IF NOT EXISTS public.waitlist (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  email TEXT NOT NULL UNIQUE,
+  created_at TIMESTAMPTZ DEFAULT now()
+);
+
+ALTER TABLE public.waitlist ENABLE ROW LEVEL SECURITY;
+CREATE POLICY "Anyone can insert waitlist" ON public.waitlist FOR INSERT WITH CHECK (true);
+CREATE POLICY "No public reads on waitlist" ON public.waitlist FOR SELECT USING (false);
