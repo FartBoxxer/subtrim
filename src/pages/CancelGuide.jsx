@@ -7,7 +7,7 @@ const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 // Build a slug→name map for lookup
 const SLUG_MAP={};
 Object.keys(CANCEL_GUIDES).forEach(name=>{
-  SLUG_MAP[name.toLowerCase().replace(/[^a-z0-9]+/g,'-')]=name;
+  SLUG_MAP[name.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'')]=name;
 });
 
 export default function CancelGuide(){
@@ -31,6 +31,7 @@ export default function CancelGuide(){
     <Helmet
       title={`How to Cancel ${name} (${new Date().getFullYear()}) | Step-by-Step Guide | SubTrim`}
       description={`Cancel your ${name} subscription in ${guide.steps.length} easy steps. ${guide.difficulty==='easy'?'Takes under 2 minutes.':guide.difficulty==='medium'?'Takes about 5 minutes.':'May require contacting support.'}`}
+      canonical={`https://subtrim.dev/guides/cancel/${service}`}
     />
     <JsonLd data={{
       "@context":"https://schema.org","@type":"HowTo",
@@ -106,4 +107,4 @@ export default function CancelGuide(){
 }
 
 // Export all guide slugs for pre-rendering
-export const GUIDE_SLUGS=Object.keys(CANCEL_GUIDES).map(n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'-'));
+export const GUIDE_SLUGS=Object.keys(CANCEL_GUIDES).map(n=>n.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,''));

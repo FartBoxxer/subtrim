@@ -15,6 +15,7 @@ export default function Privacy(){
     <Helmet
       title="Privacy Policy | SubTrim"
       description="SubTrim's privacy policy. Learn how we collect, use, and protect your data. No ad trackers, no data selling, no cookies beyond essential auth."
+      canonical="https://subtrim.dev/privacy"
     />
 
     {/* Nav */}

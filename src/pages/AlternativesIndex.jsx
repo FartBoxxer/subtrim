@@ -4,7 +4,7 @@ import { TIERS } from '../data/serviceData';
 import { Helmet } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',G='#00d48a',MT='#888',TX='#fff';
-const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+const slug=n=>n.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
 const fm=n=>'$'+Number(n).toFixed(2);
 
 export default function AlternativesIndex(){
@@ -14,6 +14,7 @@ export default function AlternativesIndex(){
     <Helmet
       title="Find Cheaper Alternatives to Any Subscription | SubTrim"
       description="Spending too much on a subscription? We found cheaper options for Netflix, Spotify, ChatGPT, Adobe, and more."
+      canonical="https://subtrim.dev/alternatives"
     />
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:1000,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>

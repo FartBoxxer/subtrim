@@ -10,7 +10,7 @@ const B={border:"none",borderRadius:10,padding:"10px 18px",cursor:"pointer",font
 const fm=n=>'$'+Number(n).toFixed(2);
 
 const ALL_SERVICES=Object.keys(TIERS).sort();
-const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+const slug=n=>n.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
 
 export default function CompareIndex(){
   const[pickA,setPickA]=useState('');
@@ -42,6 +42,7 @@ export default function CompareIndex(){
     <Helmet
       title="Compare Subscriptions Side by Side | SubTrim"
       description="Pick any two subscriptions and see the pricing, features, and trade-offs side by side. Helps you figure out which one's worth keeping."
+      canonical="https://subtrim.dev/compare"
     />
     <JsonLd data={{
       "@context":"https://schema.org","@type":"WebApplication",

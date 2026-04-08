@@ -9,7 +9,7 @@ const fm=n=>'$'+Number(n).toFixed(2);
 
 const SLUG_MAP={};
 Object.keys(TIERS).forEach(name=>{
-  SLUG_MAP[name.toLowerCase().replace(/[^a-z0-9]+/g,'-')]=name;
+  SLUG_MAP[name.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'')]=name;
 });
 
 export default function Compare(){
@@ -45,6 +45,7 @@ export default function Compare(){
     <Helmet
       title={`${nameA} vs ${nameB} (${new Date().getFullYear()}) | Price & Feature Comparison | SubTrim`}
       description={`Compare ${nameA} (from ${fm(cheapestA)}/mo) vs ${nameB} (from ${fm(cheapestB)}/mo). Plans, pricing, features, pros & cons side by side.`}
+      canonical={`https://subtrim.dev/compare/${slug}`}
     />
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:900,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>
@@ -188,8 +189,8 @@ export default function Compare(){
       {/* Cancel guide links */}
       {(guideA||guideB)&&(
         <div style={{display:"flex",gap:12,marginBottom:32,flexWrap:"wrap"}}>
-          {guideA&&<Link to={`/guides/cancel/${nameA.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:EL,borderRadius:10,padding:"12px 18px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {nameA} →</Link>}
-          {guideB&&<Link to={`/guides/cancel/${nameB.toLowerCase().replace(/[^a-z0-9]+/g,'-')}`} style={{background:EL,borderRadius:10,padding:"12px 18px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {nameB} →</Link>}
+          {guideA&&<Link to={`/guides/cancel/${nameA.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'')}`} style={{background:EL,borderRadius:10,padding:"12px 18px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {nameA} →</Link>}
+          {guideB&&<Link to={`/guides/cancel/${nameB.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'')}`} style={{background:EL,borderRadius:10,padding:"12px 18px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>How to cancel {nameB} →</Link>}
         </div>
       )}
 

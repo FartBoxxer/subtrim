@@ -9,6 +9,7 @@ export default function NotFound(){
     <Helmet
       title="Page Not Found | SubTrim"
       description="This page doesn't exist. Head back to SubTrim to audit your subscriptions and find savings."
+      noindex
     />
 
     {/* Nav */}

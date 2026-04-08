@@ -8,7 +8,7 @@ function setMeta(name,content,attr='name'){
   if(el)el.setAttribute('content',content);
 }
 
-export function Helmet({ title, description }){
+export function Helmet({ title, description, canonical, noindex }){
   useEffect(()=>{
     if(title){
       document.title=title;
@@ -20,6 +20,16 @@ export function Helmet({ title, description }){
       setMeta('og:description',description,'property');
       setMeta('twitter:description',description,'name');
     }
+    if(canonical){
+      const link=document.querySelector("link[rel='canonical']");
+      if(link)link.setAttribute('href',canonical);
+      setMeta('og:url',canonical,'property');
+    }
+    if(noindex){
+      let el=document.querySelector('meta[name="robots"]');
+      if(!el){el=document.createElement('meta');el.setAttribute('name','robots');document.head.appendChild(el)}
+      el.setAttribute('content','noindex, nofollow');
+    }
     return()=>{
       document.title=DEFAULT_TITLE;
       setMeta('description',DEFAULT_DESC);
@@ -27,8 +37,13 @@ export function Helmet({ title, description }){
       setMeta('og:description','Stop overpaying. SubTrim finds overlapping subscriptions, runs usage audits, and tells you exactly what to keep, cancel, or downgrade.','property');
       setMeta('twitter:title','SubTrim | Subscription Tracker & Optimizer','name');
       setMeta('twitter:description','Track, audit, and optimize your subscriptions. Find overlaps and save hundreds per year.','name');
+      const link=document.querySelector("link[rel='canonical']");
+      if(link)link.setAttribute('href','https://subtrim.dev');
+      setMeta('og:url','https://subtrim.dev','property');
+      const robots=document.querySelector('meta[name="robots"]');
+      if(robots)robots.remove();
     };
-  },[title,description]);
+  },[title,description,canonical,noindex]);
   return null;
 }
 

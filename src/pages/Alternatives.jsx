@@ -6,7 +6,7 @@ import { Helmet } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 const fm=n=>'$'+Number(n).toFixed(2);
-const slug=n=>n.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+const slug=n=>n.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');
 
 export default function Alternatives(){
   const{service}=useParams();
@@ -30,6 +30,7 @@ export default function Alternatives(){
     <Helmet
       title={`Best ${name} Alternatives (${new Date().getFullYear()}) | Cheaper & Better Options | SubTrim`}
       description={`Looking to replace ${name}? Compare the best alternatives with pricing, features, and our recommendations.`}
+      canonical={`https://subtrim.dev/alternatives/${service}`}
     />
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:900,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>

@@ -15,6 +15,7 @@ export default function Terms(){
     <Helmet
       title="Terms of Service | SubTrim"
       description="SubTrim's terms of service. Read the terms and conditions governing your use of the SubTrim subscription tracker and optimizer."
+      canonical="https://subtrim.dev/terms"
     />
 
     {/* Nav */}

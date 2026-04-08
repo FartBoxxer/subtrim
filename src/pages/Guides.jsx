@@ -9,7 +9,7 @@ const B={border:"none",borderRadius:10,padding:"10px 18px",cursor:"pointer",font
 const DIFF_INFO={easy:{color:G,label:'Easy',icon:'✅',desc:'1-2 minutes'},medium:{color:'#f59e0b',label:'Medium',icon:'⚠️',desc:'~5 minutes'},hard:{color:'#ef4444',label:'Hard',icon:'🔴',desc:'May need support'}};
 
 const guides=Object.entries(CANCEL_GUIDES).map(([name,g])=>({
-  name,slug:name.toLowerCase().replace(/[^a-z0-9]+/g,'-'),...g
+  name,slug:name.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,''),...g
 })).sort((a,b)=>a.name.localeCompare(b.name));
 
 export default function GuidesIndex(){
@@ -29,6 +29,7 @@ export default function GuidesIndex(){
     <Helmet
       title="Cancellation Guides | How to Cancel Any Subscription | SubTrim"
       description={`Step-by-step cancellation guides for ${guides.length}+ subscriptions. Find out how to cancel Netflix, Spotify, Adobe, Planet Fitness, and more.`}
+      canonical="https://subtrim.dev/guides"
     />
     <JsonLd data={{
       "@context":"https://schema.org","@type":"ItemList",

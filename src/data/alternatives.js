@@ -91,5 +91,5 @@ export const ALTERNATIVES = {
 // Build slug map
 export const ALT_SLUGS = {};
 Object.keys(ALTERNATIVES).forEach(name => {
-  ALT_SLUGS[name.toLowerCase().replace(/[^a-z0-9]+/g, '-')] = name;
+  ALT_SLUGS[name.replace(/\+/g, ' plus').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '')] = name;
 });

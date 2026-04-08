@@ -152,15 +152,19 @@ export default function App(){
   const[avOptions,setAvOptions]=useState(()=>genPalettes());
   const[avExpanded,setAvExpanded]=useState(false);
   const[hovCal,setHovCal]=useState(null);
-  const[theme,setTheme]=useState(()=>localStorage.getItem('st_theme')||"dark");
+  const[theme,setTheme]=useState(()=>{const saved=localStorage.getItem('st_theme');if(saved)return saved;if(typeof window!=='undefined'&&window.matchMedia?.('(prefers-color-scheme:light)').matches)return'light';return'dark'});
   const[editId,setEditId]=useState(null);
   const[editCost,setEditCost]=useState("");
   const[editCycle,setEditCycle]=useState("monthly");
   const[editRenewal,setEditRenewal]=useState("");
   const[editLabels,setEditLabels]=useState([]);
   const[editNotes,setEditNotes]=useState("");
+  const[editTrial,setEditTrial]=useState(false);
+  const[editTrialEnd,setEditTrialEnd]=useState("");
   const[addLabels,setAddLabels]=useState([]);
   const[addNotes,setAddNotes]=useState("");
+  const[addTrial,setAddTrial]=useState(false);
+  const[addTrialEnd,setAddTrialEnd]=useState("");
   const[customMode,setCustomMode]=useState(false);
   const[customName,setCustomName]=useState("");
   const[customCat,setCustomCat]=useState("streaming");
@@ -200,6 +204,7 @@ export default function App(){
   const[hhView,setHhView]=useState("idle");
 
   useEffect(()=>{localStorage.setItem('st_av',JSON.stringify(av))},[av]);
+  useEffect(()=>{document.body.style.background=TH[theme]?.bg||'#0d0d0d';document.querySelector('meta[name="theme-color"]')?.setAttribute('content',TH[theme]?.acc||'#00d48a')},[theme]);
 
   const[isMobile,setIsMobile]=useState(typeof window!=="undefined"?window.innerWidth<768:false);
   useEffect(()=>{const h=()=>setIsMobile(window.innerWidth<768);window.addEventListener("resize",h);return()=>window.removeEventListener("resize",h)},[]);
@@ -456,29 +461,35 @@ export default function App(){
   const saved=savedAmt;const score=latestScore;
   const hasAudit=act.some(s=>!s.trial&&s.audit);
   const _now=new Date();const todayDay=_now.getDate();const calMonth=_now.getMonth();const calYear=_now.getFullYear();const calDays=new Date(calYear,calMonth+1,0).getDate();const calStart=new Date(calYear,calMonth,1).getDay();const calLabel=_now.toLocaleString('en-US',{month:'long',year:'numeric'});
-  // Overlap detection from tags (memoized)
+  // Overlap detection from tags (memoized) — includes cross-household
   const allOL=useMemo(()=>{const out=[];
     for(let i=0;i<act.length;i++)for(let j=i+1;j<act.length;j++){
       const a=act[i],b=act[j];if(!a.tags?.length||!b.tags?.length)continue;
       const sh=a.tags.filter(tg=>b.tags.includes(tg));
       if(sh.length)out.push({a:a.name,b:b.name,tag:sh[0].replace(/_/g,' ').replace(/\b\w/g,c=>c.toUpperCase()),k:`${a.id}-${b.id}`});
     }return out},[act]);
+  const hhOL=useMemo(()=>{if(!hhMembers.length)return[];const out=[];
+    const others=hhMembers.filter(m=>m.user_id!==user?.id);
+    for(const me of act){for(const m of others){for(const ms of(m.subs||[])){
+      if(me.name===ms.name)out.push({a:me.name,member:m.name,k:`hh-${me.id}-${ms.name}`});
+    }}}return out},[act,hhMembers,user]);
   const olaps=allOL.filter(o=>!ign("ol-"+o.k));
+  const hhOlaps=hhOL.filter(o=>!ign("ol-"+o.k));
   const needA=useMemo(()=>act.filter(s=>!s.trial&&(!s.audit||dU(s.audit)<-60)),[act]);
   const showAA=needA.length>0&&!ign("reaudit");
   const relP=useMemo(()=>promos.filter(p=>act.some(s=>s.name===p.svc||s.cat===p.cat)).length,[promos,act]);
 
   const remove=async(id)=>{if(removing)return;setRemoving(id);const s=subs.find(x=>x.id===id);const{error}=await supabase.from('subscriptions').update({archived_at:new Date().toISOString(),status:'cancelled'}).eq('id',id);setRemoving(null);if(error){notify('Failed to remove');return}setSubs(subs.filter(x=>x.id!==id));notify(`✂️ ${s?.name} removed! Cancel directly with the service.`);pop()};
 
-  const openEdit=(s)=>{setEditId(s.id);setEditCost(String(s.cost));setEditCycle(s.cycle||'monthly');setEditRenewal(s.renewal||'');setEditLabels(s.labels||[]);setEditNotes(s.notes||'')};
+  const openEdit=(s)=>{setEditId(s.id);setEditCost(String(s.cost));setEditCycle(s.cycle||'monthly');setEditRenewal(s.renewal||'');setEditLabels(s.labels||[]);setEditNotes(s.notes||'');setEditTrial(!!s.trial);setEditTrialEnd(s.trialEnd||'')};
   const toggleLabel=(arr,set,k)=>set(arr.includes(k)?arr.filter(x=>x!==k):[...arr,k]);
   const saveSub=async()=>{
     if(saving)return;const c=parseFloat(editCost);if(isNaN(c)||c<0){notify('Enter a valid cost');return}
     setSaving(true);
-    const{error}=await supabase.from('subscriptions').update({monthly_cost:c,billing_cycle:editCycle,renewal_date:editRenewal||null,custom_tags:editLabels,notes:editNotes||null}).eq('id',editId);
+    const{error}=await supabase.from('subscriptions').update({monthly_cost:c,billing_cycle:editCycle,renewal_date:editRenewal||null,custom_tags:editLabels,notes:editNotes||null,is_trial:editTrial,trial_end_date:editTrial&&editTrialEnd?editTrialEnd:null}).eq('id',editId);
     setSaving(false);
     if(error){notify('Failed to save');return}
-    setSubs(prev=>prev.map(s=>s.id===editId?{...s,cost:c,cycle:editCycle,renewal:editRenewal,labels:editLabels,notes:editNotes}:s));
+    setSubs(prev=>prev.map(s=>s.id===editId?{...s,cost:c,cycle:editCycle,renewal:editRenewal,labels:editLabels,notes:editNotes,trial:editTrial,trialEnd:editTrial&&editTrialEnd?editTrialEnd:null}:s));
     setEditId(null);notify('Saved');
   };
 
@@ -491,17 +502,19 @@ export default function App(){
       monthly_cost:c,billing_cycle:'monthly',
       renewal_date:new Date(Date.now()+30*864e5).toISOString().split('T')[0],status:'active',
       custom_tags:addLabels.length?addLabels:null,notes:addNotes||null,
+      is_trial:addTrial,trial_end_date:addTrial&&addTrialEnd?addTrialEnd:null,
     }).select().single();
     if(error){notify('Failed to add');return}
-    setSubs(prev=>[...prev,{id:data.id,name:data.custom_name,cat:data.custom_category,cost:Number(data.monthly_cost),cycle:data.billing_cycle,renewal:data.renewal_date,trial:false,trialEnd:null,sat:null,freq:null,miss:null,audit:null,added:data.created_at?.split('T')[0],tags:[],labels:data.custom_tags||[],notes:data.notes||''}]);
-    notify(`✅ ${customName.trim()} added`);setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setCustomMode(false);setCustomName("");setCustomCost("");
+    setSubs(prev=>[...prev,{id:data.id,name:data.custom_name,cat:data.custom_category,cost:Number(data.monthly_cost),cycle:data.billing_cycle,renewal:data.renewal_date,trial:data.is_trial,trialEnd:data.trial_end_date,sat:null,freq:null,miss:null,audit:null,added:data.created_at?.split('T')[0],tags:[],labels:data.custom_tags||[],notes:data.notes||''}]);
+    notify(`✅ ${customName.trim()} added`);setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setCustomMode(false);setCustomName("");setCustomCost("");setAddTrial(false);setAddTrialEnd("");
   };
 
   const fMap={daily:1,weekly:0.75,monthly:0.4,rarely:0.15,never:0};
   const calcScore=(subsArr,olCount)=>{
     if(!subsArr.length)return 0;
-    const perSub=subsArr.map(s=>{const f=fMap[s.freq]??0.5,sa=(s.sat||3)/5,m=s.miss?1:0;return f*0.4+sa*0.3+m*0.3});
-    let sc=Math.round((perSub.reduce((a,v)=>a+v,0)/perSub.length)*100);
+    const totalCost=subsArr.reduce((a,s)=>a+(s.cost||0),0)||1;
+    const perSub=subsArr.map(s=>{const f=fMap[s.freq]??0.5,sa=(s.sat||3)/5,m=s.miss?1:0;return{eff:f*0.4+sa*0.3+m*0.3,w:(s.cost||0)/totalCost}});
+    let sc=Math.round(perSub.reduce((a,v)=>a+v.eff*v.w,0)*100);
     sc-=(olCount||0)*2;
     if(subsArr.every(s=>s.audit&&dU(s.audit)>-60))sc+=5;
     return Math.max(0,Math.min(100,sc));
@@ -839,6 +852,24 @@ export default function App(){
         </div>
       </div>
     )}
+    {olaps.length>0&&olaps.map(o=>(
+      <div key={o.k} style={{background:t.sf,borderRadius:12,padding:d?"14px 18px":"10px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,borderLeft:"3px solid #e67e22"}}>
+        <span style={{fontSize:d?14:12,color:t.tx2}}>🔍 <strong>{o.a}</strong> and <strong>{o.b}</strong> overlap ({o.tag})</span>
+        <div style={{display:"flex",gap:6}}>
+          <button onClick={()=>dismiss("ol-"+o.k)} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.mt,fontSize:d?12:11,borderRadius:6}}>Ignore</button>
+          <button onClick={()=>permDismiss("ol-"+o.k)} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.dm,fontSize:d?11:10,borderRadius:6}}>Don't Show</button>
+        </div>
+      </div>
+    ))}
+    {hhOlaps.length>0&&hhOlaps.map(o=>(
+      <div key={o.k} style={{background:t.sf,borderRadius:12,padding:d?"14px 18px":"10px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,borderLeft:"3px solid #9b59b6"}}>
+        <span style={{fontSize:d?14:12,color:t.tx2}}>👥 You and <strong>{o.member}</strong> both have <strong>{o.a}</strong>. Split the cost with a family plan?</span>
+        <div style={{display:"flex",gap:6}}>
+          <button onClick={()=>dismiss("ol-"+o.k)} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.mt,fontSize:d?12:11,borderRadius:6}}>Ignore</button>
+          <button onClick={()=>permDismiss("ol-"+o.k)} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.dm,fontSize:d?11:10,borderRadius:6}}>Don't Show</button>
+        </div>
+      </div>
+    ))}
     {/* Budget alerts disabled for now — re-enable by uncommenting
     {(()=>{const over=Object.entries(catSpend).filter(([k,v])=>budgets[k]&&v>budgets[k]).map(([k,v])=>({k,v,lim:budgets[k],...(CATS[k]||{l:k,e:"📦"})}));
       return over.length>0&&!ign("budget-warn")&&<div style={{background:t.sf,borderRadius:12,padding:d?"14px 18px":"10px 14px",borderLeft:"3px solid #ef4444"}}>
@@ -1306,6 +1337,8 @@ export default function App(){
       status:'active',
       custom_tags:addLabels.length?addLabels:null,
       notes:addNotes||null,
+      is_trial:addTrial,
+      trial_end_date:addTrial&&addTrialEnd?addTrialEnd:null,
     }).select('*, known_services(name, category, tags)').single();
     if(error){notify('Failed to add: '+error.message);return}
     setSubs(prev=>[...prev,{
@@ -1318,7 +1351,7 @@ export default function App(){
       audit:null,added:data.created_at?.split('T')[0],
       tags:data.known_services?.tags||[],labels:data.custom_tags||[],notes:data.notes||'',
     }]);
-    notify(`✅ ${svc.n} added`);setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setAddLabels([]);setAddNotes("");
+    notify(`✅ ${svc.n} added`);setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setAddLabels([]);setAddNotes("");setAddTrial(false);setAddTrialEnd("");
   };
 
   // Top services for onboarding (order = popularity)
@@ -1418,7 +1451,7 @@ export default function App(){
     {toast&&<div style={{position:"fixed",top:isMobile?52:24,left:isMobile?"50%":undefined,right:isMobile?undefined:48,transform:isMobile?"translateX(-50%)":"none",background:t.sf,border:`1px solid ${t.acc}44`,borderRadius:10,padding:d?"10px 20px":"8px 16px",zIndex:200,boxShadow:"0 8px 24px rgba(0,0,0,0.3)",animation:"sU 0.25s ease",fontSize:d?14:12,fontWeight:600,maxWidth:"85%",textAlign:"center"}}>{toast}</div>}
 
     {/* Add Modal */}
-    {addM&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",WebkitBackdropFilter:"blur(4px)",zIndex:100,display:"flex",alignItems:isMobile?"flex-end":"center",justifyContent:"center"}} onClick={()=>{setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setAddLabels([]);setAddNotes("");setCustomMode(false);setCustomName("");setCustomCost("")}}>
+    {addM&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",WebkitBackdropFilter:"blur(4px)",zIndex:100,display:"flex",alignItems:isMobile?"flex-end":"center",justifyContent:"center"}} onClick={()=>{setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setAddLabels([]);setAddNotes("");setAddTrial(false);setAddTrialEnd("");setCustomMode(false);setCustomName("");setCustomCost("")}}>
 
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:d?560:480,background:t.sf,borderRadius:isMobile?"16px 16px 0 0":"16px",padding:d?28:18,maxHeight:isMobile?"60vh":"70vh",overflowY:"auto"}}>
         {isMobile&&<div style={{width:32,height:4,borderRadius:2,background:t.bd3,margin:"0 auto 12px"}}/>}
@@ -1442,6 +1475,14 @@ export default function App(){
           {!tiers&&<div style={{fontSize:d?13:11,color:t.mt,marginBottom:6}}>Typical price: {fm(addSvc.price||0)}/mo</div>}
           <div style={{fontSize:d?12:10,color:t.mt,fontWeight:600,marginBottom:4}}>{tiers?"Or enter custom price":"Monthly cost"}</div>
           <input value={addCost} onChange={e=>setAddCost(e.target.value)} placeholder={String(addSvc.price||0)} type="number" min="0" step="0.01" style={{width:"100%",padding:d?"12px 14px":"10px 12px",borderRadius:8,border:`1px solid ${t.bd2}`,background:t.el,color:t.tx,fontSize:d?16:14,fontWeight:700,outline:"none",fontFamily:"inherit",boxSizing:"border-box",marginBottom:12}}/>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10,padding:d?"10px 14px":"8px 12px",background:addTrial?t.acc+"18":t.el,border:addTrial?`1px solid ${t.acc}44`:`1px solid transparent`,borderRadius:8,cursor:"pointer"}} onClick={()=>setAddTrial(!addTrial)}>
+            <div style={{width:36,height:20,borderRadius:10,background:addTrial?t.acc:t.dm,position:"relative",transition:"background 0.15s",flexShrink:0}}><div style={{width:16,height:16,borderRadius:"50%",background:"#fff",position:"absolute",top:2,left:addTrial?18:2,transition:"left 0.15s"}}/></div>
+            <span style={{fontSize:d?13:11,fontWeight:600,color:addTrial?t.acc:t.mt}}>Free trial</span>
+          </div>
+          {addTrial&&<div style={{marginBottom:10}}>
+            <div style={{fontSize:d?12:10,color:t.mt,fontWeight:600,marginBottom:4}}>Trial ends</div>
+            <input value={addTrialEnd} onChange={e=>setAddTrialEnd(e.target.value)} type="date" style={{width:"100%",padding:d?"10px 14px":"8px 12px",borderRadius:8,border:`1px solid ${t.bd2}`,background:t.el,color:t.tx,fontSize:d?13:11,fontFamily:"inherit",boxSizing:"border-box"}}/>
+          </div>}
           <div style={{fontSize:d?12:10,color:t.mt,fontWeight:600,marginBottom:6}}>Labels</div>
           <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10}}>{LABELS.map(lb=><button key={lb.k} onClick={()=>toggleLabel(addLabels,setAddLabels,lb.k)} style={{...B,padding:d?"5px 12px":"4px 10px",fontSize:d?12:10,borderRadius:6,background:addLabels.includes(lb.k)?lb.c+"22":t.el,color:addLabels.includes(lb.k)?lb.c:t.mt,border:addLabels.includes(lb.k)?`1px solid ${lb.c}44`:"1px solid transparent"}}>{lb.l}</button>)}</div>
           <input value={addNotes} onChange={e=>setAddNotes(e.target.value)} placeholder="Note (e.g. $2.99/mo until Dec 2026)" maxLength={80} style={{width:"100%",padding:d?"10px 14px":"8px 12px",borderRadius:8,border:`1px solid ${t.bd2}`,background:t.el,color:t.tx,fontSize:d?13:11,outline:"none",fontFamily:"inherit",boxSizing:"border-box",marginBottom:12}}/>
@@ -1505,6 +1546,14 @@ export default function App(){
               <input value={editRenewal} onChange={e=>setEditRenewal(e.target.value)} type="date" style={{width:"100%",padding:d?"12px 10px":"10px 8px",borderRadius:8,border:`1px solid ${t.bd2}`,background:t.el,color:t.tx,fontSize:d?14:12,fontFamily:"inherit",boxSizing:"border-box"}}/>
             </div>
           </div>
+          <div style={{display:"flex",alignItems:"center",gap:10,padding:d?"10px 14px":"8px 12px",background:editTrial?t.acc+"18":t.el,border:editTrial?`1px solid ${t.acc}44`:`1px solid transparent`,borderRadius:8,cursor:"pointer"}} onClick={()=>setEditTrial(!editTrial)}>
+            <div style={{width:36,height:20,borderRadius:10,background:editTrial?t.acc:t.dm,position:"relative",transition:"background 0.15s",flexShrink:0}}><div style={{width:16,height:16,borderRadius:"50%",background:"#fff",position:"absolute",top:2,left:editTrial?18:2,transition:"left 0.15s"}}/></div>
+            <span style={{fontSize:d?13:11,fontWeight:600,color:editTrial?t.acc:t.mt}}>Free trial</span>
+          </div>
+          {editTrial&&<div>
+            <div style={{fontSize:d?12:10,color:t.mt,fontWeight:600,marginBottom:4}}>Trial ends</div>
+            <input value={editTrialEnd} onChange={e=>setEditTrialEnd(e.target.value)} type="date" style={{width:"100%",padding:d?"10px 14px":"8px 12px",borderRadius:8,border:`1px solid ${t.bd2}`,background:t.el,color:t.tx,fontSize:d?13:11,fontFamily:"inherit",boxSizing:"border-box"}}/>
+          </div>}
           <div>
             <div style={{fontSize:d?12:10,color:t.mt,fontWeight:600,marginBottom:6}}>Labels</div>
             <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>{LABELS.map(lb=><button key={lb.k} onClick={()=>toggleLabel(editLabels,setEditLabels,lb.k)} style={{...B,padding:d?"5px 12px":"4px 10px",fontSize:d?12:10,borderRadius:6,background:editLabels.includes(lb.k)?lb.c+"22":t.el,color:editLabels.includes(lb.k)?lb.c:t.mt,border:editLabels.includes(lb.k)?`1px solid ${lb.c}44`:"1px solid transparent"}}>{lb.l}</button>)}</div>

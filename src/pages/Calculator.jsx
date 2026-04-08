@@ -42,6 +42,7 @@ export default function Calculator(){
     <Helmet
       title="Subscription Cost Calculator | How Much Do You Spend? | SubTrim"
       description="Add up all your subscriptions and see what you're really spending each month and year. The total is probably worse than you think."
+      canonical="https://subtrim.dev/calculator"
     />
     <JsonLd data={{
       "@context":"https://schema.org","@type":"WebApplication",
