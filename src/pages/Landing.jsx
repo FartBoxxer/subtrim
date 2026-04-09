@@ -248,7 +248,7 @@ export default function Landing(){
     <section style={{maxWidth:1000,margin:"0 auto",padding:"64px 24px"}}>
       <h2 style={{fontSize:24,fontWeight:800,textAlign:"center",marginBottom:8}}>Free Tools</h2>
       <p style={{fontSize:14,color:MT,textAlign:"center",marginBottom:32}}>Stuff that's actually useful. No account needed for these.</p>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
+      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:16}}>
         {[
           {e:"📖",t:"Cancellation Guides",d:"50+ services with actual step-by-step instructions. Because some of these companies really don't want you to leave.",to:"/guides",btn:"Browse Guides"},
           {e:"⚖️",t:"Compare Services",d:"Trying to pick between two services? We break down the pricing, features, and trade-offs so you can stop overthinking it.",to:"/compare",btn:"Compare Now"},
@@ -281,7 +281,7 @@ export default function Landing(){
         <h2 style={{fontSize:22,fontWeight:800,marginBottom:6}}>Not ready to sign up?</h2>
         <p style={{fontSize:14,color:MT,marginBottom:20,lineHeight:1.5}}>Drop your email and we'll send you a one-time heads up when we launch new features. No spam, no newsletters.</p>
         {waitStatus==='sent'?<div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:12,padding:"20px 24px",fontSize:14,color:G,fontWeight:600}}>You're on the list. We'll keep it short.</div>:(
-          <form onSubmit={async e=>{e.preventDefault();if(!waitEmail.trim()||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(waitEmail)){setWaitStatus('Enter a valid email');return}setWaitStatus('sending');try{const url=import.meta.env.VITE_SUPABASE_URL;const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;if(url&&key){const sb=createClient(url,key);await sb.from('waitlist').insert({email:waitEmail.trim().toLowerCase()})}setWaitStatus('sent');setWaitEmail('')}catch{setWaitStatus('sent');setWaitEmail('')}}} style={{display:"flex",gap:8,maxWidth:400,margin:"0 auto"}}>
+          <form onSubmit={async e=>{e.preventDefault();const trimmed=waitEmail.trim();if(!trimmed||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)){setWaitStatus('Enter a valid email');return}setWaitStatus('sending');try{const url=import.meta.env.VITE_SUPABASE_URL;const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;if(!url||!key)throw new Error('no config');const sb=createClient(url,key);const{error}=await sb.from('waitlist').insert({email:trimmed.toLowerCase()});if(error&&error.code!=='23505')throw error;setWaitStatus('sent');setWaitEmail('')}catch{setWaitStatus('Something went wrong. Try again.')}}} style={{display:"flex",gap:8,maxWidth:400,margin:"0 auto"}}>
             <input value={waitEmail} onChange={e=>setWaitEmail(e.target.value)} placeholder="your@email.com" type="email" style={{flex:1,padding:"14px 16px",borderRadius:10,border:"1px solid #222",background:EL,color:TX,fontSize:14,outline:"none",fontFamily:"inherit",boxSizing:"border-box"}}/>
             <button type="submit" disabled={waitStatus==='sending'} style={{...B,background:G,color:"#000",padding:"14px 24px",fontSize:14,borderRadius:10,whiteSpace:"nowrap",opacity:waitStatus==='sending'?0.6:1}}>{waitStatus==='sending'?'...':'Notify Me'}</button>
           </form>

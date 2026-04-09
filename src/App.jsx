@@ -426,7 +426,7 @@ export default function App(){
 
   const addCustomSub=async()=>{
     const c=parseFloat(customCost);if(!customName.trim()){notify('Enter a name');return}
-    if(isNaN(c)||c<=0){notify('Enter a valid cost');return}
+    if(isNaN(c)||c<0){notify('Enter a valid cost');return}
     if(act.some(s=>s.name.toLowerCase()===customName.trim().toLowerCase())){notify(`⚠️ ${customName.trim()} already exists`);return}
     const{data,error}=await supabase.from('subscriptions').insert({
       user_id:user.id,custom_name:customName.trim(),custom_category:customCat,
@@ -1065,7 +1065,7 @@ export default function App(){
     </div>
 
     <div style={{display:"flex",background:t.sf,borderRadius:8,padding:2,gap:2}}>
-      {[{k:"profile",l:"Profile"},{k:"household",l:"Household"},{k:"data",l:"Data"}].map(tb=><button key={tb.k} onClick={()=>setATab(tb.k)} style={{...B,flex:1,background:aTab===tb.k?t.el:"transparent",color:aTab===tb.k?t.tx:t.dm2,fontSize:d?14:11,borderRadius:6,padding:d?"9px 4px":"7px 4px"}}>{tb.l}</button>)}
+      {[{k:"profile",l:"Profile"},{k:"budgets",l:"Budgets"},{k:"household",l:"Household"},{k:"data",l:"Data"}].map(tb=><button key={tb.k} onClick={()=>setATab(tb.k)} style={{...B,flex:1,background:aTab===tb.k?t.el:"transparent",color:aTab===tb.k?t.tx:t.dm2,fontSize:d?14:11,borderRadius:6,padding:d?"9px 4px":"7px 4px"}}>{tb.l}</button>)}
     </div>
 
     {aTab==="profile"&&<>
