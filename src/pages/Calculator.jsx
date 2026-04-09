@@ -138,7 +138,7 @@ export default function Calculator(){
       <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center"}}>
         <div style={{fontSize:28,marginBottom:8}}>✂️</div>
         <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Now what?</h3>
-        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>Knowing the total is step one. SubTrim looks at which ones you actually use and tells you where to cut. Takes about 3 minutes.</p>
+        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>Knowing the total is step one. Most people find $50–100/mo they can cut after a 3-minute audit. SubTrim tells you exactly which to keep, cancel, or downgrade.</p>
         <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free</Link>
       </div>
     </div>

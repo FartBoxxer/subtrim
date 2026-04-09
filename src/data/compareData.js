@@ -166,6 +166,20 @@ export const COMPARE_DATA = {
     stats: { users: '35M+', templates: '10,000+', platforms: 'All', founded: '2016' },
     bestFor: 'Best for individuals and teams who want a flexible all-in-one workspace for notes, docs, and project management.',
   },
+  'YouTube Premium': {
+    features: ['Ad-free YouTube', 'YouTube Music included', 'Background play', 'Offline downloads', 'Picture-in-picture', 'YouTube Originals'],
+    pros: ['Removes all YouTube ads', 'YouTube Music bundled in', 'Background play on mobile', 'Family plan covers 5 people'],
+    cons: ['Expensive for just ad removal', 'YouTube Music alone is cheaper', 'Originals are sparse', 'Student plan verification can be annoying'],
+    stats: { users: '100M+ paid', countries: '100+', content: 'All YouTube + Music', founded: '2015' },
+    bestFor: 'Best for heavy YouTube watchers who want ad-free video plus music streaming in one subscription.',
+  },
+  '1Password': {
+    features: ['Password vault', 'Passkey support', 'Watchtower (breach alerts)', 'Travel Mode', 'Secure document storage', 'Family sharing (5 users)'],
+    pros: ['Excellent UI across all platforms', 'Watchtower catches weak & reused passwords', 'Travel Mode hides sensitive vaults', 'Strong family plan value'],
+    cons: ['No free tier', 'More expensive than Bitwarden', 'No self-hosting option', 'Requires subscription (no lifetime license)'],
+    stats: { users: '15M+', platforms: 'All', items: 'Unlimited', founded: '2006' },
+    bestFor: 'Best for individuals and families who want a polished, easy-to-use password manager with strong security.',
+  },
   'NordVPN': {
     features: ['5,000+ servers in 60 countries', 'Double VPN', 'Threat Protection', 'Meshnet', 'No-logs policy', '6 devices simultaneously'],
     pros: ['Fast speeds', 'Strong security features', 'No-logs audited', 'Good for streaming'],

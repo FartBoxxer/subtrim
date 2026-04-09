@@ -66,8 +66,9 @@ export default function Alternatives(){
                 </div>
                 <div style={{textAlign:"right"}}>
                   <div style={{fontSize:22,fontWeight:800,color:alt.price===0?G:(alt.price<cheapest?G:TX)}}>{alt.price===0?'Free':fm(alt.price)+'/mo'}</div>
-                  {alt.price>0&&alt.price<cheapest&&<div style={{fontSize:11,color:G}}>Save {fm(cheapest-alt.price)}/mo vs {name}</div>}
-                  {alt.price===0&&<div style={{fontSize:11,color:G}}>Free forever</div>}
+                  {alt.price>0&&alt.price<cheapest&&<div><div style={{fontSize:14,fontWeight:700,color:G}}>Save {fm((cheapest-alt.price)*12)}/yr</div><div style={{fontSize:11,color:MT}}>{fm(cheapest-alt.price)}/mo vs {name}</div></div>}
+                  {alt.price===0&&cheapest>0&&<div><div style={{fontSize:14,fontWeight:700,color:G}}>Save {fm(cheapest*12)}/yr</div><div style={{fontSize:11,color:MT}}>Free forever</div></div>}
+                  {alt.price===0&&cheapest===0&&<div style={{fontSize:11,color:G}}>Free forever</div>}
                 </div>
               </div>
               <p style={{fontSize:14,color:MT,lineHeight:1.6,margin:"0 0 12px"}}>{alt.why}</p>

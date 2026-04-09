@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Helmet } from '../components/Helmet';
-import { BLOG_POSTS } from '../data/blogPosts';
+import { BLOG_POSTS, AUTHORS } from '../data/blogPosts';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 
@@ -40,7 +40,8 @@ export default function Blog(){
                 <span style={{fontSize:12,color:"#444"}}>{post.date}</span>
               </div>
               <h2 style={{fontSize:20,fontWeight:700,margin:"0 0 8px",lineHeight:1.3}}>{post.title}</h2>
-              <p style={{fontSize:14,color:MT,margin:0,lineHeight:1.5}}>{post.description}</p>
+              <p style={{fontSize:14,color:MT,margin:"0 0 6px",lineHeight:1.5}}>{post.description}</p>
+              {post.author&&AUTHORS[post.author]&&<div style={{fontSize:12,color:"#555"}}>By {AUTHORS[post.author].name}</div>}
             </article>
           </Link>
         )})}

@@ -65,10 +65,11 @@ export default function Landing(){
     {/* Dev banner */}
     {showBanner&&<div style={{background:'linear-gradient(135deg,#00d48a18,#3498db18)',borderBottom:'1px solid #00d48a33',padding:'14px 24px',position:'relative'}}>
       <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center',gap:12,flexWrap:'wrap'}}>
-        <span style={{fontSize:20}}>👀</span>
+        <span style={{fontSize:20}}>🚀</span>
         <div style={{fontSize:14,color:TX,textAlign:'center',lineHeight:1.5}}>
-          <strong>Wow. How did you find this?</strong>
-          <span style={{color:MT}}> We're currently under development, so please don't freak out if things start drastically changing.</span>
+          <strong>Recently launched!</strong>
+          <span style={{color:MT}}> We're actively building and improving SubTrim. Got feedback? We'd love to hear it — </span>
+          <a href="#contact" style={{color:G,textDecoration:'none',fontWeight:600}} onClick={()=>setShowBanner(false)}>let us know</a>
         </div>
         <button onClick={()=>setShowBanner(false)} style={{position:'absolute',right:16,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',color:MT,fontSize:18,cursor:'pointer',padding:4,lineHeight:1}}>×</button>
       </div>
@@ -297,6 +298,14 @@ export default function Landing(){
         <h2 style={{fontSize:28,fontWeight:800,lineHeight:1.3,marginBottom:12}}>You're probably paying for something you don't use</h2>
         <p style={{fontSize:16,color:MT,lineHeight:1.6,marginBottom:28}}>Most people are. SubTrim finds it, tells you about it, and helps you decide what to do about it. Takes a few minutes.</p>
         <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 40px",textDecoration:"none",display:"inline-block",borderRadius:12}}>Get Started (It's Free)</Link>
+      </div>
+    </section>
+
+    {/* Founder's Note */}
+    <section style={{padding:"48px 24px"}}>
+      <div style={{maxWidth:520,margin:"0 auto",background:SF,borderRadius:16,padding:"28px 32px",border:"1px solid #1a1a1a"}}>
+        <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Who built this?</div>
+        <p style={{fontSize:14,color:MT,lineHeight:1.7,margin:0}}>Hey — I'm just a programmer with way too many subscriptions. I was paying for 3 streaming services, 2 cloud storage plans, and a gym app I never opened. I built SubTrim to figure out what was actually worth keeping. Turns out, not all of it was. If you're in the same boat, I think you'll like this.</p>
       </div>
     </section>
 

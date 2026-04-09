@@ -1,5 +1,14 @@
 // Blog posts — add new entries here, newest first
 // Each post renders at /blog/:slug
+
+export const AUTHORS = {
+  mira: { name: "Mira Patel", title: "SubTrim Analyst" },
+  jordan: { name: "Jordan Cole", title: "SubTrim Analyst" },
+  sam: { name: "Sam Ochoa", title: "SubTrim Analyst" },
+  casey: { name: "Casey Lin", title: "SubTrim Analyst" },
+  riley: { name: "Riley Dunn", title: "SubTrim Analyst" },
+};
+
 export const BLOG_POSTS = [
   {
     slug: "how-much-do-americans-spend-on-subscriptions",
@@ -8,6 +17,7 @@ export const BLOG_POSTS = [
     date: "2026-04-08",
     category: "data",
     readTime: "4 min",
+    author: "mira",
     content: [
       { type: "p", text: "If someone told you that you were spending over $3,200 a year on subscriptions, you'd probably say \"no way.\" But that's the average. And the thing is, most people have no idea what their actual number is because the charges are small, monthly, and easy to ignore." },
       { type: "h2", text: "The Numbers" },
@@ -39,6 +49,7 @@ export const BLOG_POSTS = [
     date: "2026-04-08",
     category: "tips",
     readTime: "3 min",
+    author: "jordan",
     content: [
       { type: "p", text: "You know about Netflix and Spotify. Those show up on your bank statement and you recognize them. But what about the other ones? The ones that blend in?" },
       { type: "h2", text: "1. Cloud Storage You Don't Use" },
@@ -67,6 +78,7 @@ export const BLOG_POSTS = [
     date: "2026-04-08",
     category: "compare",
     readTime: "5 min",
+    author: "sam",
     content: [
       { type: "p", text: "You're paying for both. You know you should probably cancel one. But which one? Let's break it down without the fluff." },
       { type: "h2", text: "Price" },

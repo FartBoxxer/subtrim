@@ -155,9 +155,9 @@ export default function Demo(){
             )})}
           </div>
 
-          <div style={{background:SF,borderRadius:14,padding:24,marginBottom:20}}>
-            <div style={{fontSize:15,fontWeight:700,marginBottom:6}}>This was just a demo.</div>
-            <p style={{fontSize:13,color:MT,lineHeight:1.5,marginBottom:16}}>With a real account, SubTrim tracks your actual subscriptions, detects overlaps, finds deals, and keeps your score updated over time.</p>
+          <div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:14,padding:24,marginBottom:20}}>
+            <div style={{fontSize:15,fontWeight:700,marginBottom:6}}>That took about 2 minutes.</div>
+            <p style={{fontSize:13,color:MT,lineHeight:1.5,marginBottom:16}}>With a free account, SubTrim tracks your real subscriptions, detects overlaps automatically, finds active deals, and keeps your SubScore updated over time.</p>
             <Link to="/app" style={{...B,background:G,color:"#000",padding:"14px 32px",fontSize:15,fontWeight:700,textDecoration:"none",display:"inline-block",borderRadius:10}}>Create Free Account</Link>
           </div>
 

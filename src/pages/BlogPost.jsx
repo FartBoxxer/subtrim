@@ -1,6 +1,6 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
 import { Helmet } from '../components/Helmet';
-import { BLOG_POSTS } from '../data/blogPosts';
+import { BLOG_POSTS, AUTHORS } from '../data/blogPosts';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 
@@ -59,7 +59,10 @@ export default function BlogPost(){
         <span style={{fontSize:12,color:"#444"}}>{post.date}</span>
       </div>
 
-      <h1 style={{fontSize:32,fontWeight:800,margin:"0 0 28px",lineHeight:1.25}}>{post.title}</h1>
+      <h1 style={{fontSize:32,fontWeight:800,margin:"0 0 12px",lineHeight:1.25}}>{post.title}</h1>
+      {post.author&&AUTHORS[post.author]&&(
+        <div style={{fontSize:13,color:MT,marginBottom:28}}>By <span style={{color:"#ccc",fontWeight:500}}>{AUTHORS[post.author].name}</span> · {AUTHORS[post.author].title}</div>
+      )}
 
       {post.content.map((block,i)=>renderBlock(block,i))}
     </article>

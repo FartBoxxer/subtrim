@@ -227,7 +227,7 @@ export default function CompareIndex(){
                   <div style={{fontSize:11,fontWeight:600,color:"#ef4444",marginBottom:6,letterSpacing:1}}>CONS</div>
                   {data.cons.map((c,i)=><div key={i} style={{fontSize:13,color:MT,padding:"5px 0",display:"flex",gap:8,lineHeight:1.4}}><span style={{color:"#ef4444",flexShrink:0}}>−</span>{c}</div>)}
                 </div>}
-                {!data&&<div style={{fontSize:13,color:"#444",padding:8}}>Detailed data coming soon</div>}
+                {!data&&<div style={{fontSize:13,color:"#444",padding:8}}>Check back soon for detailed info</div>}
               </div>
             ))}
           </div>

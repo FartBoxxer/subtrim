@@ -1,9 +1,23 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Helmet } from '../components/Helmet';
 
-const BG='#0d0d0d',SF='#141414',G='#00d48a',MT='#888',TX='#fff';
+const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
+
+const PAGES=[
+  {path:"/guides",label:"Cancel Guides",desc:"Step-by-step cancellation guides"},
+  {path:"/compare",label:"Compare Services",desc:"Side-by-side comparisons"},
+  {path:"/alternatives",label:"Alternatives",desc:"Cheaper & better options"},
+  {path:"/calculator",label:"Cost Calculator",desc:"Add up your subscriptions"},
+  {path:"/blog",label:"Blog",desc:"Tips, data, and comparisons"},
+  {path:"/demo",label:"Try Demo",desc:"Free subscription audit"},
+];
 
 export default function NotFound(){
+  const[q,setQ]=useState('');
+  const nav=useNavigate();
+  const filtered=q.trim()?PAGES.filter(p=>p.label.toLowerCase().includes(q.toLowerCase())||p.desc.toLowerCase().includes(q.toLowerCase())):PAGES;
+  const handleSearch=e=>{e.preventDefault();if(filtered.length===1)nav(filtered[0].path);else if(q.trim())nav(`/guides`);};
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif",display:"flex",flexDirection:"column"}}>
     <Helmet
@@ -32,20 +46,27 @@ export default function NotFound(){
           Looks like this page got cancelled. It either doesn't exist or it moved somewhere else.
         </p>
 
-        <div style={{display:"flex",flexDirection:"column",gap:12,alignItems:"center"}}>
-          <Link to="/" style={{
-            display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,
-            padding:"14px 32px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit",
-            width:"100%",maxWidth:280,textAlign:"center",boxSizing:"border-box"
-          }}>
-            ← Back to SubTrim
-          </Link>
-          <div style={{display:"flex",gap:16,flexWrap:"wrap",justifyContent:"center"}}>
-            <Link to="/app" style={{color:G,fontSize:14,textDecoration:"none",fontWeight:600}}>Try the App</Link>
-            <span style={{color:"#333"}}>|</span>
-            <Link to="/guides" style={{color:G,fontSize:14,textDecoration:"none",fontWeight:600}}>Browse Guides</Link>
-          </div>
+        <form onSubmit={handleSearch} style={{display:"flex",gap:8,marginBottom:20,maxWidth:360,width:"100%"}}>
+          <input value={q} onChange={e=>setQ(e.target.value)} placeholder="What were you looking for?" style={{flex:1,padding:"12px 16px",borderRadius:10,border:"1px solid #222",background:EL,color:TX,fontSize:14,outline:"none",fontFamily:"inherit"}}/>
+          <button type="submit" style={{background:G,color:"#000",border:"none",borderRadius:10,padding:"12px 18px",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Go</button>
+        </form>
+
+        <div style={{display:"flex",flexDirection:"column",gap:6,width:"100%",maxWidth:360,marginBottom:24}}>
+          {filtered.map(p=>(
+            <Link key={p.path} to={p.path} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 16px",background:SF,borderRadius:10,textDecoration:"none",border:"1px solid #1a1a1a"}}>
+              <div><div style={{fontSize:14,fontWeight:600,color:TX}}>{p.label}</div><div style={{fontSize:12,color:MT}}>{p.desc}</div></div>
+              <span style={{color:"#444",fontSize:14}}>→</span>
+            </Link>
+          ))}
         </div>
+
+        <Link to="/" style={{
+          display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,
+          padding:"14px 32px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit",
+          width:"100%",maxWidth:280,textAlign:"center",boxSizing:"border-box"
+        }}>
+          ← Back to SubTrim
+        </Link>
       </div>
     </div>
 

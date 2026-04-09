@@ -91,12 +91,22 @@ export default function CancelGuide(){
         </a>
       )}
 
+      {/* Related */}
+      <div style={{marginTop:24,marginBottom:24}}>
+        <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Related</div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          <Link to={`/alternatives/${name.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'')}`} style={{background:EL,borderRadius:8,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>Best {name} alternatives</Link>
+          <Link to="/guides" style={{background:EL,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222"}}>More cancel guides</Link>
+          <Link to="/calculator" style={{background:EL,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222"}}>Cost calculator</Link>
+        </div>
+      </div>
+
       {/* CTA */}
-      <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center",marginTop:24}}>
+      <div style={{background:SF,borderRadius:16,padding:28,textAlign:"center"}}>
         <div style={{fontSize:28,marginBottom:8}}>✂️</div>
-        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Track All Your Subscriptions</h3>
-        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>SubTrim audits your subscriptions, finds overlaps, and saves you hundreds per year. Totally free.</p>
-        <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free</Link>
+        <h3 style={{fontSize:18,fontWeight:700,margin:"0 0 8px"}}>Next time, let SubTrim handle it</h3>
+        <p style={{fontSize:14,color:MT,lineHeight:1.5,maxWidth:440,margin:"0 auto 20px"}}>SubTrim audits all your subscriptions at once and tells you exactly what to keep, cancel, or downgrade — automatically. Free forever.</p>
+        <Link to="/app" style={{display:"inline-block",background:G,color:"#000",border:"none",borderRadius:10,padding:"14px 28px",fontSize:15,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Start Free Audit</Link>
       </div>
     </article>
 

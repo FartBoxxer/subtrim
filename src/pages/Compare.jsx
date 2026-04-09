@@ -142,7 +142,7 @@ export default function Compare(){
                 <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>{name}</div>
                 {data?.features?<ul style={{margin:0,paddingLeft:18,fontSize:13,color:MT,lineHeight:2}}>
                   {data.features.map((f,i)=><li key={i}>{f}</li>)}
-                </ul>:<div style={{fontSize:13,color:"#444"}}>Feature data coming soon</div>}
+                </ul>:<div style={{fontSize:13,color:"#444"}}>Check back soon for detailed features</div>}
               </div>
             ))}
           </div>
