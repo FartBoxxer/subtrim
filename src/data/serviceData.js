@@ -57,11 +57,25 @@ export const SERVICE_CATS={
 
 // Common comparison pairs for generating routes
 export const COMPARE_PAIRS=[
+  // Streaming
   ['Netflix','Hulu'],['Netflix','Disney+'],['Netflix','HBO Max'],
+  ['Netflix','Amazon Prime Video'],['Netflix','Apple TV+'],['Netflix','Paramount+'],
+  ['Hulu','Disney+'],['Hulu','Paramount+'],['Hulu','Peacock'],
+  ['Disney+','HBO Max'],['Disney+','Paramount+'],['Disney+','Apple TV+'],
+  ['HBO Max','Paramount+'],['HBO Max','Peacock'],['HBO Max','Apple TV+'],
+  ['Amazon Prime Video','Hulu'],['Amazon Prime Video','Disney+'],
+  ['Peacock','Paramount+'],['Apple TV+','Peacock'],
+  ['YouTube Premium','Netflix'],
+  // Music
   ['Spotify','Apple Music'],['Spotify','YouTube Music'],['Spotify','Tidal'],
-  ['Disney+','HBO Max'],['Disney+','Paramount+'],
+  ['Apple Music','YouTube Music'],['Apple Music','Tidal'],
+  ['YouTube Music','Tidal'],
+  // AI
   ['ChatGPT Plus','Claude Pro'],
+  // Gaming
   ['Xbox Game Pass','PlayStation Plus'],
+  // Cloud
   ['Dropbox','Google One'],['Dropbox','iCloud+'],['Google One','iCloud+'],
+  // Productivity
   ['Microsoft 365','Notion'],
 ];
