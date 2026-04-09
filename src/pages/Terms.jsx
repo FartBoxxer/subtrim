@@ -251,6 +251,7 @@ export default function Terms(){
         <Link to="/compare" style={{color:MT,fontSize:12,textDecoration:"none"}}>Compare</Link>
         <Link to="/alternatives" style={{color:MT,fontSize:12,textDecoration:"none"}}>Alternatives</Link>
         <Link to="/calculator" style={{color:MT,fontSize:12,textDecoration:"none"}}>Calculator</Link>
+        <Link to="/blog" style={{color:MT,fontSize:12,textDecoration:"none"}}>Blog</Link>
         <Link to="/terms" style={{color:MT,fontSize:12,textDecoration:"none"}}>Terms</Link>
         <Link to="/privacy" style={{color:MT,fontSize:12,textDecoration:"none"}}>Privacy</Link>
       </div>

@@ -6,7 +6,9 @@ export const CATS = {
   fitness:{l:"Fitness",c:"#e67e22",e:"💪"},news:{l:"News",c:"#1abc9c",e:"📰"},
   creative:{l:"Creative",c:"#f39c12",e:"🎨"},security:{l:"Security",c:"#607d8b",e:"🔒"},
   food:{l:"Food",c:"#e91e63",e:"🍕"},ai_tools:{l:"AI Tools",c:"#00bcd4",e:"🤖"},
-  lifestyle:{l:"Lifestyle",c:"#ec4899",e:"✨"},
+  ai:{l:"AI",c:"#8b5cf6",e:"🤖"},cloud:{l:"Cloud",c:"#06b6d4",e:"☁️"},
+  vpn:{l:"VPN",c:"#607d8b",e:"🛡️"},passwords:{l:"Passwords",c:"#78909c",e:"🔑"},
+  education:{l:"Education",c:"#14b8a6",e:"📚"},lifestyle:{l:"Lifestyle",c:"#ec4899",e:"✨"},
 };
 
 export const LABELS=[

@@ -83,6 +83,7 @@ export default function Landing(){
       <div className="lp-nav-links" style={{display:"flex",gap:24,alignItems:"center"}}>
         <Link to="/guides" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Guides</Link>
         <Link to="/compare" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Compare</Link>
+        <Link to="/alternatives" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Alternatives</Link>
         <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 24px",fontSize:14,textDecoration:"none",whiteSpace:"nowrap",borderRadius:10}}>Get Started</Link>
       </div>
       <button className="lp-hamburger" onClick={()=>setMenuOpen(!menuOpen)} style={{display:"none",alignItems:"center",justifyContent:"center",background:"none",border:"none",color:TX,fontSize:24,cursor:"pointer",padding:4}}>
@@ -120,7 +121,7 @@ export default function Landing(){
           <span style={{fontSize:14,color:MT}}>Subtotal</span>
           <span style={{fontSize:14,color:MT,textDecoration:"line-through"}}>{fm(total)}/mo</span>
         </div>
-        <div style={{position:"relative",animation:"fadeIn 0.5s ease 1.4s both"}} onMouseEnter={()=>setShowSavings(true)} onMouseLeave={()=>setShowSavings(false)}>
+        <div style={{position:"relative",animation:"fadeIn 0.5s ease 1.4s both"}} onMouseEnter={()=>setShowSavings(true)} onMouseLeave={()=>setShowSavings(false)} onClick={()=>setShowSavings(prev=>!prev)}>
           <div style={{display:"flex",justifyContent:"space-between",padding:"8px 0",cursor:"pointer"}}>
             <span style={{fontSize:14,color:"#ef4444",fontWeight:600}}>✂️ SubTrim savings</span>
             <span style={{fontSize:14,color:"#ef4444",fontWeight:700}}>-{fm(saved)}/mo</span>

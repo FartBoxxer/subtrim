@@ -731,7 +731,7 @@ export default function App(){
         </div>
         {/* Line items */}
         <div style={{fontFamily:"'Inter',monospace"}}>
-          {act.length===0&&<div style={{textAlign:"center",padding:d?"20px 0":"14px 0",color:t.dm,fontSize:d?14:12}}>No subscriptions yet. Tap + to add one.</div>}
+          {act.length===0&&<div style={{textAlign:"center",padding:d?"20px 0":"14px 0",color:t.dm,fontSize:d?14:12}}>No subscriptions yet. Hit + to add your first one.</div>}
           {sorted.map((s,i)=>{const c=CATS[s.cat]||{e:"📦"};return(
             <div key={s.id} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:d?"10px 0":"7px 0",borderBottom:`1px dashed ${theme==="dark"?"#1a1a1a":"#e0e0dd"}`}}>
               <span style={{fontSize:d?15:13,color:theme==="dark"?"#ccc":"#333",display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:d?14:12}}>{c.e}</span>{s.name}</span>
@@ -796,7 +796,6 @@ export default function App(){
       </div>
     )}
     {/* Overlap alerts removed from dashboard - detected in audit instead */}
-    {/* Budget alerts disabled for now — re-enable by uncommenting
     {(()=>{const over=Object.entries(catSpend).filter(([k,v])=>budgets[k]&&v>budgets[k]).map(([k,v])=>({k,v,lim:budgets[k],...(CATS[k]||{l:k,e:"📦"})}));
       return over.length>0&&!ign("budget-warn")&&<div style={{background:t.sf,borderRadius:12,padding:d?"14px 18px":"10px 14px",borderLeft:"3px solid #ef4444"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
@@ -805,7 +804,7 @@ export default function App(){
         </div>
         {over.map(o=><div key={o.k} style={{fontSize:d?13:11,color:t.mt,padding:"2px 0"}}>{o.e} {o.l}: <span style={{color:"#ef4444",fontWeight:600}}>{fm(o.v)}</span> / {fm(o.lim)} budget</div>)}
       </div>
-    })()} */}
+    })()}
 
     {/* Trials */}
     {tri.length>0&&<>
@@ -967,7 +966,7 @@ export default function App(){
             return(<div key={k}>
               <div style={{fontSize:d?14:12,fontWeight:700,color:c,marginBottom:8}}>{l} ({items.length})</div>
               <div style={{background:t.sf,borderRadius:12,overflow:"hidden",minHeight:d?60:48}}>
-                {items.length===0&&<div style={{padding:d?"16px 18px":"12px 14px",fontSize:d?13:11,color:t.dm,textAlign:"center"}}>None</div>}
+                {items.length===0&&<div style={{padding:d?"16px 18px":"12px 14px",fontSize:d?13:11,color:t.dm,textAlign:"center"}}>{k==="cancel"?"Nothing to cut":"No changes needed"}</div>}
                 {items.map((s,i)=>(
                   <div key={s.id} style={{display:"flex",alignItems:"center",padding:d?"14px 18px":"10px 14px",borderBottom:i<items.length-1?`1px solid ${t.el}`:"none"}}>
                     <div style={{width:d?38:32,height:d?38:32,borderRadius:"50%",background:(CATS[s.cat]?.c||"#666")+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:d?16:14,marginRight:d?12:10}}>{CATS[s.cat]?.e||"📦"}</div>
@@ -998,6 +997,7 @@ export default function App(){
         </div>
         <div style={{marginBottom:20}}>
           <div style={{fontSize:d?14:12,fontWeight:600,marginBottom:10}}>How much do you enjoy it?</div>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:d?11:9,color:t.dm,marginBottom:4,padding:"0 4px"}}><span>Not at all</span><span>Love it</span></div>
           <div style={{display:"flex",gap:4,justifyContent:"center"}}>{[1,2,3,4,5].map(n=><button key={n} onClick={()=>setAA({...aAns,[cur.id]:{...ans,satisfaction:n}})} style={{background:"none",border:"none",fontSize:d?28:22,cursor:"pointer",filter:(ans.satisfaction||0)>=n?"none":"grayscale(1) opacity(0.3)",transition:"all 0.15s"}}>⭐</button>)}</div>
         </div>
         <div>
@@ -1051,7 +1051,7 @@ export default function App(){
                 {p.type==="new_customer"&&<span style={{fontSize:d?10:9,background:"#3498db22",color:"#3498db",padding:"2px 6px",borderRadius:4}}>new users</span>}
               </div>
               <div style={{fontSize:d?13:11,color:t.mt}}>{p.desc}</div>
-              <div style={{fontSize:d?11:9,color:t.dm,marginTop:2}}>Ends {new Date(p.until+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}{safeUrl&&<span style={{color:t.acc,marginLeft:6}}>View Deal →</span>}</div>
+              <div style={{fontSize:d?11:9,color:t.dm,marginTop:2}}>{p.until?`Ends ${new Date(p.until+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric'})}`:"Ongoing"}{safeUrl&&<span style={{color:t.acc,marginLeft:6}}>View Deal →</span>}</div>
             </div>
             <div style={{background:c.c,color:"#fff",fontWeight:800,fontSize:d?14:12,padding:d?"4px 10px":"3px 8px",borderRadius:6,flexShrink:0}}>{p.disc}%</div>
           </div>)})}
@@ -1088,7 +1088,7 @@ export default function App(){
             <div style={{display:"flex",justifyContent:"flex-end",marginBottom:8}}>
               <button onClick={()=>setAvOptions(genPalettes())} style={{...B,padding:d?"4px 10px":"3px 8px",background:t.el,color:t.mt,fontSize:d?11:9,borderRadius:6}}>🎲 Shuffle</button>
             </div>
-            <div style={{display:"grid",gridTemplateColumns:`repeat(${d?5:5},1fr)`,gap:d?12:8}}>{avOptions.map(a=>(
+            <div style={{display:"grid",gridTemplateColumns:`repeat(${d?5:4},1fr)`,gap:d?12:8}}>{avOptions.map(a=>(
               <button key={a.id} onClick={()=>setAv(a)} style={{display:"flex",alignItems:"center",justifyContent:"center",padding:d?6:4,borderRadius:12,background:av.id===a.id?t.el:"transparent",border:av.id===a.id?`2px solid ${t.acc}`:"2px solid transparent",cursor:"pointer",transition:"all 0.15s"}}>
                 <Av bg={a.bg} size={d?52:40} border="none"/>
               </button>
@@ -1099,7 +1099,7 @@ export default function App(){
             <div style={{fontSize:d?14:12,fontWeight:700}}>Choose your color</div>
             <button onClick={()=>setAvOptions(genPalettes())} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.mt,fontSize:d?12:10,borderRadius:6}}>🎲 Shuffle</button>
           </div>
-          <div style={{display:"grid",gridTemplateColumns:`repeat(${d?5:5},1fr)`,gap:d?12:8}}>{avOptions.map(a=>(
+          <div style={{display:"grid",gridTemplateColumns:`repeat(${d?5:4},1fr)`,gap:d?12:8}}>{avOptions.map(a=>(
             <button key={a.id} onClick={()=>setAv(a)} style={{display:"flex",alignItems:"center",justifyContent:"center",padding:d?6:4,borderRadius:12,background:av.id===a.id?t.el:"transparent",border:av.id===a.id?`2px solid ${t.acc}`:"2px solid transparent",cursor:"pointer",transition:"all 0.15s"}}>
               <Av bg={a.bg} size={d?52:40} border="none"/>
             </button>
@@ -1149,7 +1149,7 @@ export default function App(){
           <div style={{display:"flex",alignItems:"center",gap:4}}>
             <span style={{color:ov?"#ef4444":t.mt,fontWeight:ov?700:400}}>{fm(sp)}/</span>
             <span style={{color:t.mt}}>$</span>
-            <input value={lim} onChange={e=>{const v=parseInt(e.target.value)||0;saveBudget(k,v)}} type="number" min="0" step="5" style={{width:d?52:44,padding:"2px 4px",borderRadius:4,border:`1px solid ${t.bd2}`,background:t.el,color:ov?"#ef4444":t.tx,fontSize:d?13:11,fontWeight:600,outline:"none",fontFamily:"inherit",textAlign:"right"}}/>
+            <input value={lim} onChange={e=>{const v=parseInt(e.target.value)||0;saveBudget(k,v)}} type="number" min="0" step="1" style={{width:d?52:44,padding:"2px 4px",borderRadius:4,border:`1px solid ${t.bd2}`,background:t.el,color:ov?"#ef4444":t.tx,fontSize:d?13:11,fontWeight:600,outline:"none",fontFamily:"inherit",textAlign:"right"}}/>
             {ov&&<span style={{fontSize:d?12:10}}>⚠️</span>}
           </div>
         </div>
@@ -1242,7 +1242,7 @@ export default function App(){
           <button onClick={exportCSV} disabled={!act.length} style={{...B,flex:1,background:t.el,color:act.length?t.mt2:t.dm,fontSize:d?14:12,borderRadius:8,opacity:act.length?1:0.5}}>📤 Export ({act.length})</button>
           <button onClick={()=>fileRef.current?.click()} disabled={csvImporting} style={{...B,flex:1,background:t.el,color:t.mt2,fontSize:d?14:12,borderRadius:8,opacity:csvImporting?0.5:1}}>{csvImporting?"Importing...":"📥 Import"}</button>
         </div>
-        <div style={{fontSize:d?11:9,color:t.dm,marginTop:8}}>CSV format: Name, Category, Monthly Cost, Billing Cycle, Renewal Date, Labels, Notes</div>
+        <div style={{fontSize:d?11:9,color:t.dm,marginTop:8,lineHeight:1.5}}>Tip: Ask ChatGPT or any AI "List my subscriptions as a CSV with columns: Name, Category, Monthly Cost, Billing Cycle, Renewal Date, Labels, Notes. Categories: streaming, music, gaming, productivity, fitness, news, creative, security, ai_tools, food, lifestyle. Billing: monthly or yearly."</div>
       </div>
     </>}
   </div>);

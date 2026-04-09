@@ -59,7 +59,7 @@ export default function CancelGuide(){
         <div style={{display:"flex",gap:12,alignItems:"center",flexWrap:"wrap"}}>
           <span style={{fontSize:13,padding:"4px 12px",borderRadius:6,background:diffColor+"22",color:diffColor,fontWeight:600}}>{guide.difficulty==='easy'?'Easy (1-2 min)':guide.difficulty==='medium'?'Medium (~5 min)':'Hard (may need support)'}</span>
           <span style={{fontSize:13,color:MT}}>{guide.steps.length} steps</span>
-          <span style={{fontSize:13,color:MT}}>Updated {new Date().toLocaleDateString('en-US',{month:'long',year:'numeric'})}</span>
+          <span style={{fontSize:13,color:MT}}>Updated March 2026</span>
         </div>
       </div>
 
