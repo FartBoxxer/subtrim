@@ -328,12 +328,14 @@ export default function App(){
   };
   const hhLeave=async()=>{
     if(!supabase||!user||!household)return;
+    if(!window.confirm(`Leave "${household.name}"? You'll lose access to shared subscription data.`))return;
     setHhLoading(true);
     await supabase.from('household_members').delete().eq('household_id',household.id).eq('user_id',user.id);
     setHousehold(null);setHhMembers([]);setHhLoading(false);notify("Left household");
   };
   const hhDelete=async()=>{
     if(!supabase||!user||!household||household.role!=='owner')return;
+    if(!window.confirm(`Delete "${household.name}"? All members will be removed. This cannot be undone.`))return;
     setHhLoading(true);
     await supabase.from('household_members').delete().eq('household_id',household.id);
     await supabase.from('households').delete().eq('id',household.id);
@@ -364,12 +366,12 @@ export default function App(){
       const parseRow=row=>{const cols=[];let cur="",inQ=false;
         for(const ch of row){if(ch==='"'){inQ=!inQ}else if(ch===","&&!inQ){cols.push(cur.trim());cur=""}else{cur+=ch}}
         cols.push(cur.trim());return cols.map(c=>c.replace(/^"|"$/g,"").replace(/""/g,'"'))};
-      let added=0;
+      let added=0,skBad=0,skDup=0,skErr=0;
       for(const line of dataLines){
-        const cols=parseRow(line);if(cols.length<3)continue;
+        const cols=parseRow(line);if(cols.length<3){skBad++;continue}
         const[name,cat,cost]=cols;const price=parseFloat(cost);
-        if(!name||isNaN(price)||price<=0)continue;
-        if(act.some(s=>s.name.toLowerCase()===name.trim().toLowerCase()))continue;
+        if(!name||isNaN(price)||price<0){skBad++;continue}
+        if(act.some(s=>s.name.toLowerCase()===name.trim().toLowerCase())){skDup++;continue}
         // Try to match known service
         const match=knSvc.find(k=>k.name.toLowerCase()===name.trim().toLowerCase());
         const ins={user_id:user.id,monthly_cost:price,billing_cycle:cols[3]||"monthly",
@@ -378,9 +380,14 @@ export default function App(){
         if(cols[5])ins.custom_tags=cols[5].split(";").filter(Boolean);
         if(cols[6])ins.notes=cols[6];
         const{data,error}=await supabase.from("subscriptions").insert(ins).select("*, known_services(name, category, tags)").single();
-        if(!error&&data){added++;setSubs(prev=>[...prev,{id:data.id,serviceId:data.service_id,name:data.custom_name||data.known_services?.name||name.trim(),cat:data.custom_category||data.known_services?.category||"lifestyle",cost:Number(data.monthly_cost),cycle:data.billing_cycle,renewal:data.renewal_date,trial:false,trialEnd:null,sat:null,freq:null,miss:null,audit:null,added:data.created_at?.split("T")[0],tags:data.known_services?.tags||[],labels:data.custom_tags||[],notes:data.notes||""}])}
+        if(!error&&data){added++;setSubs(prev=>[...prev,{id:data.id,serviceId:data.service_id,name:data.custom_name||data.known_services?.name||name.trim(),cat:data.custom_category||data.known_services?.category||"lifestyle",cost:Number(data.monthly_cost),cycle:data.billing_cycle,renewal:data.renewal_date,trial:false,trialEnd:null,sat:null,freq:null,miss:null,audit:null,added:data.created_at?.split("T")[0],tags:data.known_services?.tags||[],labels:data.custom_tags||[],notes:data.notes||""}])}else{skErr++}
       }
-      notify(added>0?`📥 Imported ${added} subscription${added>1?"s":""}`:"No new subscriptions to import");
+      const parts=[];
+      if(added>0)parts.push(`Imported ${added}`);
+      if(skDup>0)parts.push(`${skDup} already existed`);
+      if(skBad>0)parts.push(`${skBad} had invalid data`);
+      if(skErr>0)parts.push(`${skErr} failed to save`);
+      notify(parts.join(", ")||"No rows to import");
     }catch(e){notify("Import failed: "+e.message)}
     setCsvImporting(false);
   };
@@ -410,7 +417,9 @@ export default function App(){
   const showAA=needA.length>0&&!ign("reaudit");
   const relP=useMemo(()=>promos.filter(p=>act.some(s=>s.name===p.svc||s.cat===p.cat)).length,[promos,act]);
 
-  const remove=async(id)=>{if(removing)return;setRemoving(id);const s=subs.find(x=>x.id===id);const{error}=await supabase.from('subscriptions').update({archived_at:new Date().toISOString(),status:'cancelled'}).eq('id',id);setRemoving(null);if(error){notify('Failed to remove');return}setSubs(subs.filter(x=>x.id!==id));notify(`✂️ ${s?.name} removed! Cancel directly with the service.`);pop()};
+  const[removeConfirm,setRemoveConfirm]=useState(null);
+  const doRemove=async(id)=>{if(removing)return;setRemoving(id);const s=subs.find(x=>x.id===id);const{error}=await supabase.from('subscriptions').update({archived_at:new Date().toISOString(),status:'cancelled'}).eq('id',id);setRemoving(null);setRemoveConfirm(null);if(error){notify('Failed to remove');return}setSubs(subs.filter(x=>x.id!==id));notify(`✂️ ${s?.name} removed`);pop()};
+  const remove=(id)=>setRemoveConfirm(id);
 
   const openEdit=(s)=>{setEditId(s.id);setEditCost(String(s.cost));setEditCycle(s.cycle||'monthly');setEditRenewal(s.renewal||'');setEditLabels(s.labels||[]);setEditNotes(s.notes||'');setEditTrial(!!s.trial);setEditTrialEnd(s.trialEnd||'')};
   const toggleLabel=(arr,set,k)=>set(arr.includes(k)?arr.filter(x=>x!==k):[...arr,k]);
@@ -882,7 +891,7 @@ export default function App(){
             </div>
             <span style={{fontSize:d?24:20,fontWeight:700,color:t.acc}}>{fm(simSave)}<span style={{fontSize:d?14:12,color:t.mt}}>/mo · {fm(simSave*12)}/yr</span></span>
           </div>
-          {simCount>0&&<button onClick={async()=>{if(!window.confirm(`Remove ${simCount} subscription${simCount>1?"s":""}? This will archive them.`))return;const ids=Object.entries(simT).filter(([,v])=>v).map(([id])=>id);for(const id of ids)await remove(id);setSimT({});setSimOn(false)}} style={{...B,marginTop:10,background:t.acc,color:"#000",fontWeight:700,fontSize:d?14:12,borderRadius:8,padding:d?"10px 24px":"8px 18px"}}>✂️ Cut {simCount} sub{simCount>1?"s":""} — save {fm(simSave)}/mo</button>}
+          {simCount>0&&<button onClick={async()=>{if(!window.confirm(`Remove ${simCount} subscription${simCount>1?"s":""}? This will archive them from SubTrim.`))return;const ids=Object.entries(simT).filter(([,v])=>v).map(([id])=>id);for(const id of ids)await doRemove(id);setSimT({});setSimOn(false)}} style={{...B,marginTop:10,background:t.acc,color:"#000",fontWeight:700,fontSize:d?14:12,borderRadius:8,padding:d?"10px 24px":"8px 18px"}}>✂️ Cut {simCount} sub{simCount>1?"s":""} — save {fm(simSave)}/mo</button>}
         </div>
       )})()}
 
@@ -893,7 +902,13 @@ export default function App(){
 
       {(()=>{const filtered=sorted.filter(s=>(catFilter==="all"||s.cat===catFilter)&&(!subSearch||s.name.toLowerCase().includes(subSearch.toLowerCase())));return(
       <div style={{background:t.sf,borderRadius:14,overflow:"hidden"}}>
-        {filtered.length===0&&<div style={{padding:d?"24px 20px":"16px 14px",textAlign:"center",color:t.mt,fontSize:d?14:12}}>{act.length===0?"No subscriptions yet. Tap + to add one.":"No matches found."}</div>}
+        {filtered.length===0&&act.length===0&&<div style={{padding:d?"40px 20px":"28px 14px",textAlign:"center"}}>
+          <div style={{fontSize:d?48:36,marginBottom:12}}>✂️</div>
+          <div style={{fontSize:d?18:15,fontWeight:700,marginBottom:6}}>No subscriptions yet</div>
+          <p style={{fontSize:d?14:12,color:t.mt,marginBottom:16,lineHeight:1.5,maxWidth:340,margin:"0 auto 16px"}}>Add your subscriptions to start tracking spending, run audits, and find savings.</p>
+          <button onClick={()=>setAddM(true)} style={{...B,background:t.acc,color:"#000",padding:d?"14px 32px":"12px 28px",fontSize:d?16:14,fontWeight:700,borderRadius:10}}>+ Add Your First Subscription</button>
+        </div>}
+        {filtered.length===0&&act.length>0&&<div style={{padding:d?"24px 20px":"16px 14px",textAlign:"center",color:t.mt,fontSize:d?14:12}}>No matches found.</div>}
         {filtered.map((s,i)=>{const c=CATS[s.cat]||{e:"📦",c:"#666",l:s.cat},dd=dU(s.renewal),off=simT[s.id];
         return(<div key={s.id} onClick={()=>{if(!simOn)openEdit(s)}} style={{display:"flex",alignItems:"center",padding:d?"16px 20px":"12px 14px",borderBottom:i<sorted.length-1?`1px solid ${t.el}`:"none",opacity:off?0.35:1,transition:"all 0.2s",position:"relative",cursor:simOn?"default":"pointer"}}>
           {off&&<div style={{position:"absolute",left:20,right:20,top:"50%",height:1,background:"#ef4444"}}/>}
@@ -913,7 +928,7 @@ export default function App(){
             <button onClick={e=>{e.stopPropagation();setSimT({...simT,[s.id]:!off})}} style={{background:off?"#ef4444":t.el,color:off?"#fff":t.mt,border:"none",borderRadius:6,padding:d?"6px 10px":"4px 8px",fontSize:d?12:10,cursor:"pointer",marginLeft:8,fontWeight:600,fontFamily:"inherit"}}>{off?"↩":"✕"}</button>
           )}
           {!simOn&&(
-            <button onClick={e=>{e.stopPropagation();if(window.confirm(`Remove ${s.name}?`))remove(s.id)}} style={{background:"transparent",color:t.bd3,border:"none",fontSize:d?20:16,cursor:"pointer",padding:"0 4px",marginLeft:8}}>×</button>
+            <button onClick={e=>{e.stopPropagation();remove(s.id)}} style={{background:"transparent",color:t.bd3,border:"none",fontSize:d?20:16,cursor:"pointer",padding:"0 4px",marginLeft:8}}>×</button>
           )}
         </div>)})}
       </div>)})()}
@@ -932,9 +947,14 @@ export default function App(){
       return(<div style={{display:"flex",flexDirection:"column",gap:d?18:14,maxWidth:d?900:undefined,margin:d?"0 auto":undefined}}>
         <div style={{textAlign:"center",padding:d?"24px 0":"16px 0"}}>
           <Ring s={score} size={d?130:100} bg={t.bd} tc={t.tx}/>
-          <p style={{fontSize:d?15:13,color:t.mt,marginTop:12,maxWidth:400,marginLeft:"auto",marginRight:"auto"}}>{score>=80?"Looking good — let's confirm nothing changed":"A few tweaks could boost your score"}</p>
+          <p style={{fontSize:d?15:13,color:t.mt,marginTop:12,maxWidth:400,marginLeft:"auto",marginRight:"auto"}}>{!has&&aud.length>0?"Run your first audit to get your SubScore and personalized recommendations":score>=80?"Looking good — let's confirm nothing changed":"A few tweaks could boost your score"}</p>
           {aud.length>0?<button onClick={()=>setAS(0)} style={{...B,background:t.acc,color:"#000",padding:d?"14px 32px":"12px 28px",fontSize:d?16:14,fontWeight:700,borderRadius:10,marginTop:14}}>Start Audit · {aud.length} subs</button>
-          :<div style={{fontSize:d?14:12,color:t.mt,marginTop:14}}>No subscriptions to audit yet</div>}
+          :<div style={{background:t.sf,borderRadius:14,padding:d?32:24,marginTop:14,textAlign:"center"}}>
+            <div style={{fontSize:d?36:28,marginBottom:10}}>📋</div>
+            <div style={{fontSize:d?16:14,fontWeight:700,marginBottom:6}}>No subscriptions to audit yet</div>
+            <p style={{fontSize:d?13:11,color:t.mt,lineHeight:1.5,maxWidth:360,margin:"0 auto 14px"}}>Add your subscriptions first, then come back to run an audit. We'll ask 3 quick questions per sub and tell you what to keep, cancel, or downgrade.</p>
+            <button onClick={()=>{setPg("dashboard");setAddM(true)}} style={{...B,background:t.acc,color:"#000",padding:d?"12px 28px":"10px 22px",fontSize:d?14:12,fontWeight:700,borderRadius:10}}>+ Add Subscriptions</button>
+          </div>}
         </div>
 
         {has&&<>
@@ -1110,13 +1130,6 @@ export default function App(){
           ))}
         </div>
       </div>
-      <div style={{background:t.sf,borderRadius:14,padding:d?20:14}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <div style={{fontSize:d?14:12,fontWeight:700}}>Email Notifications</div>
-          <span style={{fontSize:d?11:9,color:t.acc,background:t.acc+"18",padding:"3px 10px",borderRadius:6,fontWeight:600}}>Coming Soon</span>
-        </div>
-        <div style={{fontSize:d?12:10,color:t.dm,marginTop:8,lineHeight:1.5}}>Monthly digests, promo alerts, price change notifications, and trial reminders — all coming in a future update.</div>
-      </div>
       <button onClick={()=>supabase.auth.signOut()} style={{...B,background:t.el,color:"#ef4444",fontSize:d?14:12,borderRadius:10,padding:d?"12px 18px":"10px 18px"}}>Log Out</button>
       {!deleteConfirm&&<button onClick={()=>setDeleteConfirm(true)} style={{...B,background:"#ef444411",color:"#ef4444",fontSize:d?13:11,borderRadius:10,border:"1px solid #ef444422"}}>Delete Account</button>}
       {deleteConfirm&&<div style={{background:t.sf,borderRadius:14,padding:d?20:14,border:"1px solid #ef444444"}}>
@@ -1244,16 +1257,6 @@ export default function App(){
           <button onClick={()=>fileRef.current?.click()} disabled={csvImporting} style={{...B,flex:1,background:t.el,color:t.mt2,fontSize:d?14:12,borderRadius:8,opacity:csvImporting?0.5:1}}>{csvImporting?"Importing...":"📥 Import"}</button>
         </div>
         <div style={{fontSize:d?11:9,color:t.dm,marginTop:8}}>CSV format: Name, Category, Monthly Cost, Billing Cycle, Renewal Date, Labels, Notes</div>
-      </div>
-      <div style={{background:theme==="dark"?"linear-gradient(135deg,#141414,#1a1025)":"linear-gradient(135deg,#f5f5f7,#ede8f5)",borderRadius:16,padding:d?32:24,textAlign:"center",border:theme==="dark"?"1px solid #2a1a3e":"1px solid #d0c8e0"}}>
-        <div style={{fontSize:d?12:10,color:"#9b59b6",fontWeight:700,letterSpacing:2,textTransform:"uppercase",marginBottom:12}}>Coming December 2026</div>
-        <div style={{fontSize:d?36:28,marginBottom:8}}>🎁</div>
-        <div style={{fontSize:d?22:18,fontWeight:700,marginBottom:6}}>SubTrim Wrapped</div>
-        <p style={{fontSize:d?13:11,color:t.mt,maxWidth:320,margin:"0 auto 16px",lineHeight:1.5}}>Your year-in-review. Total spend, savings, top services, and SubScore journey.</p>
-        <div style={{display:"flex",gap:8,justifyContent:"center",marginBottom:14}}>
-          {["📊","💰","🔥","⭐","✂️"].map((e,i)=><div key={i} style={{width:d?32:26,height:d?44:38,borderRadius:6,background:["#e74c3c","#9b59b6","#2ecc71","#3498db","#f39c12"][i]+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:d?12:10,border:"1px solid #ffffff08"}}>{e}</div>)}
-        </div>
-        <span style={{fontSize:d?12:10,color:"#9b59b6",fontWeight:600,background:"#9b59b622",padding:"4px 12px",borderRadius:20}}>🔔 We'll notify you</span>
       </div>
     </>}
   </div>);
@@ -1509,8 +1512,23 @@ export default function App(){
           </details>)})()}
           <div style={{display:"flex",gap:8,marginTop:4}}>
             <button onClick={saveSub} disabled={saving} style={{...B,flex:2,background:t.acc,color:"#000",fontWeight:700,fontSize:d?15:13,borderRadius:10,opacity:saving?0.6:1}}>{saving?"Saving...":"Save"}</button>
-            <button onClick={()=>{if(window.confirm(`Remove ${es.name}?`)){remove(es.id);setEditId(null)}}} disabled={!!removing} style={{...B,flex:1,background:"#ef444422",color:"#ef4444",fontSize:d?13:11,borderRadius:10,opacity:removing?0.5:1}}>Remove</button>
+            <button onClick={()=>{setEditId(null);remove(es.id)}} disabled={!!removing} style={{...B,flex:1,background:"#ef444422",color:"#ef4444",fontSize:d?13:11,borderRadius:10,opacity:removing?0.5:1}}>Remove</button>
           </div>
+        </div>
+      </div>
+    </div>)})()}
+
+    {/* Remove Confirmation */}
+    {removeConfirm&&(()=>{const rs=subs.find(x=>x.id===removeConfirm);if(!rs)return null;const hasCG=!!CANCEL_GUIDES[rs.name];const slug=rs.name.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');return(
+    <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",WebkitBackdropFilter:"blur(4px)",zIndex:100,display:"flex",alignItems:isMobile?"flex-end":"center",justifyContent:"center"}} onClick={()=>setRemoveConfirm(null)}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:d?420:360,background:t.sf,borderRadius:isMobile?"16px 16px 0 0":"16px",padding:d?28:20}}>
+        {isMobile&&<div style={{width:32,height:4,borderRadius:2,background:t.bd3,margin:"0 auto 12px"}}/>}
+        <div style={{fontSize:d?18:15,fontWeight:700,marginBottom:6}}>Remove {rs.name}?</div>
+        <p style={{fontSize:d?13:11,color:t.mt,lineHeight:1.5,marginBottom:16}}>This removes it from SubTrim tracking. If you haven't cancelled with {rs.name} directly, you'll still be charged.</p>
+        {hasCG&&<a href={`/guides/cancel/${slug}`} target="_blank" rel="noopener noreferrer" style={{display:"block",background:t.acc+"11",border:`1px solid ${t.acc}33`,borderRadius:10,padding:d?"12px 16px":"10px 14px",marginBottom:14,textDecoration:"none",fontSize:d?13:11,color:t.acc,fontWeight:600}}>📖 How to cancel {rs.name} →</a>}
+        <div style={{display:"flex",gap:8}}>
+          <button onClick={()=>setRemoveConfirm(null)} style={{...B,flex:1,background:t.el,color:t.mt,fontSize:d?14:12,borderRadius:10}}>Keep</button>
+          <button onClick={()=>doRemove(rs.id)} disabled={!!removing} style={{...B,flex:1,background:"#ef4444",color:"#fff",fontWeight:700,fontSize:d?14:12,borderRadius:10,opacity:removing?0.6:1}}>{removing?"Removing...":"Remove"}</button>
         </div>
       </div>
     </div>)})()}
