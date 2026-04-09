@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="108" fill="#0d0d0d"/>
+  <g transform="translate(256,256)">
+    <!-- Full circle background (spending) -->
+    <circle cx="0" cy="0" r="140" fill="#1a1a1a"/>
+    <!-- Main arc — the portion you keep (green, ~270 degrees) -->
+    <path d="M0,-140 A140,140 0 1,1 -99,-99 L0,0 Z" fill="#00d48a" opacity="0.85"/>
+    <!-- Removed wedge — the trimmed portion (red/dark) -->
+    <path d="M0,0 L-99,-99 A140,140 0 0,1 0,-140 Z" fill="#ef4444" opacity="0.5"/>
+    <!-- Separation line / cut effect -->
+    <line x1="0" y1="0" x2="-99" y2="-99" stroke="#0d0d0d" stroke-width="6"/>
+    <line x1="0" y1="0" x2="0" y2="-140" stroke="#0d0d0d" stroke-width="6"/>
+    <!-- Inner circle for depth -->
+    <circle cx="0" cy="0" r="60" fill="#0d0d0d"/>
+    <!-- Percentage / trim indicator in center -->
+    <text x="0" y="8" text-anchor="middle" font-family="Inter,system-ui,sans-serif"
+          font-size="32" font-weight="800" fill="#fff">-25%</text>
+    <!-- The wedge piece drifting away -->
+    <g transform="translate(18,-18)" opacity="0.4">
+      <path d="M0,0 L-99,-99 A140,140 0 0,1 0,-140 Z" fill="#ef4444"
+            transform="translate(15,-15) scale(0.3) rotate(20)"/>
+    </g>
+  </g>
+</svg>

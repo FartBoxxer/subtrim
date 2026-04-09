@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 160">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@800');
+    text { font-family: 'Inter', system-ui, sans-serif; }
+  </style>
+  <!-- Background -->
+  <rect width="600" height="160" rx="0" fill="#0d0d0d"/>
+  <!-- "Sub" text — will be struck through -->
+  <text x="40" y="112" font-size="88" font-weight="800" fill="#666" letter-spacing="-2">Sub</text>
+  <!-- "Trim" text — clean, bright -->
+  <text x="230" y="112" font-size="88" font-weight="800" fill="#ffffff" letter-spacing="-2">Trim</text>
+  <!-- Green strikethrough line cutting through "Sub" -->
+  <line x1="30" y1="88" x2="225" y2="88" stroke="#00d48a" stroke-width="6" stroke-linecap="round"/>
+  <!-- Small scissors icon at end of strike line -->
+  <g transform="translate(225,88) scale(0.35)">
+    <path d="M-20,-30 L30,0 L-20,30" fill="none" stroke="#00d48a" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="-24" cy="-34" r="12" fill="none" stroke="#00d48a" stroke-width="6"/>
+    <circle cx="-24" cy="34" r="12" fill="none" stroke="#00d48a" stroke-width="6"/>
+  </g>
+</svg>

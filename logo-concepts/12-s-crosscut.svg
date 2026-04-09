@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <circle cx="256" cy="256" r="256" fill="#0d0d0d"/>
+  <defs>
+    <clipPath id="sClip">
+      <rect x="0" y="0" width="512" height="512"/>
+    </clipPath>
+  </defs>
+  <g transform="translate(256,256)">
+    <!-- Bold rounded S -->
+    <path d="M65,-110 C25,-155 -90,-140 -90,-88 C-90,-36 -8,-28 38,-12 C84,4 100,25 100,62 C100,125 -10,158 -65,110"
+          fill="none" stroke="#00d48a" stroke-width="38" stroke-linecap="round"
+          id="mainS"/>
+    <!-- Horizontal cut line through center — like scissors just cut through -->
+    <line x1="-120" y1="0" x2="20" y2="0" stroke="#0d0d0d" stroke-width="14"/>
+    <!-- Dashed continuation suggesting the cut -->
+    <line x1="24" y1="0" x2="120" y2="0" stroke="#333" stroke-width="3" stroke-dasharray="8,6"/>
+    <!-- Tiny open scissors at the cut point -->
+    <g transform="translate(22,0)">
+      <line x1="0" y1="0" x2="20" y2="-14" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+      <line x1="0" y1="0" x2="20" y2="14" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+      <circle cx="26" cy="-18" r="7" fill="none" stroke="#fff" stroke-width="3"/>
+      <circle cx="26" cy="18" r="7" fill="none" stroke="#fff" stroke-width="3"/>
+    </g>
+  </g>
+</svg>

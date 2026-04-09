@@ -17,17 +17,17 @@ export const LABELS=[
 
 export const AUTO_PROMOS=[
   {svc:"Hulu",cat:"streaming",disc:50,desc:"First 3 months at $3.99/mo for new & returning subscribers",type:"new_customer",until:"2026-06-30",url:"https://www.hulu.com/welcome"},
-  {svc:"Paramount+",cat:"streaming",disc:50,desc:"Annual plan 50% off — $29.99/yr (Essential)",type:"everyone",until:"2026-05-15",url:"https://www.paramountplus.com"},
+  {svc:"Paramount+",cat:"streaming",disc:50,desc:"Annual plan 50% off at $29.99/yr (Essential)",type:"everyone",until:"2026-05-15",url:"https://www.paramountplus.com"},
   {svc:"YouTube Premium",cat:"streaming",disc:30,desc:"3-month free trial for new subscribers",type:"new_customer",until:"2026-12-31",url:"https://www.youtube.com/premium"},
-  {svc:"NordVPN",cat:"security",disc:72,desc:"2-year plan — $3.09/mo + 3 months free",type:"everyone",until:"2026-07-01",url:"https://nordvpn.com/offer"},
+  {svc:"NordVPN",cat:"security",disc:72,desc:"2-year plan at $3.09/mo + 3 months free",type:"everyone",until:"2026-07-01",url:"https://nordvpn.com/offer"},
   {svc:"Spotify",cat:"music",disc:100,desc:"3 months free Premium for new users",type:"new_customer",until:"2026-09-30",url:"https://www.spotify.com/premium"},
   {svc:"Apple Music",cat:"music",disc:100,desc:"1 month free trial for new subscribers",type:"new_customer",until:"2026-12-31",url:"https://www.apple.com/apple-music"},
-  {svc:"Disney+",cat:"streaming",disc:33,desc:"Bundle with Hulu (No Ads) — save $10/mo vs separate",type:"everyone",until:"2026-12-31",url:"https://www.disneyplus.com"},
-  {svc:"Adobe Creative Cloud",cat:"creative",disc:40,desc:"Students & teachers — All Apps at $19.99/mo",type:"new_customer",until:"2026-08-31",url:"https://www.adobe.com/creativecloud/plans.html"},
-  {svc:"1Password",cat:"security",disc:25,desc:"Annual plan — save 25% vs monthly billing",type:"everyone",until:"2026-12-31",url:"https://1password.com"},
+  {svc:"Disney+",cat:"streaming",disc:33,desc:"Bundle with Hulu (No Ads), save $10/mo vs separate",type:"everyone",until:"2026-12-31",url:"https://www.disneyplus.com"},
+  {svc:"Adobe Creative Cloud",cat:"creative",disc:40,desc:"Students & teachers get All Apps at $19.99/mo",type:"new_customer",until:"2026-08-31",url:"https://www.adobe.com/creativecloud/plans.html"},
+  {svc:"1Password",cat:"security",disc:25,desc:"Annual plan, save 25% vs monthly billing",type:"everyone",until:"2026-12-31",url:"https://1password.com"},
   {svc:"Xbox Game Pass",cat:"gaming",disc:50,desc:"First month of Ultimate for $7.99",type:"new_customer",until:"2026-06-30",url:"https://www.xbox.com/en-US/xbox-game-pass"},
-  {svc:"Dropbox",cat:"productivity",disc:20,desc:"Plus annual plan — $9.99/mo billed yearly",type:"everyone",until:"2026-12-31",url:"https://www.dropbox.com/plans"},
-  {svc:"Peacock",cat:"streaming",disc:50,desc:"Premium annual plan — $29.99/yr (save 50%)",type:"everyone",until:"2026-05-31",url:"https://www.peacocktv.com"},
+  {svc:"Dropbox",cat:"productivity",disc:20,desc:"Plus annual plan at $9.99/mo billed yearly",type:"everyone",until:"2026-12-31",url:"https://www.dropbox.com/plans"},
+  {svc:"Peacock",cat:"streaming",disc:50,desc:"Premium annual plan at $29.99/yr (save 50%)",type:"everyone",until:"2026-05-31",url:"https://www.peacocktv.com"},
 ];
 
 export const TH={

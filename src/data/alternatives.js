@@ -51,7 +51,7 @@ export const ALTERNATIVES = {
     ]
   },
   'Disney+': {
-    tagline: 'Beyond the Disney vault — here are streaming alternatives worth considering.',
+    tagline: 'Beyond the Disney vault. Here are streaming alternatives worth considering.',
     alts: [
       { name: 'Netflix', why: 'Largest content library. Best original series. Global availability.', price: 6.99 },
       { name: 'HBO Max', why: 'Premium originals. Warner Bros movies. DC content.', price: 9.99 },

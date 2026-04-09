@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Circle background -->
+  <circle cx="256" cy="256" r="256" fill="#0d0d0d"/>
+  <!-- S shape formed by two scissor blades curving in opposite directions -->
+  <g transform="translate(256,256)">
+    <!-- Top curve of S — upper blade -->
+    <path d="M60,-120 C60,-120 80,-80 40,-55 C0,-30 -60,-50 -60,-90 C-60,-130 -20,-145 20,-140 C60,-135 80,-110 60,-80"
+          fill="none" stroke="#00d48a" stroke-width="28" stroke-linecap="round"/>
+    <!-- Bottom curve of S — lower blade -->
+    <path d="M-60,120 C-60,120 -80,80 -40,55 C0,30 60,50 60,90 C60,130 20,145 -20,140 C-60,135 -80,110 -60,80"
+          fill="none" stroke="#00d48a" stroke-width="28" stroke-linecap="round"/>
+    <!-- Scissor handle holes — top -->
+    <circle cx="68" cy="-128" r="20" fill="none" stroke="#00d48a" stroke-width="10"/>
+    <!-- Scissor handle holes — bottom -->
+    <circle cx="-68" cy="128" r="20" fill="none" stroke="#00d48a" stroke-width="10"/>
+  </g>
+</svg>

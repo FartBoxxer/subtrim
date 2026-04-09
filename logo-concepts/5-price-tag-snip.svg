@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="108" fill="#0d0d0d"/>
+  <g transform="translate(256,256)">
+    <!-- Price tag shape -->
+    <path d="M-30,-140 L100,-140 L140,-100 L140,80 L-100,80 L-100,-70 Z"
+          fill="#1a1a1a" stroke="#333" stroke-width="3"/>
+    <!-- Tag hole -->
+    <circle cx="105" cy="-105" r="16" fill="#0d0d0d" stroke="#444" stroke-width="3"/>
+    <!-- Dollar amount -->
+    <text x="20" y="-20" text-anchor="middle" font-family="Inter,system-ui,sans-serif"
+          font-size="56" font-weight="800" fill="#fff">$</text>
+    <!-- Snip/cut taken from bottom-right corner -->
+    <path d="M140,30 L90,80 L140,80 Z" fill="#0d0d0d"/>
+    <!-- The cut piece floating away -->
+    <path d="M148,38 L98,88 L148,88 Z" fill="#00d48a" opacity="0.3"
+          transform="translate(12,12) rotate(15,123,63)"/>
+    <!-- Dotted cut line -->
+    <line x1="140" y1="28" x2="88" y2="80" stroke="#00d48a" stroke-width="3"
+          stroke-dasharray="6,5" stroke-linecap="round"/>
+    <!-- Tiny scissors at the cut -->
+    <g transform="translate(110,58) rotate(-45)">
+      <ellipse cx="-10" cy="-7" rx="6" ry="8" fill="none" stroke="#00d48a" stroke-width="2.5"/>
+      <ellipse cx="-10" cy="7" rx="6" ry="8" fill="none" stroke="#00d48a" stroke-width="2.5"/>
+      <line x1="-4" y1="0" x2="10" y2="0" stroke="#00d48a" stroke-width="2.5" stroke-linecap="round"/>
+    </g>
+  </g>
+</svg>

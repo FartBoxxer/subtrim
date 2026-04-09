@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="108" fill="#0d0d0d"/>
+  <g transform="translate(256,256)">
+    <!-- Left blade — shaped like a dollar sign curve -->
+    <path d="M-8,-20 C-8,-80 -70,-100 -70,-60 C-70,-30 -8,-40 -8,0 C-8,40 -70,30 -70,60 C-70,100 -8,80 -8,20"
+          fill="none" stroke="#00d48a" stroke-width="22" stroke-linecap="round"/>
+    <!-- Dollar sign ticks on left blade -->
+    <line x1="-8" y1="-100" x2="-8" y2="-75" stroke="#00d48a" stroke-width="12" stroke-linecap="round"/>
+    <line x1="-8" y1="75" x2="-8" y2="100" stroke="#00d48a" stroke-width="12" stroke-linecap="round"/>
+    <!-- Right blade — clean angled blade -->
+    <path d="M20,-10 L140,-80 C150,-86 156,-80 150,-70 L40,10 Z" fill="#00d48a"/>
+    <path d="M20,10 L140,80 C150,86 156,80 150,70 L40,-10 Z" fill="#00d48a" opacity="0.8"/>
+    <!-- Pivot -->
+    <circle cx="16" cy="0" r="14" fill="#0d0d0d"/>
+    <circle cx="16" cy="0" r="8" fill="#00d48a" opacity="0.5"/>
+    <!-- Handle ring on right blade -->
+    <ellipse cx="148" cy="-78" rx="18" ry="22" transform="rotate(-30,148,-78)" fill="none" stroke="#00d48a" stroke-width="8"/>
+    <ellipse cx="148" cy="78" rx="18" ry="22" transform="rotate(30,148,78)" fill="none" stroke="#00d48a" stroke-width="8" opacity="0.8"/>
+  </g>
+</svg>

@@ -153,11 +153,11 @@ export default function Privacy(){
         <h2 style={h2Style}>6. Your Rights</h2>
         <p style={pStyle}>You have the right to:</p>
         <ul style={ulStyle}>
-          <li style={liStyle}><strong style={{color:TX}}>Access</strong> your data — all your subscription data is visible to you in the app at all times</li>
-          <li style={liStyle}><strong style={{color:TX}}>Export</strong> your data — CSV export functionality is available in your account settings</li>
-          <li style={liStyle}><strong style={{color:TX}}>Correct</strong> your data — you can edit any subscription or profile information at any time</li>
-          <li style={liStyle}><strong style={{color:TX}}>Delete</strong> your data — you can request complete account deletion by emailing us</li>
-          <li style={liStyle}><strong style={{color:TX}}>Withdraw consent</strong> — you can stop using the service at any time; no data is retained after deletion</li>
+          <li style={liStyle}><strong style={{color:TX}}>Access</strong> your data. All your subscription data is visible to you in the app at all times.</li>
+          <li style={liStyle}><strong style={{color:TX}}>Export</strong> your data. CSV export functionality is available in your account settings.</li>
+          <li style={liStyle}><strong style={{color:TX}}>Correct</strong> your data. You can edit any subscription or profile information at any time.</li>
+          <li style={liStyle}><strong style={{color:TX}}>Delete</strong> your data. You can request complete account deletion by emailing us.</li>
+          <li style={liStyle}><strong style={{color:TX}}>Withdraw consent</strong>. You can stop using the service at any time; no data is retained after deletion.</li>
         </ul>
         <p style={pStyle}>
           To exercise any of these rights, contact us at <a href="mailto:hello@subtrim.dev" style={{color:G,textDecoration:"none"}}>hello@subtrim.dev</a>.

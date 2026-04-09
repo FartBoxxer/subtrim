@@ -1,7 +1,7 @@
 import { useEffect, createContext, useContext } from 'react';
 
 const DEFAULT_TITLE='SubTrim | Subscription Tracker & Optimizer';
-const DEFAULT_DESC='The average person wastes $50-100/mo on subscriptions they barely use. SubTrim audits everything you pay for and tells you exactly what to keep, cancel, or downgrade — free.';
+const DEFAULT_DESC='The average person wastes $50-100/mo on subscriptions they barely use. SubTrim audits everything you pay for and tells you exactly what to keep, cancel, or downgrade. Completely free.';
 
 // SSR head context — used during prerendering to collect meta tags
 export const HeadContext = createContext(null);

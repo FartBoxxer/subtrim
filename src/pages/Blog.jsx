@@ -10,7 +10,7 @@ export default function Blog(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title="SubTrim Blog — Subscription Tips, Comparisons & Data"
+      title="SubTrim Blog | Subscription Tips, Comparisons & Data"
       description="Practical advice on managing subscriptions, cutting costs, and choosing the right services. No fluff."
       canonical="https://subtrim.dev/blog"
     />

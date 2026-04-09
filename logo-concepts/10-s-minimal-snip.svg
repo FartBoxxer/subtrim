@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <circle cx="256" cy="256" r="256" fill="#0d0d0d"/>
+  <g transform="translate(256,256)">
+    <!-- Thick geometric S -->
+    <path d="M70,-108 C30,-150 -85,-140 -85,-90 C-85,-40 -15,-32 30,-18 C75,-4 95,20 95,60 C95,120 -10,155 -70,108"
+          fill="none" stroke="#00d48a" stroke-width="40" stroke-linecap="round"/>
+  </g>
+</svg>

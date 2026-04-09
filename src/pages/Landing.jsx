@@ -68,7 +68,7 @@ export default function Landing(){
         <span style={{fontSize:20}}>🚀</span>
         <div style={{fontSize:14,color:TX,textAlign:'center',lineHeight:1.5}}>
           <strong>Recently launched!</strong>
-          <span style={{color:MT}}> We're actively building and improving SubTrim. Got feedback? We'd love to hear it — </span>
+          <span style={{color:MT}}> We're actively building and improving SubTrim. Got feedback? We'd love to hear it.</span>
           <a href="#contact" style={{color:G,textDecoration:'none',fontWeight:600}} onClick={()=>setShowBanner(false)}>let us know</a>
         </div>
         <button onClick={()=>setShowBanner(false)} style={{position:'absolute',right:16,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',color:MT,fontSize:18,cursor:'pointer',padding:4,lineHeight:1}}>×</button>
@@ -305,7 +305,7 @@ export default function Landing(){
     <section style={{padding:"48px 24px"}}>
       <div style={{maxWidth:520,margin:"0 auto",background:SF,borderRadius:16,padding:"28px 32px",border:"1px solid #1a1a1a"}}>
         <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Who built this?</div>
-        <p style={{fontSize:14,color:MT,lineHeight:1.7,margin:0}}>Hey — I'm just a programmer with way too many subscriptions. I was paying for 3 streaming services, 2 cloud storage plans, and a gym app I never opened. I built SubTrim to figure out what was actually worth keeping. Turns out, not all of it was. If you're in the same boat, I think you'll like this.</p>
+        <p style={{fontSize:14,color:MT,lineHeight:1.7,margin:0}}>Hey, I'm just a programmer who had over 10 subscriptions but only actually used about half of them. I wanted to make the process of trimming them down a bit easier to visualize, so I built SubTrim. If you're in the same boat, I think you'll like it.</p>
       </div>
     </section>
 

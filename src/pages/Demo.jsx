@@ -72,7 +72,7 @@ export default function Demo(){
       {/* Banner */}
       <div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:12,padding:"14px 20px",marginBottom:24,display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:18}}>🧪</span>
-        <div style={{fontSize:13,color:G,fontWeight:600}}>Demo Mode <span style={{fontWeight:400,color:MT}}>— sample data, nothing is saved</span></div>
+        <div style={{fontSize:13,color:G,fontWeight:600}}>Demo Mode <span style={{fontWeight:400,color:MT}}>. Sample data, nothing is saved</span></div>
       </div>
 
       {/* Overview */}

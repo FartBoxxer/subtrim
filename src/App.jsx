@@ -891,7 +891,7 @@ export default function App(){
             </div>
             <span style={{fontSize:d?24:20,fontWeight:700,color:t.acc}}>{fm(simSave)}<span style={{fontSize:d?14:12,color:t.mt}}>/mo · {fm(simSave*12)}/yr</span></span>
           </div>
-          {simCount>0&&<button onClick={async()=>{if(!window.confirm(`Remove ${simCount} subscription${simCount>1?"s":""}? This will archive them from SubTrim.`))return;const ids=Object.entries(simT).filter(([,v])=>v).map(([id])=>id);for(const id of ids)await doRemove(id);setSimT({});setSimOn(false)}} style={{...B,marginTop:10,background:t.acc,color:"#000",fontWeight:700,fontSize:d?14:12,borderRadius:8,padding:d?"10px 24px":"8px 18px"}}>✂️ Cut {simCount} sub{simCount>1?"s":""} — save {fm(simSave)}/mo</button>}
+          {simCount>0&&<button onClick={async()=>{if(!window.confirm(`Remove ${simCount} subscription${simCount>1?"s":""}? This will archive them from SubTrim.`))return;const ids=Object.entries(simT).filter(([,v])=>v).map(([id])=>id);for(const id of ids)await doRemove(id);setSimT({});setSimOn(false)}} style={{...B,marginTop:10,background:t.acc,color:"#000",fontWeight:700,fontSize:d?14:12,borderRadius:8,padding:d?"10px 24px":"8px 18px"}}>✂️ Cut {simCount} sub{simCount>1?"s":""}, save {fm(simSave)}/mo</button>}
         </div>
       )})()}
 
@@ -947,7 +947,7 @@ export default function App(){
       return(<div style={{display:"flex",flexDirection:"column",gap:d?18:14,maxWidth:d?900:undefined,margin:d?"0 auto":undefined}}>
         <div style={{textAlign:"center",padding:d?"24px 0":"16px 0"}}>
           <Ring s={score} size={d?130:100} bg={t.bd} tc={t.tx}/>
-          <p style={{fontSize:d?15:13,color:t.mt,marginTop:12,maxWidth:400,marginLeft:"auto",marginRight:"auto"}}>{!has&&aud.length>0?"Run your first audit to get your SubScore and personalized recommendations":score>=80?"Looking good — let's confirm nothing changed":"A few tweaks could boost your score"}</p>
+          <p style={{fontSize:d?15:13,color:t.mt,marginTop:12,maxWidth:400,marginLeft:"auto",marginRight:"auto"}}>{!has&&aud.length>0?"Run your first audit to get your SubScore and personalized recommendations":score>=80?"Looking good. Let's confirm nothing changed":"A few tweaks could boost your score"}</p>
           {aud.length>0?<button onClick={()=>setAS(0)} style={{...B,background:t.acc,color:"#000",padding:d?"14px 32px":"12px 28px",fontSize:d?16:14,fontWeight:700,borderRadius:10,marginTop:14}}>Start Audit · {aud.length} subs</button>
           :<div style={{background:t.sf,borderRadius:14,padding:d?32:24,marginTop:14,textAlign:"center"}}>
             <div style={{fontSize:d?36:28,marginBottom:10}}>📋</div>
@@ -985,7 +985,7 @@ export default function App(){
                 {items.map((s,i)=>(
                   <div key={s.id} style={{display:"flex",alignItems:"center",padding:d?"14px 18px":"10px 14px",borderBottom:i<items.length-1?`1px solid ${t.el}`:"none"}}>
                     <div style={{width:d?38:32,height:d?38:32,borderRadius:"50%",background:(CATS[s.cat]?.c||"#666")+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:d?16:14,marginRight:d?12:10}}>{CATS[s.cat]?.e||"📦"}</div>
-                    <div style={{flex:1}}><div style={{fontSize:d?15:13,fontWeight:600}}>{s.name}</div><div style={{fontSize:d?12:10,color:t.mt}}>{k==="cancel"?`Saves ${fm(s.cost*12)}/yr`:k==="keep"?`${s.freq||"—"} · ${s.sat||0}★`:(()=>{const dg=getDowngrade(s.name,s.cost);return dg?`Switch to ${dg.name} — save ${fm(dg.save)}/mo`:"Consider a lower plan"})()}</div>{k==="cancel"&&CANCEL_GUIDES[s.name]&&<button onClick={()=>setEditId(s.id)} style={{...B,padding:0,fontSize:d?11:9,color:t.acc,fontWeight:600,marginTop:2}}>How to cancel →</button>}</div>
+                    <div style={{flex:1}}><div style={{fontSize:d?15:13,fontWeight:600}}>{s.name}</div><div style={{fontSize:d?12:10,color:t.mt}}>{k==="cancel"?`Saves ${fm(s.cost*12)}/yr`:k==="keep"?`${s.freq||"—"} · ${s.sat||0}★`:(()=>{const dg=getDowngrade(s.name,s.cost);return dg?`Switch to ${dg.name}, save ${fm(dg.save)}/mo`:"Consider a lower plan"})()}</div>{k==="cancel"&&CANCEL_GUIDES[s.name]&&<button onClick={()=>setEditId(s.id)} style={{...B,padding:0,fontSize:d?11:9,color:t.acc,fontWeight:600,marginTop:2}}>How to cancel →</button>}</div>
                     <span style={{fontSize:d?16:14,fontWeight:700,color:c}}>-{fm(s.cost)}</span>
                   </div>
                 ))}
@@ -1539,7 +1539,7 @@ export default function App(){
         <div style={{textAlign:"center",marginBottom:d?28:20}}>
           <div style={{fontSize:d?40:32,marginBottom:8}}>✂️</div>
           <div style={{fontSize:d?24:18,fontWeight:800}}>Welcome to SubTrim!</div>
-          <p style={{fontSize:d?15:13,color:t.mt,marginTop:8,lineHeight:1.5}}>Which of these do you subscribe to? Tap to select — we'll add them for you.</p>
+          <p style={{fontSize:d?15:13,color:t.mt,marginTop:8,lineHeight:1.5}}>Which of these do you subscribe to? Tap to select, and we'll add them for you.</p>
         </div>
         <input value={obSearch} onChange={e=>setObSearch(e.target.value)} placeholder="Search services..." style={{width:"100%",padding:d?"12px 16px":"10px 14px",borderRadius:10,border:`1px solid ${t.bd2}`,background:t.el,color:t.tx,fontSize:d?14:12,outline:"none",fontFamily:"inherit",boxSizing:"border-box",marginBottom:d?12:8}}/>
         <div style={{display:"grid",gridTemplateColumns:d?"repeat(2,1fr)":"1fr",gap:d?8:6}}>

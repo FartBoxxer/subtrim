@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <circle cx="256" cy="256" r="256" fill="#0d0d0d"/>
+  <g transform="translate(256,256)">
+    <!-- Bold S where the stroke tapers like a blade edge -->
+    <!-- Top half of S -->
+    <path d="M55,-115 C10,-155 -90,-135 -85,-85 C-80,-35 -10,-30 30,-15"
+          fill="none" stroke="#00d48a" stroke-width="32" stroke-linecap="round"/>
+    <!-- Bottom half of S — blade taper (thinner to thicker) -->
+    <path d="M-55,115 C-10,155 90,135 85,85 C80,35 10,30 -30,15"
+          fill="none" stroke="#00d48a" stroke-width="32" stroke-linecap="round"/>
+    <!-- Diagonal cut through center — the trim action -->
+    <line x1="-50" y1="30" x2="50" y2="-30" stroke="#0d0d0d" stroke-width="12"/>
+    <!-- Blade edge highlight along the cut -->
+    <line x1="-48" y1="24" x2="48" y2="-36" stroke="#fff" stroke-width="2" opacity="0.4"/>
+  </g>
+</svg>

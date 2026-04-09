@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="108" fill="#0d0d0d"/>
+  <g transform="translate(256,240)">
+    <!-- Receipt body -->
+    <rect x="-90" y="-160" width="180" height="300" rx="8" fill="#1a1a1a"/>
+    <!-- Receipt top edge — clean -->
+    <rect x="-90" y="-160" width="180" height="8" rx="4" fill="#333"/>
+    <!-- Torn bottom edge -->
+    <path d="M-90,140 L-75,130 L-60,142 L-45,128 L-30,140 L-15,126 L0,140 L15,128 L30,142 L45,130 L60,140 L75,128 L90,140 Z" fill="#1a1a1a"/>
+    <!-- Line items -->
+    <!-- Item 1 — normal -->
+    <rect x="-65" y="-120" width="80" height="6" rx="3" fill="#444"/>
+    <rect x="40" y="-120" width="30" height="6" rx="3" fill="#444"/>
+    <!-- Item 2 — crossed out in green -->
+    <rect x="-65" y="-90" width="80" height="6" rx="3" fill="#00d48a" opacity="0.3"/>
+    <rect x="40" y="-90" width="30" height="6" rx="3" fill="#00d48a" opacity="0.3"/>
+    <line x1="-68" y1="-87" x2="73" y2="-87" stroke="#00d48a" stroke-width="3" stroke-linecap="round"/>
+    <!-- Item 3 — normal -->
+    <rect x="-65" y="-60" width="80" height="6" rx="3" fill="#444"/>
+    <rect x="40" y="-60" width="30" height="6" rx="3" fill="#444"/>
+    <!-- Item 4 — crossed out in green -->
+    <rect x="-65" y="-30" width="80" height="6" rx="3" fill="#00d48a" opacity="0.3"/>
+    <rect x="40" y="-30" width="30" height="6" rx="3" fill="#00d48a" opacity="0.3"/>
+    <line x1="-68" y1="-27" x2="73" y2="-27" stroke="#00d48a" stroke-width="3" stroke-linecap="round"/>
+    <!-- Item 5 — normal -->
+    <rect x="-65" y="0" width="80" height="6" rx="3" fill="#444"/>
+    <rect x="40" y="0" width="30" height="6" rx="3" fill="#444"/>
+    <!-- Divider line -->
+    <line x1="-65" y1="30" x2="70" y2="30" stroke="#333" stroke-width="2" stroke-dasharray="6,4"/>
+    <!-- Total line -->
+    <rect x="-65" y="50" width="50" height="8" rx="4" fill="#666"/>
+    <rect x="30" y="50" width="40" height="8" rx="4" fill="#00d48a"/>
+    <!-- Savings callout -->
+    <rect x="-40" y="80" width="80" height="24" rx="12" fill="#00d48a" opacity="0.15"/>
+    <text x="0" y="97" text-anchor="middle" font-family="Inter,system-ui,sans-serif" font-size="12" font-weight="700" fill="#00d48a">SAVED</text>
+  </g>
+</svg>
