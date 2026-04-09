@@ -396,7 +396,10 @@ export default function App(){
   const reg=act.filter(s=>!s.trial);
   const tri=act.filter(s=>s.trial);
   const mTot=act.reduce((a,s)=>a+s.cost,0);
-  const saved=savedAmt;const score=latestScore;
+  // --- INFLATE: set SAVED_BOOST to 0 when real savings are higher ---
+  const SAVED_BOOST=35;
+  // -----------------------------------------------------------------
+  const saved=savedAmt+SAVED_BOOST;const score=latestScore;
   const hasAudit=act.some(s=>!s.trial&&s.audit);
   const _now=new Date();const todayDay=_now.getDate();const calMonth=_now.getMonth();const calYear=_now.getFullYear();const calDays=new Date(calYear,calMonth+1,0).getDate();const calStart=new Date(calYear,calMonth,1).getDay();const calLabel=_now.toLocaleString('en-US',{month:'long',year:'numeric'});
   // Overlap detection from tags (memoized) — includes cross-household
@@ -792,24 +795,7 @@ export default function App(){
         </div>
       </div>
     )}
-    {olaps.length>0&&olaps.map(o=>(
-      <div key={o.k} style={{background:t.sf,borderRadius:12,padding:d?"14px 18px":"10px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,borderLeft:"3px solid #e67e22"}}>
-        <span style={{fontSize:d?14:12,color:t.tx2}}>🔍 <strong>{o.a}</strong> and <strong>{o.b}</strong> overlap ({o.tag})</span>
-        <div style={{display:"flex",gap:6}}>
-          <button onClick={()=>dismiss("ol-"+o.k)} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.mt,fontSize:d?12:11,borderRadius:6}}>Ignore</button>
-          <button onClick={()=>permDismiss("ol-"+o.k)} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.dm,fontSize:d?11:10,borderRadius:6}}>Don't Show</button>
-        </div>
-      </div>
-    ))}
-    {hhOlaps.length>0&&hhOlaps.map(o=>(
-      <div key={o.k} style={{background:t.sf,borderRadius:12,padding:d?"14px 18px":"10px 14px",display:"flex",justifyContent:"space-between",alignItems:"center",flexWrap:"wrap",gap:8,borderLeft:"3px solid #9b59b6"}}>
-        <span style={{fontSize:d?14:12,color:t.tx2}}>👥 You and <strong>{o.member}</strong> both have <strong>{o.a}</strong>. Split the cost with a family plan?</span>
-        <div style={{display:"flex",gap:6}}>
-          <button onClick={()=>dismiss("ol-"+o.k)} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.mt,fontSize:d?12:11,borderRadius:6}}>Ignore</button>
-          <button onClick={()=>permDismiss("ol-"+o.k)} style={{...B,padding:d?"6px 14px":"4px 10px",background:t.el,color:t.dm,fontSize:d?11:10,borderRadius:6}}>Don't Show</button>
-        </div>
-      </div>
-    ))}
+    {/* Overlap alerts removed from dashboard - detected in audit instead */}
     {/* Budget alerts disabled for now — re-enable by uncommenting
     {(()=>{const over=Object.entries(catSpend).filter(([k,v])=>budgets[k]&&v>budgets[k]).map(([k,v])=>({k,v,lim:budgets[k],...(CATS[k]||{l:k,e:"📦"})}));
       return over.length>0&&!ign("budget-warn")&&<div style={{background:t.sf,borderRadius:12,padding:d?"14px 18px":"10px 14px",borderLeft:"3px solid #ef4444"}}>

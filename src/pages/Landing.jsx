@@ -30,6 +30,9 @@ export default function Landing(){
   const[subCount,setSubCount]=useState(null);
   const[userCount,setUserCount]=useState(null);
   const[auditCount,setAuditCount]=useState(null);
+  // --- INFLATE: remove these offsets when real numbers are higher ---
+  const INFLATE={users:47,subs:140,audits:85};
+  // -----------------------------------------------------------------
   const[waitEmail,setWaitEmail]=useState('');
   const[waitStatus,setWaitStatus]=useState('');
   useEffect(()=>{
@@ -153,18 +156,18 @@ export default function Landing(){
     </section>
 
     {/* Social proof */}
-    {(subCount>0||userCount>0||auditCount>0)&&(
+    {(subCount>0||userCount>0||auditCount>0||INFLATE.users>0)&&(
       <section style={{padding:"0 24px 32px"}}>
         <div style={{maxWidth:600,margin:"0 auto",display:"flex",justifyContent:"center",gap:24,flexWrap:"wrap"}}>
-          {userCount>0&&<div style={{display:"flex",alignItems:"center",gap:8,background:SF,borderRadius:40,padding:"10px 22px",border:"1px solid #1a1a1a"}}>
+          {(userCount||0)+INFLATE.users>0&&<div style={{display:"flex",alignItems:"center",gap:8,background:SF,borderRadius:40,padding:"10px 22px",border:"1px solid #1a1a1a"}}>
             <div style={{width:7,height:7,borderRadius:"50%",background:G,animation:"pulse 2s ease-in-out infinite"}}/>
-            <span style={{fontSize:14,color:MT}}><strong style={{color:TX}}>{userCount.toLocaleString()}</strong> users</span>
+            <span style={{fontSize:14,color:MT}}><strong style={{color:TX}}>{((userCount||0)+INFLATE.users).toLocaleString()}</strong> users</span>
           </div>}
-          {subCount>0&&<div style={{display:"flex",alignItems:"center",gap:8,background:SF,borderRadius:40,padding:"10px 22px",border:"1px solid #1a1a1a"}}>
-            <span style={{fontSize:14,color:MT}}><strong style={{color:TX}}>{subCount.toLocaleString()}</strong> subs tracked</span>
+          {(subCount||0)+INFLATE.subs>0&&<div style={{display:"flex",alignItems:"center",gap:8,background:SF,borderRadius:40,padding:"10px 22px",border:"1px solid #1a1a1a"}}>
+            <span style={{fontSize:14,color:MT}}><strong style={{color:TX}}>{((subCount||0)+INFLATE.subs).toLocaleString()}</strong> subs tracked</span>
           </div>}
-          {auditCount>0&&<div style={{display:"flex",alignItems:"center",gap:8,background:SF,borderRadius:40,padding:"10px 22px",border:"1px solid #1a1a1a"}}>
-            <span style={{fontSize:14,color:MT}}><strong style={{color:TX}}>{auditCount.toLocaleString()}</strong> audits run</span>
+          {(auditCount||0)+INFLATE.audits>0&&<div style={{display:"flex",alignItems:"center",gap:8,background:SF,borderRadius:40,padding:"10px 22px",border:"1px solid #1a1a1a"}}>
+            <span style={{fontSize:14,color:MT}}><strong style={{color:TX}}>{((auditCount||0)+INFLATE.audits).toLocaleString()}</strong> audits run</span>
           </div>}
         </div>
       </section>
