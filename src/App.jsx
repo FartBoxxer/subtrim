@@ -486,9 +486,13 @@ export default function App(){
   // Downgrade path finder
   const getDowngrade=(name,cost)=>{const tiers=TIERS[name];if(!tiers)return null;const sorted=[...tiers].sort((a,b)=>a.p-b.p);const cheaper=sorted.filter(tr=>tr.p<cost);if(!cheaper.length)return null;const best=cheaper[cheaper.length-1];return{name:best.n,price:best.p,save:cost-best.p}};
 
+  // Share image modal state
+  const[shareImg,setShareImg]=useState(null);
+  const[shareFileName,setShareFileName]=useState('subtrim.png');
+  const downloadShareImg=()=>{if(!shareImg)return;const a=document.createElement('a');a.href=shareImg;a.download=shareFileName;document.body.appendChild(a);a.click();document.body.removeChild(a)};
   // Export audit report as image
-  const exportReport=async()=>{if(!reportRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(reportRef.current,{backgroundColor:'#0d0d0d',scale:2,useCORS:true});canvas.toBlob(blob=>{if(!blob)return;if(navigator.share&&navigator.canShare){navigator.share({files:[new File([blob],'subtrim-audit.png',{type:'image/png'})],title:'My SubTrim Audit'}).catch(()=>{})}else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='subtrim-audit.png';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}},'image/png')}catch{notify('Failed to export report')}};
-  const shareReceipt=async()=>{if(!receiptRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(receiptRef.current,{backgroundColor:theme==='dark'?'#0d0d0d':'#ffffff',scale:2,useCORS:true});canvas.toBlob(blob=>{if(!blob)return;if(navigator.share&&navigator.canShare){navigator.share({files:[new File([blob],'subtrim-statement.png',{type:'image/png'})],title:'My SubTrim Monthly Statement'}).catch(()=>{})}else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='subtrim-statement.png';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}},'image/png')}catch{notify('Failed to export statement')}};
+  const exportReport=async()=>{if(!reportRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(reportRef.current,{backgroundColor:'#0d0d0d',scale:2,useCORS:true});setShareFileName('subtrim-audit.png');setShareImg(canvas.toDataURL('image/png'))}catch{notify('Failed to export report')}};
+  const shareReceipt=async()=>{if(!receiptRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(receiptRef.current,{backgroundColor:theme==='dark'?'#0d0d0d':'#ffffff',scale:2,useCORS:true});setShareFileName('subtrim-statement.png');setShareImg(canvas.toDataURL('image/png'))}catch{notify('Failed to export statement')}};
 
   const simSave=Object.entries(simT).filter(([,v])=>v).reduce((a,[id])=>{const s=act.find(x=>x.id===id);return a+(s?s.cost:0)},0);
   const sorted=[...reg].sort((a,b)=>sort==="cost"?b.cost-a.cost:sort==="category"?a.cat.localeCompare(b.cat):dU(a.renewal)-dU(b.renewal));
@@ -1370,8 +1374,20 @@ export default function App(){
     {/* Toast */}
     {toast&&<div style={{position:"fixed",top:isMobile?52:24,left:isMobile?"50%":undefined,right:isMobile?undefined:48,transform:isMobile?"translateX(-50%)":"none",background:t.sf,border:`1px solid ${t.acc}44`,borderRadius:10,padding:d?"10px 20px":"8px 16px",zIndex:200,boxShadow:"0 8px 24px rgba(0,0,0,0.3)",animation:"sU 0.25s ease",fontSize:d?14:12,fontWeight:600,maxWidth:"85%",textAlign:"center"}}>{toast}</div>}
 
+    {/* Share image modal */}
+    {shareImg&&<div onClick={()=>setShareImg(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.85)",backdropFilter:"blur(4px)",WebkitBackdropFilter:"blur(4px)",zIndex:150,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:24}}>
+      <div onClick={e=>e.stopPropagation()} style={{maxWidth:d?480:360,width:"100%",display:"flex",flexDirection:"column",alignItems:"center",gap:14}}>
+        <img src={shareImg} alt="SubTrim" style={{width:"100%",borderRadius:8,border:`1px solid ${t.bd2}`}}/>
+        <div style={{display:"flex",gap:10}}>
+          <button onClick={downloadShareImg} style={{...B,background:t.acc,color:"#000",fontSize:d?14:12,padding:d?"12px 28px":"10px 20px",borderRadius:10}}>Download Image</button>
+          <button onClick={()=>setShareImg(null)} style={{...B,background:t.sf,color:t.mt2,fontSize:d?14:12,padding:d?"12px 28px":"10px 20px",borderRadius:10,border:`1px solid ${t.bd2}`}}>Close</button>
+        </div>
+        <p style={{fontSize:d?12:10,color:t.dm,margin:0}}>Long-press or right-click the image to save or share</p>
+      </div>
+    </div>}
+
     {/* Add Modal */}
-    {addM&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",WebkitBackdropFilter:"blur(4px)",zIndex:100,display:"flex",alignItems:isMobile?"flex-end":"center",justifyContent:"center"}} onClick={()=>{setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setAddLabels([]);setAddNotes("");setAddTrial(false);setAddTrialEnd("");setCustomMode(false);setCustomName("");setCustomCost("")}}>
+    {addM&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",WebkitBackdropFilter:"blur(4px)",zIndex:100,display:"flex",alignItems:isMobile?"flex-end":"center",justifyContent:"center"}} onClick={()=>{setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setAddLabels([]);setAddNotes("");setAddTrial(false);setAddTrialEnd("");setCustomMode(false);setCustomName("");setCustomCost=""}}>
 
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:d?560:480,background:t.sf,borderRadius:isMobile?"16px 16px 0 0":"16px",padding:d?28:18,maxHeight:isMobile?"60vh":"70vh",overflowY:"auto"}}>
         {isMobile&&<div style={{width:32,height:4,borderRadius:2,background:t.bd3,margin:"0 auto 12px"}}/>}

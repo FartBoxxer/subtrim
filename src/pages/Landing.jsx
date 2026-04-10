@@ -23,7 +23,9 @@ export default function Landing(){
   const[showSavings,setShowSavings]=useState(false);
   const[menuOpen,setMenuOpen]=useState(false);
   const receiptRef=useRef(null);
-  const shareReceipt=async()=>{if(!receiptRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(receiptRef.current,{backgroundColor:'#0d0d0d',scale:2,useCORS:true});canvas.toBlob(blob=>{if(!blob)return;if(navigator.share&&navigator.canShare){navigator.share({files:[new File([blob],'subtrim-statement.png',{type:'image/png'})],title:'SubTrim Monthly Statement'}).catch(()=>{})}else{const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='subtrim-statement.png';document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url)}},'image/png')}catch{}};
+  const[shareImg,setShareImg]=useState(null);
+  const shareReceipt=async()=>{if(!receiptRef.current)return;try{const{default:html2canvas}=await import('html2canvas');const canvas=await html2canvas(receiptRef.current,{backgroundColor:'#0d0d0d',scale:2,useCORS:true});setShareImg(canvas.toDataURL('image/png'))}catch{}};
+  const downloadShareImg=()=>{if(!shareImg)return;const a=document.createElement('a');a.href=shareImg;a.download='subtrim-statement.png';document.body.appendChild(a);a.click();document.body.removeChild(a)};
 
   const total=RECEIPT_ITEMS.reduce((a,i)=>a+i.p,0);
   const saved=RECEIPT_ITEMS.filter(i=>i.cut).reduce((a,i)=>a+i.p,0);
@@ -231,85 +233,35 @@ export default function Landing(){
       </div>
     </section>
 
-    {/* Stats bar */}
-    <section style={{padding:"48px 24px",borderTop:"1px solid #1a1a1a",borderBottom:"1px solid #1a1a1a"}}>
-      <div style={{maxWidth:900,margin:"0 auto",display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(160px,1fr))",gap:24,textAlign:"center"}}>
-        {[
-          {v:"$273",l:"avg monthly spend",s:"per American household"},
-          {v:"12+",l:"subscriptions",s:"per household on average"},
-          {v:"$86",l:"wasted per year",s:"on stuff people forget they have"},
-          {v:"3 min",l:"to run an audit",s:"and find out what to cut"},
-        ].map((s,i)=>(
-          <div key={i}>
-            <div style={{fontSize:32,fontWeight:800,color:G}}>{s.v}</div>
-            <div style={{fontSize:14,fontWeight:600,color:TX,marginTop:4}}>{s.l}</div>
-            <div style={{fontSize:12,color:"#555",marginTop:2}}>{s.s}</div>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    {/* Tools — clean CTA cards */}
-    <section style={{maxWidth:1000,margin:"0 auto",padding:"64px 24px"}}>
-      <h2 style={{fontSize:24,fontWeight:800,textAlign:"center",marginBottom:8}}>Free Tools</h2>
-      <p style={{fontSize:14,color:MT,textAlign:"center",marginBottom:32}}>Stuff that's actually useful. No account needed for these.</p>
-      <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(260px,1fr))",gap:16}}>
-        {[
-          {e:"📖",t:"Cancellation Guides",d:"50+ services with actual step-by-step instructions. Because some of these companies really don't want you to leave.",to:"/guides",btn:"Browse Guides"},
-          {e:"⚖️",t:"Compare Services",d:"Trying to pick between two services? We break down the pricing, features, and trade-offs so you can stop overthinking it.",to:"/compare",btn:"Compare Now"},
-          {e:"🔄",t:"Find Alternatives",d:"Spending too much on something? There's probably a cheaper option that does the same thing.",to:"/alternatives",btn:"Find Alternatives"},
-        ].map((c,i)=>(
-          <div key={i} style={{background:SF,borderRadius:16,padding:28,display:"flex",flexDirection:"column"}}>
-            <div style={{fontSize:28,marginBottom:12}}>{c.e}</div>
-            <div style={{fontSize:17,fontWeight:700,marginBottom:6}}>{c.t}</div>
-            <p style={{fontSize:13,color:MT,lineHeight:1.6,margin:"0 0 20px",flex:1}}>{c.d}</p>
-            <Link to={c.to} style={{display:"inline-block",background:G+"15",color:G,border:`1px solid ${G}44`,borderRadius:10,padding:"10px 20px",fontSize:14,fontWeight:600,textDecoration:"none",textAlign:"center"}}>{c.btn} →</Link>
-          </div>
-        ))}
-      </div>
-    </section>
-
-    {/* Try Demo */}
-    <section style={{padding:"64px 24px",textAlign:"center",background:SF}}>
+    {/* CTA + Demo */}
+    <section style={{padding:"64px 24px",textAlign:"center"}}>
       <div style={{maxWidth:560,margin:"0 auto"}}>
-        <div style={{fontSize:36,marginBottom:12}}>🧪</div>
-        <h2 style={{fontSize:24,fontWeight:800,marginBottom:8}}>Not sure yet? Try it first.</h2>
-        <p style={{fontSize:14,color:MT,lineHeight:1.6,marginBottom:24}}>Run through a sample audit with fake data. See exactly how SubTrim works before you create an account.</p>
-        <Link to="/demo" style={{...B,background:G+"18",color:G,fontSize:15,padding:"14px 36px",textDecoration:"none",display:"inline-block",borderRadius:12,border:`1px solid ${G}44`}}>Try the Demo</Link>
-      </div>
-    </section>
-
-    {/* Email capture */}
-    <section style={{padding:"64px 24px"}}>
-      <div style={{maxWidth:480,margin:"0 auto",textAlign:"center"}}>
-        <div style={{fontSize:28,marginBottom:12}}>📬</div>
-        <h2 style={{fontSize:22,fontWeight:800,marginBottom:6}}>Not ready to sign up?</h2>
-        <p style={{fontSize:14,color:MT,marginBottom:20,lineHeight:1.5}}>Drop your email and we'll send you a one-time heads up when we launch new features. No spam, no newsletters.</p>
-        {waitStatus==='sent'?<div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:12,padding:"20px 24px",fontSize:14,color:G,fontWeight:600}}>You're on the list. We'll keep it short.</div>:(
-          <form onSubmit={async e=>{e.preventDefault();const trimmed=waitEmail.trim();if(!trimmed||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)){setWaitStatus('Enter a valid email');return}setWaitStatus('sending');try{const url=import.meta.env.VITE_SUPABASE_URL;const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;if(!url||!key)throw new Error('no config');const sb=createClient(url,key);const{error}=await sb.from('waitlist').insert({email:trimmed.toLowerCase()});if(error&&error.code!=='23505')throw error;setWaitStatus('sent');setWaitEmail('')}catch{setWaitStatus('Something went wrong. Try again.')}}} style={{display:"flex",gap:8,maxWidth:400,margin:"0 auto"}}>
-            <input value={waitEmail} onChange={e=>setWaitEmail(e.target.value)} placeholder="your@email.com" type="email" style={{flex:1,padding:"14px 16px",borderRadius:10,border:"1px solid #222",background:EL,color:TX,fontSize:14,outline:"none",fontFamily:"inherit",boxSizing:"border-box"}}/>
-            <button type="submit" disabled={waitStatus==='sending'} style={{...B,background:G,color:"#000",padding:"14px 24px",fontSize:14,borderRadius:10,whiteSpace:"nowrap",opacity:waitStatus==='sending'?0.6:1}}>{waitStatus==='sending'?'...':'Notify Me'}</button>
-          </form>
-        )}
-        {waitStatus&&waitStatus!=='sent'&&waitStatus!=='sending'&&<div style={{fontSize:12,color:"#ef4444",marginTop:8}}>{waitStatus}</div>}
-      </div>
-    </section>
-
-    {/* Final CTA */}
-    <section style={{padding:"72px 24px",textAlign:"center"}}>
-      <div style={{maxWidth:560,margin:"0 auto"}}>
-        <div style={{fontSize:48,marginBottom:16}}>✂️</div>
         <h2 style={{fontSize:28,fontWeight:800,lineHeight:1.3,marginBottom:12}}>You're probably paying for something you don't use</h2>
-        <p style={{fontSize:16,color:MT,lineHeight:1.6,marginBottom:28}}>Most people are. SubTrim finds it, tells you about it, and helps you decide what to do about it. Takes a few minutes.</p>
+        <p style={{fontSize:16,color:MT,lineHeight:1.6,marginBottom:28}}>Most people are. SubTrim finds it in about 3 minutes.</p>
         <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 40px",textDecoration:"none",display:"inline-block",borderRadius:12}}>Get Started (It's Free)</Link>
+        <div style={{marginTop:16}}>
+          <Link to="/demo" style={{fontSize:14,color:MT,textDecoration:"none",fontWeight:500}}>or <span style={{color:G,textDecoration:"underline"}}>try the demo first</span></Link>
+        </div>
       </div>
     </section>
 
-    {/* Founder's Note */}
+    {/* Founder + Email capture */}
     <section style={{padding:"48px 24px"}}>
-      <div style={{maxWidth:520,margin:"0 auto",background:SF,borderRadius:16,padding:"28px 32px",border:"1px solid #1a1a1a"}}>
-        <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Who built this?</div>
-        <p style={{fontSize:14,color:MT,lineHeight:1.7,margin:0}}>Hey, I'm just a programmer who had over 10 subscriptions but only actually used about half of them. I wanted to make the process of trimming them down a bit easier to visualize, so I built SubTrim. If you're in the same boat, I think you'll like it.</p>
+      <div style={{maxWidth:520,margin:"0 auto"}}>
+        <div style={{background:SF,borderRadius:16,padding:"28px 32px",border:"1px solid #1a1a1a",marginBottom:24}}>
+          <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Who built this?</div>
+          <p style={{fontSize:14,color:MT,lineHeight:1.7,margin:0}}>Hey, I'm just a programmer who had over 10 subscriptions but only actually used about half of them. I wanted to make the process of trimming them down a bit easier to visualize, so I built SubTrim. If you're in the same boat, I think you'll like it.</p>
+        </div>
+        <div style={{textAlign:"center"}}>
+          <p style={{fontSize:13,color:MT,marginBottom:12}}>Get notified when we launch new features. No spam.</p>
+          {waitStatus==='sent'?<div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:10,padding:"12px 20px",fontSize:13,color:G,fontWeight:600}}>You're on the list.</div>:(
+            <form onSubmit={async e=>{e.preventDefault();const trimmed=waitEmail.trim();if(!trimmed||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)){setWaitStatus('Enter a valid email');return}setWaitStatus('sending');try{const url=import.meta.env.VITE_SUPABASE_URL;const key=import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;if(!url||!key)throw new Error('no config');const sb=createClient(url,key);const{error}=await sb.from('waitlist').insert({email:trimmed.toLowerCase()});if(error&&error.code!=='23505')throw error;setWaitStatus('sent');setWaitEmail('')}catch{setWaitStatus('Something went wrong. Try again.')}}} style={{display:"flex",gap:8,maxWidth:400,margin:"0 auto"}}>
+              <input value={waitEmail} onChange={e=>setWaitEmail(e.target.value)} placeholder="your@email.com" type="email" style={{flex:1,padding:"12px 14px",borderRadius:10,border:"1px solid #222",background:EL,color:TX,fontSize:13,outline:"none",fontFamily:"inherit",boxSizing:"border-box"}}/>
+              <button type="submit" disabled={waitStatus==='sending'} style={{...B,background:G,color:"#000",padding:"12px 20px",fontSize:13,borderRadius:10,whiteSpace:"nowrap",opacity:waitStatus==='sending'?0.6:1}}>{waitStatus==='sending'?'...':'Notify Me'}</button>
+            </form>
+          )}
+          {waitStatus&&waitStatus!=='sent'&&waitStatus!=='sending'&&<div style={{fontSize:12,color:"#ef4444",marginTop:8}}>{waitStatus}</div>}
+        </div>
       </div>
     </section>
 
@@ -351,6 +303,18 @@ export default function Landing(){
         </div>
       </div>
     </section>
+
+    {/* Share image modal */}
+    {shareImg&&<div onClick={()=>setShareImg(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.85)",zIndex:999,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:24}}>
+      <div onClick={e=>e.stopPropagation()} style={{maxWidth:480,width:"100%",display:"flex",flexDirection:"column",alignItems:"center",gap:16}}>
+        <img src={shareImg} alt="SubTrim Statement" style={{width:"100%",borderRadius:8,border:"1px solid #333"}}/>
+        <div style={{display:"flex",gap:10}}>
+          <button onClick={downloadShareImg} style={{...B,background:G,color:"#000",fontSize:14,padding:"12px 28px",borderRadius:10}}>Download Image</button>
+          <button onClick={()=>setShareImg(null)} style={{...B,background:SF,color:MT,fontSize:14,padding:"12px 28px",borderRadius:10,border:"1px solid #333"}}>Close</button>
+        </div>
+        <p style={{fontSize:12,color:"#555",margin:0}}>Long-press or right-click the image to save or share</p>
+      </div>
+    </div>}
 
     {/* Footer */}
     <footer style={{borderTop:"1px solid #1a1a1a",padding:"32px 24px",textAlign:"center"}}>
