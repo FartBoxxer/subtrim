@@ -14,6 +14,13 @@ const RECEIPT_ITEMS=[
 ];
 
 export default function Landing(){
+  const glowRef=useRef(null);
+  useEffect(()=>{
+    if(window.matchMedia('(hover:none)').matches)return;
+    const move=e=>{if(glowRef.current)glowRef.current.style.transform=`translate(${e.clientX-120}px,${e.clientY-120}px)`};
+    window.addEventListener('mousemove',move);
+    return()=>window.removeEventListener('mousemove',move);
+  },[]);
   const[cfName,setCfName]=useState('');
   const[cfEmail,setCfEmail]=useState('');
   const[cfMsg,setCfMsg]=useState('');
@@ -31,9 +38,7 @@ export default function Landing(){
   const[subCount,setSubCount]=useState(null);
   const[userCount,setUserCount]=useState(null);
   const[auditCount,setAuditCount]=useState(null);
-  // --- INFLATE: remove these offsets when real numbers are higher ---
-  const INFLATE={users:47,subs:140,audits:85};
-  // -----------------------------------------------------------------
+  const INFLATE={users:0,subs:0,audits:0};
   const[waitEmail,setWaitEmail]=useState('');
   const[waitStatus,setWaitStatus]=useState('');
   useEffect(()=>{
@@ -64,7 +69,8 @@ export default function Landing(){
   };
 
   return(
-  <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
+  <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif",position:"relative"}}>
+    <div ref={glowRef} aria-hidden="true" style={{position:"fixed",top:0,left:0,width:240,height:240,borderRadius:"50%",background:"radial-gradient(circle, rgba(0,212,138,0.14) 0%, rgba(0,212,138,0.05) 40%, transparent 70%)",pointerEvents:"none",zIndex:1,transition:"transform 0.12s cubic-bezier(0.2,0.8,0.2,1)",willChange:"transform",mixBlendMode:"screen"}}/>
     <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.lp-cta{box-shadow:0 4px 14px rgba(0,212,138,0.28);transition:transform 0.15s ease,box-shadow 0.15s ease}.lp-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,138,0.4)}.lp-cta:active{transform:translateY(0)}.lp-marquee{display:flex;width:max-content;animation:marquee 40s linear infinite}.lp-marquee:hover{animation-play-state:paused}.lp-marquee-mask{mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}@media(max-width:600px){.lp-nav-links{display:none!important}.lp-hamburger{display:flex!important}}@media(min-width:601px){.lp-mobile-menu{display:none!important}}`}</style>
     {/* Nav */}
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px clamp(16px,4vw,32px)",maxWidth:1100,margin:"0 auto",position:"relative"}}>
@@ -140,7 +146,6 @@ export default function Landing(){
         <div style={{position:"absolute",bottom:-1,left:0,right:0,height:6,background:BG,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0 Q 2.5 6 5 0 Q 7.5 6 10 0 Q 12.5 6 15 0 Q 17.5 6 20 0 Q 22.5 6 25 0 Q 27.5 6 30 0 Q 32.5 6 35 0 Q 37.5 6 40 0 Q 42.5 6 45 0 Q 47.5 6 50 0 Q 52.5 6 55 0 Q 57.5 6 60 0 Q 62.5 6 65 0 Q 67.5 6 70 0 Q 72.5 6 75 0 Q 77.5 6 80 0 Q 82.5 6 85 0 Q 87.5 6 90 0 Q 92.5 6 95 0 Q 97.5 6 100 0' fill='white'/%3E%3C/svg%3E\")"}}/>
       </div>
       <div style={{textAlign:"center",marginTop:32}}>
-        <button onClick={shareReceipt} style={{...B,background:SF,color:MT,fontSize:13,borderRadius:8,border:"1px solid #222",padding:"8px 20px",marginBottom:16}}>📤 Share This</button>
         <p style={{fontSize:18,color:MT,marginBottom:20,lineHeight:1.5}}>The average American wastes <strong style={{color:TX}}>{fm(saved*12)}/year</strong> on subscriptions they barely use.</p>
         <Link to="/demo" className="lp-cta" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 36px",textDecoration:"none",display:"inline-block"}}>Try the Audit (Free)</Link>
         <p style={{fontSize:13,color:"#555",marginTop:14}}>No signup. Takes 2 minutes.</p>

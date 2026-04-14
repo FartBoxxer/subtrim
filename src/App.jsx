@@ -828,7 +828,6 @@ export default function App(){
 
       {/* Share + avg stat */}
       <div style={{textAlign:"center",marginTop:d?24:16}}>
-        {act.length>0&&<button onClick={shareReceipt} style={{...B,background:t.sf,color:t.mt2,fontSize:d?13:11,borderRadius:8,border:`1px solid ${t.bd2}`,padding:d?"8px 20px":"7px 16px",marginBottom:12}}>📤 Share Statement</button>}
         <p style={{fontSize:d?16:13,color:t.mt,lineHeight:1.6}}>The average American spends <strong style={{color:t.tx}}>{fm(273)}/mo</strong> on subscriptions.{act.length>0&&<>{' '}You spend <strong style={{color:mTot>273?"#ef4444":t.acc}}>{fm(mTot)}/mo</strong>, {mTot>273?`${fm(mTot-273)} above`:`${fm(273-mTot)} below`} average.</>}</p>
       </div>
 
@@ -1025,7 +1024,6 @@ export default function App(){
             </div>
             <div style={{fontSize:d?10:8,color:t.dm,marginTop:14}}>subtrim.dev</div>
           </div>
-          <button onClick={exportReport} style={{...B,background:t.sf,color:t.mt2,fontSize:d?13:11,borderRadius:8,border:`1px solid ${t.bd2}`,padding:d?"10px 20px":"8px 16px",alignSelf:"center"}}>📤 Share Report</button>
 
           <div style={isMobile?{}:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
           {[{k:"keep",l:"Keep",c:"#00d48a"},{k:"downgrade",l:"Downgrade",c:"#f59e0b"},{k:"cancel",l:"Cut",c:"#ef4444"}].map(({k,l,c})=>{
