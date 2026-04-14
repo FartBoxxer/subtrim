@@ -195,8 +195,53 @@ export default function App(){
         const mo=Math.max(1,Math.round((now-new Date(s.archived_at))/(30*864e5)));
         return a+Number(s.monthly_cost)*mo;
       },0))}
-      // Only show onboarding for truly new users (no active or archived subs)
-      if(mapped.length===0&&(!arch||arch.length===0))setOnboarding(true);
+      // If there's a demo audit saved in localStorage, import it before onboarding
+      let demoImported=false;
+      if(mapped.length===0&&(!arch||arch.length===0)){
+        try{
+          const raw=localStorage.getItem('subtrim_demo');
+          if(raw){
+            const demo=JSON.parse(raw);
+            const fresh=demo?.ts&&(Date.now()-demo.ts)<24*3600*1000;
+            if(fresh&&Array.isArray(demo.subs)&&demo.subs.length){
+              const{data:ksRows}=await supabase.from('known_services').select('id,name,category,typical_monthly_price,tags');
+              const nameMap={'Adobe CC':'Adobe Creative Cloud'};
+              const inserted=[];
+              for(const d of demo.subs){
+                const lookupName=nameMap[d.name]||d.name;
+                const match=ksRows?.find(k=>k.name===lookupName);
+                if(!match)continue;
+                const{data:subRow}=await supabase.from('subscriptions').insert({
+                  user_id:user.id,service_id:match.id,monthly_cost:d.cost,billing_cycle:'monthly',
+                  renewal_date:new Date(Date.now()+30*864e5).toISOString().split('T')[0],status:'active',
+                }).select('*, known_services(name, category, tags)').single();
+                if(subRow){
+                  if(d.freq&&d.sat!=null){
+                    await supabase.from('usage_surveys').insert({
+                      user_id:user.id,subscription_id:subRow.id,
+                      frequency:d.freq,satisfaction:d.sat,would_miss:!!d.miss,
+                    });
+                    await supabase.from('subscriptions').update({last_audited_at:new Date().toISOString()}).eq('id',subRow.id);
+                  }
+                  inserted.push({id:subRow.id,serviceId:subRow.service_id,name:subRow.known_services?.name||lookupName,
+                    cat:subRow.known_services?.category||'lifestyle',cost:Number(subRow.monthly_cost),cycle:subRow.billing_cycle,
+                    renewal:subRow.renewal_date,trial:false,trialEnd:null,sat:d.sat||null,freq:d.freq||null,miss:!!d.miss,
+                    audit:(d.freq&&d.sat!=null)?new Date().toISOString():null,
+                    added:subRow.created_at?.split('T')[0],tags:subRow.known_services?.tags||[],labels:[],notes:''});
+                }
+              }
+              if(inserted.length){
+                setSubs(prev=>[...prev,...inserted]);
+                demoImported=true;
+                notify(`✅ Imported ${inserted.length} from your demo`);
+              }
+            }
+            localStorage.removeItem('subtrim_demo');
+          }
+        }catch{localStorage.removeItem('subtrim_demo')}
+      }
+      // Only show onboarding for truly new users (no active or archived subs, no demo import)
+      if(mapped.length===0&&(!arch||arch.length===0)&&!demoImported)setOnboarding(true);
       // Load profile (budgets, email prefs, theme, avatar)
       const{data:prof}=await supabase.from('profiles').select('category_budgets,email_preferences,theme,currency').eq('id',user.id).maybeSingle();
       if(prof){
@@ -654,10 +699,25 @@ export default function App(){
       <style>{`*{box-sizing:border-box;margin:0}input::placeholder{color:${t.dm}}`}</style>
       <div style={{width:"100%",maxWidth:400}}>
         <a href="/" style={{...B,background:"none",color:t.mt,fontSize:14,padding:"0 0 16px",display:"flex",alignItems:"center",gap:6,textDecoration:"none"}}>← Back</a>
-        <div style={{textAlign:"center",marginBottom:36}}>
+        <div style={{textAlign:"center",marginBottom:28}}>
           <div style={{fontSize:48,marginBottom:10}}>✂️</div>
           <div style={{fontSize:28,fontWeight:800,letterSpacing:"-0.5px"}}>SubTrim</div>
           <div style={{fontSize:14,color:t.mt,marginTop:6}}>Figure out what's worth keeping</div>
+        </div>
+
+        <button onClick={async()=>{
+          setAuthLoading(true);setAuthErr("");
+          const{error}=await supabase.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin+'/app'}});
+          if(error){setAuthErr(error.message);setAuthLoading(false)}
+        }} disabled={authLoading} style={{...B,background:"#fff",color:"#1f1f1f",padding:"13px",fontSize:15,fontWeight:600,borderRadius:10,width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:10,opacity:authLoading?0.6:1,marginBottom:16}}>
+          <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+          Continue with Google
+        </button>
+
+        <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:16}}>
+          <div style={{flex:1,height:1,background:t.bd2}}/>
+          <span style={{fontSize:12,color:t.dm,fontWeight:500}}>or continue with email</span>
+          <div style={{flex:1,height:1,background:t.bd2}}/>
         </div>
 
         <div style={{display:"flex",background:t.sf,borderRadius:10,padding:3,marginBottom:20}}>
@@ -701,6 +761,9 @@ export default function App(){
         {!resetMode&&<div style={{textAlign:"center",marginTop:18,fontSize:13,color:t.dm}}>
           {authMode==="login"?"Don't have an account? ":"Already have one? "}
           <span onClick={()=>{setAuthMode(authMode==="login"?"signup":"login");setAuthErr("");setAuthInfo("");setResetMode(false)}} style={{color:t.acc,cursor:"pointer",fontWeight:600}}>{authMode==="login"?"Sign Up":"Log In"}</span>
+        </div>}
+        {!resetMode&&<div style={{textAlign:"center",marginTop:14,paddingTop:14,borderTop:`1px solid ${t.bd2}`,fontSize:13}}>
+          <a href="/demo" style={{color:t.mt,textDecoration:"none",fontWeight:500}}>or try without an account →</a>
         </div>}
       </div>
     </div>

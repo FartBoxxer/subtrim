@@ -14,7 +14,6 @@ const RECEIPT_ITEMS=[
 ];
 
 export default function Landing(){
-  const[showBanner,setShowBanner]=useState(true);
   const[cfName,setCfName]=useState('');
   const[cfEmail,setCfEmail]=useState('');
   const[cfMsg,setCfMsg]=useState('');
@@ -66,19 +65,7 @@ export default function Landing(){
 
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
-    <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}@media(max-width:600px){.lp-nav-links{display:none!important}.lp-hamburger{display:flex!important}}@media(min-width:601px){.lp-mobile-menu{display:none!important}}`}</style>
-    {/* Dev banner */}
-    {showBanner&&<div style={{background:'linear-gradient(135deg,#00d48a18,#3498db18)',borderBottom:'1px solid #00d48a33',padding:'14px 24px',position:'relative'}}>
-      <div style={{maxWidth:1100,margin:'0 auto',display:'flex',alignItems:'center',justifyContent:'center',gap:12,flexWrap:'wrap'}}>
-        <span style={{fontSize:20}}>🚀</span>
-        <div style={{fontSize:14,color:TX,textAlign:'center',lineHeight:1.5}}>
-          <strong>Recently launched!</strong>
-          <span style={{color:MT}}> We're actively building and improving SubTrim. Got feedback? We'd love to hear it.</span>
-          <a href="#contact" style={{color:G,textDecoration:'none',fontWeight:600}} onClick={()=>setShowBanner(false)}>let us know</a>
-        </div>
-        <button onClick={()=>setShowBanner(false)} style={{position:'absolute',right:16,top:'50%',transform:'translateY(-50%)',background:'none',border:'none',color:MT,fontSize:18,cursor:'pointer',padding:4,lineHeight:1}}>×</button>
-      </div>
-    </div>}
+    <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.lp-cta{box-shadow:0 4px 14px rgba(0,212,138,0.28);transition:transform 0.15s ease,box-shadow 0.15s ease}.lp-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,138,0.4)}.lp-cta:active{transform:translateY(0)}.lp-marquee{display:flex;width:max-content;animation:marquee 40s linear infinite}.lp-marquee:hover{animation-play-state:paused}.lp-marquee-mask{mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}@media(max-width:600px){.lp-nav-links{display:none!important}.lp-hamburger{display:flex!important}}@media(min-width:601px){.lp-mobile-menu{display:none!important}}`}</style>
     {/* Nav */}
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px clamp(16px,4vw,32px)",maxWidth:1100,margin:"0 auto",position:"relative"}}>
       <Link to="/" style={{fontSize:22,fontWeight:800,letterSpacing:"-0.5px",color:TX,textDecoration:"none",flexShrink:0}}>✂️ SubTrim</Link>
@@ -86,7 +73,8 @@ export default function Landing(){
         <Link to="/guides" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Guides</Link>
         <Link to="/compare" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Compare</Link>
         <Link to="/alternatives" style={{color:MT,fontSize:14,textDecoration:"none",fontWeight:500,whiteSpace:"nowrap"}}>Alternatives</Link>
-        <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 24px",fontSize:14,textDecoration:"none",whiteSpace:"nowrap",borderRadius:10}}>Get Started</Link>
+        <Link to="/demo" style={{color:TX,fontSize:14,textDecoration:"none",fontWeight:600,whiteSpace:"nowrap"}}>Try Demo</Link>
+        <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 24px",fontSize:14,textDecoration:"none",whiteSpace:"nowrap",borderRadius:10}}>Sign Up</Link>
       </div>
       <button className="lp-hamburger" onClick={()=>setMenuOpen(!menuOpen)} style={{display:"none",alignItems:"center",justifyContent:"center",background:"none",border:"none",color:TX,fontSize:24,cursor:"pointer",padding:4}}>
         {menuOpen?"✕":"☰"}
@@ -96,7 +84,8 @@ export default function Landing(){
       <Link to="/guides" onClick={()=>setMenuOpen(false)} style={{color:MT,fontSize:15,textDecoration:"none",fontWeight:500,padding:"8px 0"}}>Guides</Link>
       <Link to="/compare" onClick={()=>setMenuOpen(false)} style={{color:MT,fontSize:15,textDecoration:"none",fontWeight:500,padding:"8px 0"}}>Compare</Link>
       <Link to="/alternatives" onClick={()=>setMenuOpen(false)} style={{color:MT,fontSize:15,textDecoration:"none",fontWeight:500,padding:"8px 0"}}>Alternatives</Link>
-      <Link to="/app" onClick={()=>setMenuOpen(false)} style={{...B,background:G,color:"#000",padding:"12px 24px",fontSize:15,textDecoration:"none",textAlign:"center",borderRadius:10}}>Get Started</Link>
+      <Link to="/demo" onClick={()=>setMenuOpen(false)} style={{color:TX,fontSize:15,textDecoration:"none",fontWeight:600,padding:"8px 0"}}>Try Demo</Link>
+      <Link to="/app" onClick={()=>setMenuOpen(false)} style={{...B,background:G,color:"#000",padding:"12px 24px",fontSize:15,textDecoration:"none",textAlign:"center",borderRadius:10}}>Sign Up</Link>
     </div>}
 
     {/* Hero — Receipt */}
@@ -153,8 +142,36 @@ export default function Landing(){
       <div style={{textAlign:"center",marginTop:32}}>
         <button onClick={shareReceipt} style={{...B,background:SF,color:MT,fontSize:13,borderRadius:8,border:"1px solid #222",padding:"8px 20px",marginBottom:16}}>📤 Share This</button>
         <p style={{fontSize:18,color:MT,marginBottom:20,lineHeight:1.5}}>The average American wastes <strong style={{color:TX}}>{fm(saved*12)}/year</strong> on subscriptions they barely use.</p>
-        <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 36px",textDecoration:"none",display:"inline-block"}}>Find Your Savings (Free)</Link>
-        <p style={{fontSize:13,color:"#555",marginTop:14}}>No credit card. Takes 2 minutes.</p>
+        <Link to="/demo" className="lp-cta" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 36px",textDecoration:"none",display:"inline-block"}}>Try the Audit (Free)</Link>
+        <p style={{fontSize:13,color:"#555",marginTop:14}}>No signup. Takes 2 minutes.</p>
+        <p style={{fontSize:13,color:MT,marginTop:6}}>Already convinced? <Link to="/app" style={{color:G,textDecoration:"none",fontWeight:600}}>Create a free account →</Link></p>
+      </div>
+    </section>
+
+    {/* Brand marquee */}
+    <section style={{padding:"20px 0 32px"}}>
+      <div style={{maxWidth:1100,margin:"0 auto",padding:"0 24px"}}>
+        <div style={{textAlign:"center",fontSize:12,color:"#555",textTransform:"uppercase",letterSpacing:2,marginBottom:20,fontWeight:600}}>Tracks every subscription you've got</div>
+      </div>
+      <div className="lp-marquee-mask" style={{overflow:"hidden"}}>
+        <div className="lp-marquee">
+          {[...Array(2)].map((_,dup)=>(
+            <div key={dup} style={{display:"flex",gap:56,alignItems:"center",padding:"0 28px",flexShrink:0}}>
+              {[
+                {s:'netflix',n:'Netflix'},{s:'spotify',n:'Spotify'},{s:'hulu',n:'Hulu'},
+                {s:'amazonprimevideo',n:'Prime Video'},{s:'youtube',n:'YouTube'},{s:'adobe',n:'Adobe'},
+                {s:'openai',n:'ChatGPT'},{s:'notion',n:'Notion'},{s:'dropbox',n:'Dropbox'},
+                {s:'nordvpn',n:'NordVPN'},{s:'1password',n:'1Password'},{s:'crunchyroll',n:'Crunchyroll'},
+                {s:'playstation',n:'PlayStation'},{s:'apple',n:'Apple'},{s:'hbo',n:'HBO Max'},
+              ].map((b,i)=>(
+                <div key={i} style={{display:"flex",alignItems:"center",gap:10,opacity:0.45,flexShrink:0}}>
+                  <img src={`https://cdn.simpleicons.org/${b.s}/ffffff`} alt={b.n} width={24} height={24} loading="lazy" style={{filter:"grayscale(1)"}}/>
+                  <span style={{fontSize:15,color:"#888",fontWeight:600,whiteSpace:"nowrap"}}>{b.n}</span>
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
       </div>
     </section>
 
@@ -238,7 +255,7 @@ export default function Landing(){
       <div style={{maxWidth:560,margin:"0 auto"}}>
         <h2 style={{fontSize:28,fontWeight:800,lineHeight:1.3,marginBottom:12}}>You're probably paying for something you don't use</h2>
         <p style={{fontSize:16,color:MT,lineHeight:1.6,marginBottom:28}}>Most people are. SubTrim finds it in about 3 minutes.</p>
-        <Link to="/app" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 40px",textDecoration:"none",display:"inline-block",borderRadius:12}}>Get Started (It's Free)</Link>
+        <Link to="/app" className="lp-cta" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 40px",textDecoration:"none",display:"inline-block",borderRadius:12}}>Get Started (It's Free)</Link>
         <div style={{marginTop:16}}>
           <Link to="/demo" style={{fontSize:14,color:MT,textDecoration:"none",fontWeight:500}}>or <span style={{color:G,textDecoration:"underline"}}>try the demo first</span></Link>
         </div>

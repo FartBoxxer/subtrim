@@ -52,7 +52,13 @@ export default function Demo(){
   const cuts=recs.filter(r=>r.rec==="cancel");
   const cS=cuts.reduce((a,r)=>a+r.cost,0);
 
-  const finish=()=>{setStep(-1);setDone(true)};
+  const finish=()=>{
+    setStep(-1);setDone(true);
+    try{
+      const audit=subs.map(s=>({name:s.name,cat:s.cat,cost:s.cost,freq:s.freq,sat:s.sat,miss:s.miss}));
+      localStorage.setItem('subtrim_demo',JSON.stringify({subs:audit,ts:Date.now()}));
+    }catch{}
+  };
 
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
@@ -156,9 +162,9 @@ export default function Demo(){
           </div>
 
           <div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:14,padding:24,marginBottom:20}}>
-            <div style={{fontSize:15,fontWeight:700,marginBottom:6}}>That took about 2 minutes.</div>
-            <p style={{fontSize:13,color:MT,lineHeight:1.5,marginBottom:16}}>With a free account, SubTrim tracks your real subscriptions, detects overlaps automatically, finds active deals, and keeps your SubScore updated over time.</p>
-            <Link to="/app" style={{...B,background:G,color:"#000",padding:"14px 32px",fontSize:15,fontWeight:700,textDecoration:"none",display:"inline-block",borderRadius:10}}>Create Free Account</Link>
+            <div style={{fontSize:15,fontWeight:700,marginBottom:6}}>Save this to your account</div>
+            <p style={{fontSize:13,color:MT,lineHeight:1.5,marginBottom:16}}>Create a free account to keep these results, track your real subs, catch overlaps, and get deal alerts. Your audit answers carry over automatically.</p>
+            <Link to="/app" style={{...B,background:G,color:"#000",padding:"14px 32px",fontSize:15,fontWeight:700,textDecoration:"none",display:"inline-block",borderRadius:10}}>Save & Create Account</Link>
           </div>
 
           <button onClick={()=>{setSubs(DEMO_SUBS);setDone(false);setStep(-1)}} style={{...B,background:EL,color:MT,fontSize:13,borderRadius:8}}>Reset Demo</button>
