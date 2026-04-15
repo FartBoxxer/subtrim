@@ -210,11 +210,15 @@ export default function App(){
               for(const d of demo.subs){
                 const lookupName=nameMap[d.name]||d.name;
                 const match=ksRows?.find(k=>k.name===lookupName);
-                if(!match)continue;
-                const{data:subRow}=await supabase.from('subscriptions').insert({
+                const insertPayload=match?{
                   user_id:user.id,service_id:match.id,monthly_cost:d.cost,billing_cycle:'monthly',
                   renewal_date:new Date(Date.now()+30*864e5).toISOString().split('T')[0],status:'active',
-                }).select('*, known_services(name, category, tags)').single();
+                }:{
+                  user_id:user.id,custom_name:d.name,custom_category:d.cat||'productivity',
+                  monthly_cost:d.cost,billing_cycle:'monthly',
+                  renewal_date:new Date(Date.now()+30*864e5).toISOString().split('T')[0],status:'active',
+                };
+                const{data:subRow}=await supabase.from('subscriptions').insert(insertPayload).select('*, known_services(name, category, tags)').single();
                 if(subRow){
                   if(d.freq&&d.sat!=null){
                     await supabase.from('usage_surveys').insert({
@@ -223,8 +227,8 @@ export default function App(){
                     });
                     await supabase.from('subscriptions').update({last_audited_at:new Date().toISOString()}).eq('id',subRow.id);
                   }
-                  inserted.push({id:subRow.id,serviceId:subRow.service_id,name:subRow.known_services?.name||lookupName,
-                    cat:subRow.known_services?.category||'lifestyle',cost:Number(subRow.monthly_cost),cycle:subRow.billing_cycle,
+                  inserted.push({id:subRow.id,serviceId:subRow.service_id,name:subRow.known_services?.name||subRow.custom_name||lookupName,
+                    cat:subRow.known_services?.category||subRow.custom_category||'lifestyle',cost:Number(subRow.monthly_cost),cycle:subRow.billing_cycle,
                     renewal:subRow.renewal_date,trial:false,trialEnd:null,sat:d.sat||null,freq:d.freq||null,miss:!!d.miss,
                     audit:(d.freq&&d.sat!=null)?new Date().toISOString():null,
                     added:subRow.created_at?.split('T')[0],tags:subRow.known_services?.tags||[],labels:[],notes:''});
