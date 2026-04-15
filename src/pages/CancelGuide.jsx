@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { CANCEL_GUIDES } from '../data/cancelGuides';
+import { ALTERNATIVES } from '../data/alternatives';
 import { Helmet, JsonLd } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
@@ -29,7 +30,7 @@ export default function CancelGuide(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title={`How to Cancel ${name} (${new Date().getFullYear()}) | Step-by-Step Guide | SubTrim`}
+      title={`How to Cancel ${name} ${new Date().getFullYear()} | SubTrim`}
       description={`Cancel your ${name} subscription in ${guide.steps.length} easy steps. ${guide.difficulty==='easy'?'Takes under 2 minutes.':guide.difficulty==='medium'?'Takes about 5 minutes.':'May require contacting support.'}`}
       canonical={`https://subtrim.dev/guides/cancel/${service}`}
     />
@@ -95,7 +96,7 @@ export default function CancelGuide(){
       <div style={{marginTop:24,marginBottom:24}}>
         <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Related</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          <Link to={`/alternatives/${name.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'')}`} style={{background:EL,borderRadius:8,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>Best {name} alternatives</Link>
+          {ALTERNATIVES[name]&&<Link to={`/alternatives/${name.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'')}`} style={{background:EL,borderRadius:8,padding:"10px 16px",fontSize:13,color:G,textDecoration:"none",fontWeight:600,border:"1px solid #222"}}>Best {name} alternatives</Link>}
           <Link to="/guides" style={{background:EL,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222"}}>More cancel guides</Link>
           <Link to="/calculator" style={{background:EL,borderRadius:8,padding:"10px 16px",fontSize:13,color:MT,textDecoration:"none",fontWeight:500,border:"1px solid #222"}}>Cost calculator</Link>
         </div>

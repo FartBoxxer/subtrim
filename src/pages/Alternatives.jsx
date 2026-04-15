@@ -28,7 +28,7 @@ export default function Alternatives(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title={`Best ${name} Alternatives (${new Date().getFullYear()}) | Cheaper & Better Options | SubTrim`}
+      title={`Best ${name} Alternatives ${new Date().getFullYear()} | SubTrim`}
       description={`Looking to replace ${name}? Compare the best alternatives with pricing, features, and our recommendations.`}
       canonical={`https://subtrim.dev/alternatives/${service}`}
     />

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { createClient } from '@supabase/supabase-js';
+import { Helmet } from '../components/Helmet';
 
 const G='#00d48a',BG='#0d0d0d',SF='#141414',EL='#1f1f1f',MT='#888',TX='#fff';
 const B={border:"none",borderRadius:10,padding:"14px 28px",cursor:"pointer",fontSize:15,fontWeight:700,fontFamily:"inherit",transition:"all 0.15s"};
@@ -63,6 +64,11 @@ export default function Landing(){
 
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif",position:"relative"}}>
+    <Helmet
+      title="SubTrim | Audit Your Subscriptions & Cut What You Don't Use"
+      description="SubTrim audits every subscription you pay for and tells you exactly what to keep, cancel, or downgrade. Free to try, no signup required."
+      canonical="https://subtrim.dev/"
+    />
     <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.lp-cta{box-shadow:0 4px 14px rgba(0,212,138,0.28);transition:transform 0.15s ease,box-shadow 0.15s ease}.lp-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,138,0.4)}.lp-cta:active{transform:translateY(0)}.lp-marquee{display:flex;width:max-content;animation:marquee 40s linear infinite}.lp-marquee:hover{animation-play-state:paused}.lp-marquee-mask{mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}@media(max-width:600px){.lp-nav-links{display:none!important}.lp-hamburger{display:flex!important}}@media(min-width:601px){.lp-mobile-menu{display:none!important}}`}</style>
     {/* Nav */}
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px clamp(16px,4vw,32px)",maxWidth:1100,margin:"0 auto",position:"relative"}}>
@@ -87,7 +93,9 @@ export default function Landing(){
     </div>}
 
     {/* Hero — Receipt */}
-    <section style={{padding:"60px 24px 40px",maxWidth:520,margin:"0 auto"}}>
+    <section style={{padding:"40px 24px 40px",maxWidth:720,margin:"0 auto"}}>
+      <h1 style={{fontSize:"clamp(30px,5.2vw,46px)",fontWeight:800,lineHeight:1.15,textAlign:"center",maxWidth:720,margin:"0 auto 28px",letterSpacing:"-0.02em"}}>Audit your subscriptions.<br/><span style={{color:G}}>Cancel what you don't use.</span></h1>
+      <div style={{maxWidth:520,margin:"0 auto"}}>
       <div ref={receiptRef} style={{background:"#0f0f0f",border:"1px solid #1a1a1a",borderRadius:2,padding:"40px clamp(16px,5vw,36px)",position:"relative",boxShadow:"0 20px 60px rgba(0,0,0,0.5)"}}>
         {/* Torn top */}
         <div style={{position:"absolute",top:-1,left:0,right:0,height:6,background:BG,maskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")",WebkitMaskImage:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 100 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 6 Q 2.5 0 5 6 Q 7.5 0 10 6 Q 12.5 0 15 6 Q 17.5 0 20 6 Q 22.5 0 25 6 Q 27.5 0 30 6 Q 32.5 0 35 6 Q 37.5 0 40 6 Q 42.5 0 45 6 Q 47.5 0 50 6 Q 52.5 0 55 6 Q 57.5 0 60 6 Q 62.5 0 65 6 Q 67.5 0 70 6 Q 72.5 0 75 6 Q 77.5 0 80 6 Q 82.5 0 85 6 Q 87.5 0 90 6 Q 92.5 0 95 6 Q 97.5 0 100 6' fill='white'/%3E%3C/svg%3E\")"}}/>
@@ -142,6 +150,7 @@ export default function Landing(){
         <Link to="/demo" className="lp-cta" style={{...B,background:G,color:"#000",fontSize:16,padding:"16px 36px",textDecoration:"none",display:"inline-block"}}>Try the Audit (Free)</Link>
         <p style={{fontSize:13,color:"#555",marginTop:14}}>No signup. Takes 2 minutes.</p>
         <p style={{fontSize:13,color:MT,marginTop:6}}>Already convinced? <Link to="/app" style={{color:G,textDecoration:"none",fontWeight:600}}>Create a free account →</Link></p>
+      </div>
       </div>
     </section>
 

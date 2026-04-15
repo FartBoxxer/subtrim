@@ -37,7 +37,7 @@ export default function BlogPost(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title={`${post.title} | SubTrim Blog`}
+      title={`${post.title} | SubTrim`}
       description={post.description}
       canonical={`https://subtrim.dev/blog/${post.slug}`}
     />

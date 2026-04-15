@@ -43,7 +43,7 @@ export default function Compare(){
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
-      title={`${nameA} vs ${nameB} (${new Date().getFullYear()}) | Price & Feature Comparison | SubTrim`}
+      title={`${nameA} vs ${nameB} ${new Date().getFullYear()} | SubTrim`}
       description={`Compare ${nameA} (from ${fm(cheapestA)}/mo) vs ${nameB} (from ${fm(cheapestB)}/mo). Plans, pricing, features, pros & cons side by side.`}
       canonical={`https://subtrim.dev/compare/${slug}`}
     />

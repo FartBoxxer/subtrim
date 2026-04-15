@@ -12,7 +12,7 @@ export const AUTHORS = {
 export const BLOG_POSTS = [
   {
     slug: "how-much-do-americans-spend-on-subscriptions",
-    title: "How Much Do Americans Actually Spend on Subscriptions in 2026?",
+    title: "How Much Americans Spend on Subscriptions in 2026",
     description: "The average American household spends $273/month on subscriptions. Here's where that money goes and how to figure out if you're overpaying.",
     date: "2026-04-08",
     category: "data",
@@ -73,7 +73,7 @@ export const BLOG_POSTS = [
   },
   {
     slug: "netflix-vs-hulu-which-should-you-keep",
-    title: "Netflix vs Hulu: If You Can Only Keep One, Which Should It Be?",
+    title: "Netflix vs Hulu: Which Should You Keep in 2026?",
     description: "Breaking down Netflix and Hulu by price, content, and what kind of viewer you are. One of them might be costing you more than it's worth.",
     date: "2026-04-08",
     category: "compare",
