@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { createClient } from '@supabase/supabase-js';
 // html2canvas loaded dynamically when needed (large dep)
 import { CANCEL_GUIDES } from './data/cancelGuides';
+import { ALTERNATIVES } from './data/alternatives';
 import { CATS, LABELS, AUTO_PROMOS, TH, CURRENCIES, B, SB_W, dU, mS, mkFmt, genPalettes } from './data/appConstants';
 import { Ring, Confetti, Av } from './components/shared';
 
@@ -1039,7 +1040,7 @@ export default function App(){
                 {items.map((s,i)=>(
                   <div key={s.id} style={{display:"flex",alignItems:"center",padding:d?"14px 18px":"10px 14px",borderBottom:i<items.length-1?`1px solid ${t.el}`:"none"}}>
                     <div style={{width:d?38:32,height:d?38:32,borderRadius:"50%",background:(CATS[s.cat]?.c||"#666")+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:d?16:14,marginRight:d?12:10}}>{CATS[s.cat]?.e||"📦"}</div>
-                    <div style={{flex:1}}><div style={{fontSize:d?15:13,fontWeight:600}}>{s.name}</div><div style={{fontSize:d?12:10,color:t.mt}}>{k==="cancel"?`Saves ${fm(s.cost*12)}/yr`:k==="keep"?`${s.freq||"—"} · ${s.sat||0}★`:(()=>{const dg=getDowngrade(s.name,s.cost);return dg?`Switch to ${dg.name}, save ${fm(dg.save)}/mo`:"Consider a lower plan"})()}</div>{k==="cancel"&&CANCEL_GUIDES[s.name]&&<button onClick={()=>setEditId(s.id)} style={{...B,padding:0,fontSize:d?11:9,color:t.acc,fontWeight:600,marginTop:2}}>How to cancel →</button>}</div>
+                    <div style={{flex:1}}><div style={{fontSize:d?15:13,fontWeight:600}}>{s.name}</div><div style={{fontSize:d?12:10,color:t.mt}}>{k==="cancel"?`Saves ${fm(s.cost*12)}/yr`:k==="keep"?`${s.freq||"—"} · ${s.sat||0}★`:(()=>{const dg=getDowngrade(s.name,s.cost);return dg?`Switch to ${dg.name}, save ${fm(dg.save)}/mo`:"Consider a lower plan"})()}</div>{k==="cancel"&&(()=>{const sl=s.name.replace(/\+/g,' plus').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/-$/,'');const hasCG=!!CANCEL_GUIDES[s.name];const hasAlt=!!ALTERNATIVES[s.name];if(!hasCG&&!hasAlt)return null;const pill={display:"inline-flex",alignItems:"center",fontSize:d?11:10,fontWeight:600,textDecoration:"none",padding:d?"4px 10px":"3px 8px",borderRadius:999,whiteSpace:"nowrap"};return(<div style={{display:"flex",flexWrap:"wrap",gap:6,marginTop:6}}>{hasCG&&<a href={`/guides/cancel/${sl}`} target="_blank" rel="noopener noreferrer" style={{...pill,background:"#ef444418",color:"#ef4444",border:`1px solid #ef444433`}}>Cancel guide →</a>}{hasAlt&&<a href={`/alternatives/${sl}`} target="_blank" rel="noopener noreferrer" style={{...pill,background:t.acc+"18",color:t.acc,border:`1px solid ${t.acc}33`}}>Alternatives →</a>}</div>)})()}</div>
                     <span style={{fontSize:d?16:14,fontWeight:700,color:c}}>-{fm(s.cost)}</span>
                   </div>
                 ))}
