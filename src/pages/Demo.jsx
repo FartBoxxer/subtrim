@@ -23,6 +23,18 @@ const PICK_ORDER=[
   'NordVPN','1Password','Dropbox','Google One','iCloud+',
 ];
 
+const LOGOS={
+  'Netflix':'netflix','Spotify':'spotify','Hulu':'hulu','Disney+':'disneyplus',
+  'HBO Max':'max','Amazon Prime Video':'amazonprimevideo','Apple TV+':'appletv',
+  'YouTube Premium':'youtube','Paramount+':'paramountplus','Peacock':'peacock',
+  'Crunchyroll':'crunchyroll','Apple Music':'applemusic','YouTube Music':'youtubemusic',
+  'Tidal':'tidal','ChatGPT Plus':'openai','Claude Pro':'claude',
+  'Adobe Creative Cloud':'adobecreativecloud','Microsoft 365':'microsoft365',
+  'Notion':'notion','Xbox Game Pass':'xbox','PlayStation Plus':'playstation',
+  'NordVPN':'nordvpn','1Password':'1password','Dropbox':'dropbox',
+  'Google One':'googleone','iCloud+':'icloud',
+};
+
 const fO=[{v:"daily",e:"🔥",l:"Daily"},{v:"weekly",e:"👍",l:"Weekly"},{v:"monthly",e:"🤷",l:"Monthly"},{v:"rarely",e:"😬",l:"Rarely"},{v:"never",e:"💀",l:"Never"}];
 const fMap={daily:1,weekly:0.75,monthly:0.4,rarely:0.15,never:0};
 
@@ -33,6 +45,18 @@ const gR=s=>{
   if(s.freq==="monthly"&&s.cost>15&&s.sat<=3)return"downgrade";
   return"keep";
 };
+
+function Logo({name,cat,size=34}){
+  const[fail,setFail]=useState(false);
+  const c=CATS[cat]||{e:"📦",c:"#666"};
+  const slug=LOGOS[name];
+  const ic=Math.round(size*0.58);
+  return(
+    <div style={{width:size,height:size,borderRadius:"50%",background:c.c+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:Math.round(size*0.42),flexShrink:0}}>
+      {slug&&!fail?<img src={`https://cdn.simpleicons.org/${slug}/ffffff`} alt={name} width={ic} height={ic} loading="lazy" onError={()=>setFail(true)} style={{objectFit:"contain"}}/>:c.e}
+    </div>
+  );
+}
 
 export default function Demo(){
   const[picks,setPicks]=useState({});
@@ -113,11 +137,10 @@ export default function Demo(){
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:8,marginBottom:20}}>
             {filteredServices.map(name=>{
               const cat=SERVICE_CATS[name]||'productivity';
-              const c=CATS[cat]||{e:"📦",c:"#666"};
               const sel=!!picks[name];
               const tiers=TIERS[name];const price=tiers?tiers[0].p:9.99;
               return(<button key={name} onClick={()=>togglePick(name)} style={{display:"flex",alignItems:"center",gap:10,padding:"12px 14px",background:sel?G+"18":EL,border:sel?`2px solid ${G}`:"2px solid transparent",borderRadius:12,cursor:"pointer",color:TX,fontFamily:"inherit",transition:"all 0.15s",textAlign:"left"}}>
-                <div style={{width:34,height:34,borderRadius:"50%",background:c.c+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{c.e}</div>
+                <Logo name={name} cat={cat} size={34}/>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{fontSize:13,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{name}</div>
                   <div style={{fontSize:11,color:MT}}>{fm(price)}/mo</div>
@@ -146,13 +169,13 @@ export default function Demo(){
           <h1 style={{fontSize:26,fontWeight:800,marginBottom:8}}>Ready to audit</h1>
           <p style={{fontSize:15,color:MT,marginBottom:24,lineHeight:1.5}}>Answer 3 quick questions for each. We'll tell you what to keep, cancel, or downgrade.</p>
           <div style={{background:SF,borderRadius:14,overflow:"hidden",marginBottom:24}}>
-            {subs.map((s,i)=>{const c=CATS[s.cat]||{e:"📦",c:"#666"};return(
-              <div key={s.id} style={{display:"flex",alignItems:"center",padding:"14px 18px",borderBottom:i<subs.length-1?`1px solid ${EL}`:"none"}}>
-                <div style={{width:38,height:38,borderRadius:"50%",background:c.c+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,marginRight:12}}>{c.e}</div>
+            {subs.map((s,i)=>(
+              <div key={s.id} style={{display:"flex",alignItems:"center",padding:"14px 18px",borderBottom:i<subs.length-1?`1px solid ${EL}`:"none",gap:12}}>
+                <Logo name={s.name} cat={s.cat} size={38}/>
                 <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:15,fontWeight:600}}>{s.name}</div></div>
                 <span style={{fontSize:15,fontWeight:700,color:MT}}>-{fm(s.cost)}</span>
               </div>
-            )})}
+            ))}
           </div>
           <div style={{fontSize:14,color:MT,marginBottom:16}}>Total: <strong style={{color:TX}}>{fm(subs.reduce((a,s)=>a+s.cost,0))}/mo</strong></div>
           <div style={{display:"flex",gap:8,justifyContent:"center"}}>
@@ -163,12 +186,12 @@ export default function Demo(){
       )}
 
       {/* Audit questions */}
-      {step>=0&&step<subs.length&&(()=>{const s=subs[step];const c=CATS[s.cat]||{e:"📦",c:"#666"};return(
+      {step>=0&&step<subs.length&&(()=>{const s=subs[step];return(
         <div>
           <div style={{display:"flex",gap:2,marginBottom:16}}>{subs.map((_,i)=><div key={i} style={{flex:1,height:4,borderRadius:2,background:i<step?G:i===step?"#00b8d4":EL}}/>)}</div>
           <div style={{fontSize:13,color:MT,textAlign:"center",marginBottom:16}}>{step+1}/{subs.length}</div>
           <div style={{background:SF,borderRadius:16,padding:32,textAlign:"center"}}>
-            <div style={{width:56,height:56,borderRadius:"50%",background:c.c+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:26,margin:"0 auto 12px"}}>{c.e}</div>
+            <div style={{display:"flex",justifyContent:"center",marginBottom:12}}><Logo name={s.name} cat={s.cat} size={56}/></div>
             <div style={{fontSize:22,fontWeight:700,marginBottom:4}}>{s.name}</div>
             <div style={{fontSize:14,color:MT,marginBottom:4}}>{fm(s.cost)}/mo</div>
 
@@ -213,9 +236,9 @@ export default function Demo(){
           </div>
 
           <div style={{display:"flex",flexDirection:"column",gap:4,marginBottom:28}}>
-            {recs.map(s=>{const c=CATS[s.cat]||{e:"📦",c:"#666"};const rc=s.rec==="cancel"?"#ef4444":s.rec==="downgrade"?"#f59e0b":"#00d48a";return(
-              <div key={s.id} style={{display:"flex",alignItems:"center",padding:"12px 16px",background:SF,borderRadius:10,borderLeft:`3px solid ${rc}`}}>
-                <div style={{width:34,height:34,borderRadius:"50%",background:c.c+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,marginRight:10}}>{c.e}</div>
+            {recs.map(s=>{const rc=s.rec==="cancel"?"#ef4444":s.rec==="downgrade"?"#f59e0b":"#00d48a";return(
+              <div key={s.id} style={{display:"flex",alignItems:"center",padding:"12px 16px",background:SF,borderRadius:10,borderLeft:`3px solid ${rc}`,gap:10}}>
+                <Logo name={s.name} cat={s.cat} size={34}/>
                 <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:14,fontWeight:600}}>{s.name}</div><div style={{fontSize:11,color:MT}}>{s.freq||"-"} . {s.sat||0}★</div></div>
                 <span style={{fontSize:12,fontWeight:700,color:rc,background:rc+"18",padding:"3px 10px",borderRadius:6}}>{s.rec==="cancel"?"Cut":s.rec==="downgrade"?"Downgrade":"Keep"}</span>
               </div>
