@@ -123,7 +123,7 @@ export default function Landing(){
             <span style={{fontSize:14,color:"#ef4444",fontWeight:600}}>✂️ SubTrim savings</span>
             <span style={{fontSize:14,color:"#ef4444",fontWeight:700}}>-{fm(saved)}/mo</span>
           </div>
-          {showSavings&&<div style={{position:"absolute",left:0,right:0,top:"100%",background:"#1a1a1a",border:"1px solid #333",borderRadius:10,padding:"12px 16px",zIndex:10,animation:"fadeIn 0.15s ease"}}>
+          {showSavings&&<div style={{position:"absolute",left:-8,right:-8,top:"calc(100% + 6px)",background:"#0a0a0a",border:"1px solid #ef4444",borderRadius:12,padding:"14px 18px",zIndex:50,animation:"fadeIn 0.15s ease",boxShadow:"0 12px 32px rgba(0,0,0,0.85), 0 0 0 3px rgba(239,68,68,0.08)"}}>
             <div style={{fontSize:11,color:MT,fontWeight:600,marginBottom:8,textTransform:"uppercase",letterSpacing:1}}>Savings breakdown</div>
             {RECEIPT_ITEMS.filter(i=>i.cut).map((item,i)=>(
               <div key={i} style={{display:"flex",justifyContent:"space-between",padding:"4px 0",fontSize:13}}>

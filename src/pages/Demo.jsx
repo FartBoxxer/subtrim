@@ -1,24 +1,27 @@
 import { useState, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from '../components/Helmet';
+import { TIERS, SERVICE_CATS } from '../data/serviceData';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 const B={border:"none",borderRadius:10,padding:"10px 18px",cursor:"pointer",fontSize:13,fontWeight:600,fontFamily:"inherit",transition:"all 0.15s"};
 const fm=n=>'$'+Number(n).toFixed(2);
 
-const DEMO_SUBS=[
-  {id:1,name:"Netflix",cat:"streaming",cost:15.49,freq:null,sat:null,miss:null},
-  {id:2,name:"Spotify",cat:"music",cost:10.99,freq:null,sat:null,miss:null},
-  {id:3,name:"Hulu",cat:"streaming",cost:17.99,freq:null,sat:null,miss:null},
-  {id:4,name:"ChatGPT Plus",cat:"ai_tools",cost:20,freq:null,sat:null,miss:null},
-  {id:5,name:"Adobe CC",cat:"creative",cost:54.99,freq:null,sat:null,miss:null},
-  {id:6,name:"iCloud+",cat:"productivity",cost:2.99,freq:null,sat:null,miss:null},
-];
-
 const CATS={
   streaming:{e:"🎬",c:"#e74c3c"},music:{e:"🎵",c:"#a855f7"},gaming:{e:"🎮",c:"#2ecc71"},
-  productivity:{e:"💼",c:"#3498db"},creative:{e:"🎨",c:"#f39c12"},ai_tools:{e:"🤖",c:"#00bcd4"},
+  productivity:{e:"💼",c:"#3498db"},creative:{e:"🎨",c:"#f39c12"},ai:{e:"🤖",c:"#8b5cf6"},
+  cloud:{e:"☁️",c:"#06b6d4"},vpn:{e:"🛡️",c:"#607d8b"},passwords:{e:"🔑",c:"#78909c"},
 };
+
+const PICK_ORDER=[
+  'Netflix','Spotify','Hulu','Disney+','HBO Max','Amazon Prime Video','Apple TV+',
+  'YouTube Premium','Paramount+','Peacock','Crunchyroll',
+  'Apple Music','YouTube Music','Tidal',
+  'ChatGPT Plus','Claude Pro',
+  'Adobe Creative Cloud','Microsoft 365','Notion',
+  'Xbox Game Pass','PlayStation Plus',
+  'NordVPN','1Password','Dropbox','Google One','iCloud+',
+];
 
 const fO=[{v:"daily",e:"🔥",l:"Daily"},{v:"weekly",e:"👍",l:"Weekly"},{v:"monthly",e:"🤷",l:"Monthly"},{v:"rarely",e:"😬",l:"Rarely"},{v:"never",e:"💀",l:"Never"}];
 const fMap={daily:1,weekly:0.75,monthly:0.4,rarely:0.15,never:0};
@@ -32,13 +35,26 @@ const gR=s=>{
 };
 
 export default function Demo(){
-  const[subs,setSubs]=useState(DEMO_SUBS);
-  const[step,setStep]=useState(-1);
+  const[picks,setPicks]=useState({});
+  const[search,setSearch]=useState("");
+  const[subs,setSubs]=useState([]);
+  const[step,setStep]=useState(-2);
   const[done,setDone]=useState(false);
 
+  const togglePick=n=>setPicks(p=>{const next={...p};if(next[n])delete next[n];else{const t=TIERS[n];next[n]=t?t[0].p:9.99;}return next});
+  const pickCount=Object.keys(picks).length;
+  const pickTotal=Object.values(picks).reduce((a,v)=>a+v,0);
+
+  const startAudit=()=>{
+    const built=Object.entries(picks).map(([name,cost],i)=>({
+      id:i+1,name,cat:SERVICE_CATS[name]||'productivity',cost,freq:null,sat:null,miss:null
+    }));
+    setSubs(built);setStep(-1);
+  };
+
+  const resetAll=()=>{setPicks({});setSubs([]);setDone(false);setStep(-2);setSearch("")};
+
   const update=(id,field,val)=>setSubs(prev=>prev.map(s=>s.id===id?{...s,[field]:val}:s));
-  const cur=subs[step];
-  const ans=cur||{};
 
   const score=useMemo(()=>{
     const audited=subs.filter(s=>s.freq&&s.sat);
@@ -60,11 +76,13 @@ export default function Demo(){
     }catch{}
   };
 
+  const filteredServices=PICK_ORDER.filter(n=>!search||n.toLowerCase().includes(search.toLowerCase()));
+
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif"}}>
     <Helmet
       title="Try SubTrim Demo | Free Subscription Audit | SubTrim"
-      description="Try SubTrim's subscription audit with sample data. See how it works before creating an account."
+      description="Try SubTrim's subscription audit with your own subscriptions. See how it works before creating an account."
       canonical="https://subtrim.dev/demo"
     />
     <style>{`*{box-sizing:border-box;margin:0}button:active:not(:disabled){transform:scale(0.97)}`}</style>
@@ -74,30 +92,73 @@ export default function Demo(){
       <Link to="/app" style={{...B,background:G,color:"#000",padding:"10px 22px",fontSize:14,fontWeight:700,textDecoration:"none",borderRadius:10}}>Sign Up Free</Link>
     </nav>
 
-    <div style={{maxWidth:560,margin:"0 auto",padding:"20px 20px 80px"}}>
+    <div style={{maxWidth:640,margin:"0 auto",padding:"20px 20px 80px"}}>
       {/* Banner */}
       <div style={{background:G+"11",border:`1px solid ${G}33`,borderRadius:12,padding:"14px 20px",marginBottom:24,display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:18}}>🧪</span>
-        <div style={{fontSize:13,color:G,fontWeight:600}}>Demo Mode <span style={{fontWeight:400,color:MT}}>. Sample data, nothing is saved</span></div>
+        <div style={{fontSize:13,color:G,fontWeight:600}}>Demo Mode <span style={{fontWeight:400,color:MT}}>. Nothing is saved until you create an account</span></div>
       </div>
+
+      {/* Picker */}
+      {step===-2&&(
+        <div>
+          <div style={{textAlign:"center",marginBottom:20}}>
+            <div style={{fontSize:44,marginBottom:10}}>📋</div>
+            <h1 style={{fontSize:26,fontWeight:800,marginBottom:8}}>Pick your subscriptions</h1>
+            <p style={{fontSize:15,color:MT,lineHeight:1.5}}>Tap the ones you currently pay for. We'll audit them and tell you what to keep, cancel, or downgrade.</p>
+          </div>
+
+          <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search services..." style={{width:"100%",padding:"12px 16px",borderRadius:10,border:`1px solid #222`,background:SF,color:TX,fontSize:14,outline:"none",fontFamily:"inherit",marginBottom:12}}/>
+
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fill,minmax(200px,1fr))",gap:8,marginBottom:20}}>
+            {filteredServices.map(name=>{
+              const cat=SERVICE_CATS[name]||'productivity';
+              const c=CATS[cat]||{e:"📦",c:"#666"};
+              const sel=!!picks[name];
+              const tiers=TIERS[name];const price=tiers?tiers[0].p:9.99;
+              return(<button key={name} onClick={()=>togglePick(name)} style={{display:"flex",alignItems:"center",gap:10,padding:"12px 14px",background:sel?G+"18":EL,border:sel?`2px solid ${G}`:"2px solid transparent",borderRadius:12,cursor:"pointer",color:TX,fontFamily:"inherit",transition:"all 0.15s",textAlign:"left"}}>
+                <div style={{width:34,height:34,borderRadius:"50%",background:c.c+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:15,flexShrink:0}}>{c.e}</div>
+                <div style={{flex:1,minWidth:0}}>
+                  <div style={{fontSize:13,fontWeight:600,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{name}</div>
+                  <div style={{fontSize:11,color:MT}}>{fm(price)}/mo</div>
+                </div>
+                {sel&&<div style={{width:22,height:22,borderRadius:"50%",background:G,color:"#000",fontSize:13,fontWeight:800,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>✓</div>}
+              </button>);
+            })}
+          </div>
+
+          {filteredServices.length===0&&<div style={{textAlign:"center",color:MT,fontSize:14,padding:"20px 0"}}>No matches. Try a different search.</div>}
+
+          <div style={{position:"sticky",bottom:20,background:BG,padding:"16px 0",borderTop:`1px solid #222`,display:"flex",alignItems:"center",gap:12}}>
+            <div style={{flex:1}}>
+              <div style={{fontSize:13,color:MT}}>{pickCount} selected</div>
+              {pickCount>0&&<div style={{fontSize:15,fontWeight:700}}>{fm(pickTotal)}/mo</div>}
+            </div>
+            <button onClick={startAudit} disabled={pickCount===0} style={{...B,background:pickCount===0?EL:G,color:pickCount===0?MT:"#000",padding:"14px 28px",fontSize:15,fontWeight:700,borderRadius:10,opacity:pickCount===0?0.5:1,cursor:pickCount===0?"not-allowed":"pointer"}}>Start Audit →</button>
+          </div>
+        </div>
+      )}
 
       {/* Overview */}
       {step===-1&&!done&&(
         <div style={{textAlign:"center"}}>
           <div style={{fontSize:48,marginBottom:12}}>🧠</div>
-          <h1 style={{fontSize:26,fontWeight:800,marginBottom:8}}>Subscription Audit</h1>
-          <p style={{fontSize:15,color:MT,marginBottom:24,lineHeight:1.5}}>Answer 3 quick questions for each subscription. We'll tell you what to keep, cancel, or downgrade.</p>
+          <h1 style={{fontSize:26,fontWeight:800,marginBottom:8}}>Ready to audit</h1>
+          <p style={{fontSize:15,color:MT,marginBottom:24,lineHeight:1.5}}>Answer 3 quick questions for each. We'll tell you what to keep, cancel, or downgrade.</p>
           <div style={{background:SF,borderRadius:14,overflow:"hidden",marginBottom:24}}>
             {subs.map((s,i)=>{const c=CATS[s.cat]||{e:"📦",c:"#666"};return(
               <div key={s.id} style={{display:"flex",alignItems:"center",padding:"14px 18px",borderBottom:i<subs.length-1?`1px solid ${EL}`:"none"}}>
                 <div style={{width:38,height:38,borderRadius:"50%",background:c.c+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,marginRight:12}}>{c.e}</div>
-                <div style={{flex:1}}><div style={{fontSize:15,fontWeight:600}}>{s.name}</div></div>
+                <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:15,fontWeight:600}}>{s.name}</div></div>
                 <span style={{fontSize:15,fontWeight:700,color:MT}}>-{fm(s.cost)}</span>
               </div>
             )})}
           </div>
           <div style={{fontSize:14,color:MT,marginBottom:16}}>Total: <strong style={{color:TX}}>{fm(subs.reduce((a,s)=>a+s.cost,0))}/mo</strong></div>
-          <button onClick={()=>setStep(0)} style={{...B,background:G,color:"#000",padding:"14px 32px",fontSize:16,fontWeight:700,borderRadius:10}}>Start Audit</button>
+          <div style={{display:"flex",gap:8,justifyContent:"center"}}>
+            <button onClick={()=>setStep(-2)} style={{...B,background:EL,color:MT,padding:"14px 22px",fontSize:14,borderRadius:10}}>← Edit list</button>
+            <button onClick={()=>setStep(0)} style={{...B,background:G,color:"#000",padding:"14px 32px",fontSize:16,fontWeight:700,borderRadius:10}}>Start Audit</button>
+          </div>
         </div>
       )}
 
@@ -128,7 +189,7 @@ export default function Demo(){
             </div>
           </div>
           <div style={{display:"flex",gap:8,marginTop:16}}>
-            <button onClick={()=>setStep(step-1)} disabled={step===0} style={{...B,flex:1,background:EL,color:step===0?"#333":MT,fontSize:14,borderRadius:10,padding:"14px",opacity:step===0?0.4:1}}>← Back</button>
+            <button onClick={()=>setStep(step-1)} style={{...B,flex:1,background:EL,color:MT,fontSize:14,borderRadius:10,padding:"14px"}}>← Back</button>
             <button onClick={()=>{if(step<subs.length-1)setStep(step+1);else finish()}} style={{...B,flex:2,background:G,color:"#000",fontWeight:700,fontSize:14,borderRadius:10,padding:"14px"}}>{step<subs.length-1?"Next →":"Finish Audit"}</button>
           </div>
         </div>
@@ -155,7 +216,7 @@ export default function Demo(){
             {recs.map(s=>{const c=CATS[s.cat]||{e:"📦",c:"#666"};const rc=s.rec==="cancel"?"#ef4444":s.rec==="downgrade"?"#f59e0b":"#00d48a";return(
               <div key={s.id} style={{display:"flex",alignItems:"center",padding:"12px 16px",background:SF,borderRadius:10,borderLeft:`3px solid ${rc}`}}>
                 <div style={{width:34,height:34,borderRadius:"50%",background:c.c+"22",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,marginRight:10}}>{c.e}</div>
-                <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:14,fontWeight:600}}>{s.name}</div><div style={{fontSize:11,color:MT}}>{s.freq||"—"} · {s.sat||0}★</div></div>
+                <div style={{flex:1,textAlign:"left"}}><div style={{fontSize:14,fontWeight:600}}>{s.name}</div><div style={{fontSize:11,color:MT}}>{s.freq||"-"} . {s.sat||0}★</div></div>
                 <span style={{fontSize:12,fontWeight:700,color:rc,background:rc+"18",padding:"3px 10px",borderRadius:6}}>{s.rec==="cancel"?"Cut":s.rec==="downgrade"?"Downgrade":"Keep"}</span>
               </div>
             )})}
@@ -167,7 +228,7 @@ export default function Demo(){
             <Link to="/app" style={{...B,background:G,color:"#000",padding:"14px 32px",fontSize:15,fontWeight:700,textDecoration:"none",display:"inline-block",borderRadius:10}}>Save & Create Account</Link>
           </div>
 
-          <button onClick={()=>{setSubs(DEMO_SUBS);setDone(false);setStep(-1)}} style={{...B,background:EL,color:MT,fontSize:13,borderRadius:8}}>Reset Demo</button>
+          <button onClick={resetAll} style={{...B,background:EL,color:MT,fontSize:13,borderRadius:8}}>Reset Demo</button>
         </div>
       )}
     </div>
