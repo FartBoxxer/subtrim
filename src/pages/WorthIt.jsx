@@ -3,7 +3,7 @@ import { WORTH_IT, WORTH_IT_SLUGS } from '../data/worthIt';
 import { ALTERNATIVES } from '../data/alternatives';
 import { CANCEL_GUIDES } from '../data/cancelGuides';
 import { TIERS } from '../data/serviceData';
-import { Helmet } from '../components/Helmet';
+import { Helmet, JsonLd } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 const fm=n=>'$'+Number(n).toFixed(2);
@@ -40,6 +40,30 @@ export default function WorthIt(){
       description={`${data.summary} Full breakdown of who should keep ${name} and who should cancel.`}
       canonical={`https://subtrim.dev/worth-it/${service}`}
     />
+    <JsonLd data={{
+      "@context":"https://schema.org","@type":"Product",
+      name,
+      description:data.summary,
+      brand:{"@type":"Brand",name},
+      offers:{"@type":"Offer",price:cheapest.toFixed(2),priceCurrency:"USD",availability:"https://schema.org/InStock"},
+      review:{
+        "@type":"Review",
+        reviewRating:{"@type":"Rating",ratingValue:data.verdict==='yes'?5:data.verdict==='conditional'?3:2,bestRating:5,worstRating:1},
+        author:{"@type":"Organization",name:"SubTrim"},
+        datePublished:`${year}-01-01`,
+        reviewBody:`${VERDICT_LABELS[data.verdict]}. ${data.summary} Keep it if: ${data.whoShouldKeep} Cancel it if: ${data.whoShouldCancel}`,
+        name:`Is ${name} Worth It in ${year}?`
+      }
+    }}/>
+    <JsonLd data={{
+      "@context":"https://schema.org","@type":"FAQPage",
+      mainEntity:[
+        {"@type":"Question",name:`Is ${name} worth it in ${year}?`,acceptedAnswer:{"@type":"Answer",text:`${VERDICT_LABELS[data.verdict]}. ${data.summary}`}},
+        {"@type":"Question",name:`Who should keep ${name}?`,acceptedAnswer:{"@type":"Answer",text:data.whoShouldKeep}},
+        {"@type":"Question",name:`Who should cancel ${name}?`,acceptedAnswer:{"@type":"Answer",text:data.whoShouldCancel}},
+        ...(data.breakEven?[{"@type":"Question",name:`When does ${name} break even?`,acceptedAnswer:{"@type":"Answer",text:data.breakEven}}]:[])
+      ]
+    }}/>
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:900,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>
       <Link to="/app" style={{background:G,color:"#000",border:"none",borderRadius:10,padding:"10px 22px",fontSize:14,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Try SubTrim Free</Link>

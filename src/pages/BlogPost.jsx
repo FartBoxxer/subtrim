@@ -1,5 +1,5 @@
 import { useParams, Link, Navigate } from 'react-router-dom';
-import { Helmet } from '../components/Helmet';
+import { Helmet, JsonLd } from '../components/Helmet';
 import { BLOG_POSTS, AUTHORS } from '../data/blogPosts';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
@@ -41,6 +41,18 @@ export default function BlogPost(){
       description={post.description}
       canonical={`https://subtrim.dev/blog/${post.slug}`}
     />
+    <JsonLd data={{
+      "@context":"https://schema.org","@type":"BlogPosting",
+      headline:post.title,
+      description:post.description,
+      datePublished:post.date,
+      dateModified:post.date,
+      author:post.author&&AUTHORS[post.author]?{"@type":"Person",name:AUTHORS[post.author].name,jobTitle:AUTHORS[post.author].title}:{"@type":"Organization",name:"SubTrim"},
+      publisher:{"@type":"Organization",name:"SubTrim",logo:{"@type":"ImageObject",url:"https://subtrim.dev/icon-512.png"}},
+      mainEntityOfPage:{"@type":"WebPage","@id":`https://subtrim.dev/blog/${post.slug}`},
+      image:"https://subtrim.dev/og.png",
+      articleSection:post.category
+    }}/>
 
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:900,margin:"0 auto",width:"100%",boxSizing:"border-box"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none"}}>✂️ SubTrim</Link>

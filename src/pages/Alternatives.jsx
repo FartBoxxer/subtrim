@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { TIERS } from '../data/serviceData';
 import { ALTERNATIVES, ALT_SLUGS } from '../data/alternatives';
 import { CANCEL_GUIDES } from '../data/cancelGuides';
-import { Helmet } from '../components/Helmet';
+import { Helmet, JsonLd } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 const fm=n=>'$'+Number(n).toFixed(2);
@@ -32,6 +32,21 @@ export default function Alternatives(){
       description={`Looking to replace ${name}? Compare the best alternatives with pricing, features, and our recommendations.`}
       canonical={`https://subtrim.dev/alternatives/${service}`}
     />
+    <JsonLd data={{
+      "@context":"https://schema.org","@type":"ItemList",
+      name:`Best ${name} Alternatives`,
+      description:data.tagline,
+      numberOfItems:data.alts.length,
+      itemListElement:data.alts.map((alt,i)=>({
+        "@type":"ListItem",position:i+1,
+        item:{
+          "@type":"Product",
+          name:alt.name,
+          description:alt.why,
+          offers:{"@type":"Offer",price:Number(alt.price).toFixed(2),priceCurrency:"USD"}
+        }
+      }))
+    }}/>
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:900,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>
       <Link to="/app" style={{background:G,color:"#000",border:"none",borderRadius:10,padding:"10px 22px",fontSize:14,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Try SubTrim Free</Link>

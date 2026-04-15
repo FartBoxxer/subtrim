@@ -2,7 +2,7 @@ import { useParams, Link } from 'react-router-dom';
 import { TIERS, SERVICE_CATS, CATS } from '../data/serviceData';
 import { CANCEL_GUIDES } from '../data/cancelGuides';
 import { COMPARE_DATA } from '../data/compareData';
-import { Helmet } from '../components/Helmet';
+import { Helmet, JsonLd } from '../components/Helmet';
 
 const BG='#0d0d0d',SF='#141414',EL='#1f1f1f',G='#00d48a',MT='#888',TX='#fff';
 const fm=n=>'$'+Number(n).toFixed(2);
@@ -47,6 +47,16 @@ export default function Compare(){
       description={`Compare ${nameA} (from ${fm(cheapestA)}/mo) vs ${nameB} (from ${fm(cheapestB)}/mo). Plans, pricing, features, pros & cons side by side.`}
       canonical={`https://subtrim.dev/compare/${slug}`}
     />
+    <JsonLd data={{
+      "@context":"https://schema.org","@type":"ItemList",
+      name:`${nameA} vs ${nameB}`,
+      description:`Side-by-side comparison of ${nameA} and ${nameB}: pricing, plans, features.`,
+      numberOfItems:2,
+      itemListElement:[
+        {"@type":"ListItem",position:1,item:{"@type":"Product",name:nameA,category:infoA.l,offers:{"@type":"Offer",price:cheapestA.toFixed(2),priceCurrency:"USD"}}},
+        {"@type":"ListItem",position:2,item:{"@type":"Product",name:nameB,category:infoB.l,offers:{"@type":"Offer",price:cheapestB.toFixed(2),priceCurrency:"USD"}}}
+      ]
+    }}/>
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px 24px",maxWidth:900,margin:"0 auto"}}>
       <Link to="/" style={{fontSize:20,fontWeight:800,color:TX,textDecoration:"none",letterSpacing:"-0.5px"}}>✂️ SubTrim</Link>
       <Link to="/app" style={{background:G,color:"#000",border:"none",borderRadius:10,padding:"10px 22px",fontSize:14,fontWeight:700,textDecoration:"none",fontFamily:"inherit"}}>Try SubTrim Free</Link>
