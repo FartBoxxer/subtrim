@@ -17,6 +17,7 @@ const Terms = lazy(() => import("./pages/Terms.jsx"));
 const Demo = lazy(() => import("./pages/Demo.jsx"));
 const Blog = lazy(() => import("./pages/Blog.jsx"));
 const BlogPost = lazy(() => import("./pages/BlogPost.jsx"));
+const WorthIt = lazy(() => import("./pages/WorthIt.jsx"));
 const NotFound = lazy(() => import("./pages/NotFound.jsx"));
 
 const Loading = () => (
@@ -78,6 +79,7 @@ createRoot(document.getElementById("root")).render(
             <Route path="/demo" element={<Demo />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/worth-it/:service" element={<WorthIt />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
             {/* Fallback — 404 page */}

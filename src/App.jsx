@@ -1030,6 +1030,11 @@ export default function App(){
             <div style={{fontSize:d?10:8,color:t.dm,marginTop:14}}>subtrim.dev</div>
           </div>
 
+          <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap",margin:isMobile?"14px 0 4px":"18px 0 4px"}}>
+            <button onClick={exportReport} style={{...B,background:t.acc,color:"#000",fontWeight:700,padding:d?"10px 20px":"8px 16px",fontSize:d?13:11,borderRadius:10}}>📸 Share audit</button>
+            <button onClick={()=>{const text=`My SubScore is ${score}/100. Cutting ${cuts.length} subs saves ${fm(cuts.reduce((a,s)=>a+s.cost,0)*12)}/yr. Audit yours:`;const url='https://subtrim.dev';if(navigator.share){navigator.share({title:'SubTrim audit',text,url}).catch(()=>{})}else{navigator.clipboard.writeText(`${text} ${url}`).then(()=>notify('Copied to clipboard')).catch(()=>{})}}} style={{...B,background:t.el,color:t.mt2,fontWeight:600,padding:d?"10px 20px":"8px 16px",fontSize:d?13:11,borderRadius:10,border:`1px solid ${t.bd2}`}}>🔗 Copy summary</button>
+          </div>
+
           <div style={isMobile?{}:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
           {[{k:"keep",l:"Keep",c:"#00d48a"},{k:"downgrade",l:"Downgrade",c:"#f59e0b"},{k:"cancel",l:"Cut",c:"#ef4444"}].map(({k,l,c})=>{
             const items=recs.filter(r=>r.rec===k);

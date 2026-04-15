@@ -19,12 +19,14 @@ import NotFound from './pages/NotFound.jsx';
 import Demo from './pages/Demo.jsx';
 import Blog from './pages/Blog.jsx';
 import BlogPost from './pages/BlogPost.jsx';
+import WorthIt from './pages/WorthIt.jsx';
 
 // Import data for route generation
 import { CANCEL_GUIDES } from './data/cancelGuides';
 import { TIERS, SERVICE_CATS, COMPARE_PAIRS } from './data/serviceData';
 import { ALTERNATIVES } from './data/alternatives';
 import { BLOG_POSTS } from './data/blogPosts';
+import { WORTH_IT } from './data/worthIt';
 
 // Slug helper (same as used in page components)
 const toSlug = n => n.replace(/\+/g, ' plus').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-$/, '');
@@ -84,6 +86,11 @@ export function getRoutes() {
     routes.push(`/blog/${post.slug}`);
   }
 
+  // Worth-It pages — one per service in WORTH_IT
+  for (const name of Object.keys(WORTH_IT)) {
+    routes.push(`/worth-it/${toSlug(name)}`);
+  }
+
   return routes;
 }
 
@@ -109,6 +116,7 @@ export function render(url) {
           <Route path="/demo" element={<Demo />} />
           <Route path="/blog" element={<Blog />} />
           <Route path="/blog/:slug" element={<BlogPost />} />
+          <Route path="/worth-it/:service" element={<WorthIt />} />
           <Route path="/privacy" element={<Privacy />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="*" element={<NotFound />} />

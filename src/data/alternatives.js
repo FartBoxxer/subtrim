@@ -240,6 +240,180 @@ export const ALTERNATIVES = {
       { name: 'Disney+', why: 'Better for families. Marvel, Star Wars, Pixar. 4K included.', price: 7.99 },
     ]
   },
+  'Peloton': {
+    tagline: 'Peloton App getting pricey? These fitness apps deliver similar workouts for less.',
+    alts: [
+      { name: 'Apple Fitness+', why: 'Cheaper. Great trainer-led classes. Included free with some Apple One plans.', price: 9.99 },
+      { name: 'Nike Training Club', why: 'Completely free. Strength, yoga, and HIIT from top trainers.', price: 0 },
+      { name: 'iFit', why: 'Works with NordicTrack and ProForm equipment. Global workouts filmed outdoors.', price: 15 },
+      { name: 'Les Mills+', why: 'BodyPump, BodyCombat, and more. Strong strength programming.', price: 11.99 },
+      { name: 'YouTube', why: 'Free. Huge library of workouts from creators like Caroline Girvan and FitnessBlender.', price: 0 },
+    ]
+  },
+  'Calm': {
+    tagline: 'Calm not clicking? These meditation and sleep apps offer different approaches.',
+    alts: [
+      { name: 'Headspace', why: 'Structured programs for beginners. Great sleepcasts and focus music.', price: 12.99 },
+      { name: 'Insight Timer', why: 'Largest free meditation library. 150K+ guided sessions.', price: 0 },
+      { name: 'Balance', why: 'Personalized daily meditation plan. First year often free.', price: 11.99 },
+      { name: 'Waking Up', why: 'Philosophical approach from Sam Harris. Pay-what-you-can policy.', price: 14.99 },
+    ]
+  },
+  'Headspace': {
+    tagline: 'Want to try a different meditation app? These alternatives all bring something unique.',
+    alts: [
+      { name: 'Calm', why: 'Better sleep stories (including Matthew McConaughey). Music and nature sounds.', price: 14.99 },
+      { name: 'Insight Timer', why: 'Free tier is extensive. Community-driven with thousands of teachers.', price: 0 },
+      { name: 'Waking Up', why: 'For people wanting depth beyond basic mindfulness. Sam Harris course.', price: 14.99 },
+      { name: 'Ten Percent Happier', why: 'Great for skeptics. Dan Harris interviews famous teachers.', price: 11.67 },
+    ]
+  },
+  'Strava': {
+    tagline: 'Strava subscription not pulling its weight? These training apps work for runners and cyclists too.',
+    alts: [
+      { name: 'Garmin Connect', why: 'Free with any Garmin watch. Training plans, routes, and analysis.', price: 0 },
+      { name: 'TrainingPeaks', why: 'Best for serious athletes with a coach. Structured workout tracking.', price: 19.95 },
+      { name: 'Komoot', why: 'Better for route planning, especially cycling and hiking. One-time regional fee option.', price: 4.99 },
+      { name: 'AllTrails+', why: 'Best for hikers and trail runners. Offline maps and 3D previews.', price: 2.99 },
+      { name: 'Runna', why: 'AI-driven running plans. Adapts to your schedule and pace.', price: 17.99 },
+    ]
+  },
+  'LinkedIn Premium': {
+    tagline: 'LinkedIn Premium not converting to interviews? Put the money toward these instead.',
+    alts: [
+      { name: 'Blind', why: 'Anonymous workplace conversations. See real salaries and company reviews.', price: 0 },
+      { name: 'Wellfound (AngelList)', why: 'Free. Direct access to startup founders and jobs.', price: 0 },
+      { name: 'Hunter.io', why: 'Find email addresses for cold outreach. Free tier included.', price: 0 },
+      { name: 'Teal', why: 'Free job tracker and resume builder. Premium features cheaper than LinkedIn.', price: 9 },
+      { name: 'Resume-worthy coursework', why: 'Coursera or a niche certification often beats Premium for landing interviews.', price: 49 },
+    ]
+  },
+  'GitHub Copilot': {
+    tagline: 'Exploring other AI coding tools? These alternatives compete directly with Copilot.',
+    alts: [
+      { name: 'Cursor', why: 'AI-first editor fork of VS Code. Better agent and chat than Copilot.', price: 20 },
+      { name: 'Claude Code', why: 'Terminal-native AI pair programmer. Long context and tool use.', price: 20 },
+      { name: 'Codeium', why: 'Free tier for individuals. Works across IDEs. Solid completions.', price: 0 },
+      { name: 'Tabnine', why: 'Privacy-focused. Can run locally. Good for enterprise.', price: 12 },
+      { name: 'ChatGPT Plus', why: 'General-purpose AI works for coding. Cheaper if you already pay for it.', price: 20 },
+    ]
+  },
+  'LastPass': {
+    tagline: 'After LastPass\'s breaches, users have been migrating. Here is where they went.',
+    alts: [
+      { name: 'Bitwarden', why: 'Open source. Generous free tier. Never had a breach. Most common migration target.', price: 0 },
+      { name: '1Password', why: 'Best UI and family sharing. Clean audit history. Used by most tech companies.', price: 2.99 },
+      { name: 'Dashlane', why: 'Built-in VPN. Dark web monitoring. Good autofill.', price: 4.99 },
+      { name: 'Proton Pass', why: 'End-to-end encrypted with hide-my-email aliases. Swiss privacy.', price: 1.99 },
+      { name: 'Apple Passwords', why: 'Built in on Apple devices. Free. Good enough for most Apple-only users.', price: 0 },
+    ]
+  },
+  'Dashlane': {
+    tagline: 'Dashlane pricey for what you need? Other password managers might fit better.',
+    alts: [
+      { name: 'Bitwarden', why: 'Open source. Best free tier of any password manager. Self-hosting option.', price: 0 },
+      { name: '1Password', why: 'Best UX and polish. Family sharing is excellent. No free tier though.', price: 2.99 },
+      { name: 'Proton Pass', why: 'End-to-end encrypted. Email aliases built in. Cheaper than Dashlane.', price: 1.99 },
+      { name: 'Apple Passwords', why: 'Built into Apple devices. Completely free. Passkey support.', price: 0 },
+    ]
+  },
+  'Grammarly': {
+    tagline: 'Grammarly worth the price? These alternatives may cover your needs.',
+    alts: [
+      { name: 'LanguageTool', why: 'Open source. Strong grammar and style. Privacy-focused. Free tier is generous.', price: 4.99 },
+      { name: 'ProWritingAid', why: 'Deeper style analysis for writers. Lifetime option available.', price: 10 },
+      { name: 'Microsoft Editor', why: 'Free with Microsoft 365. Built into Word and Edge.', price: 0 },
+      { name: 'ChatGPT Plus', why: 'Just ask it to proofread. More flexible than dedicated grammar checkers.', price: 20 },
+      { name: 'Hemingway Editor', why: 'One-time purchase. Focuses on readability over grammar.', price: 0 },
+    ]
+  },
+  'Kindle Unlimited': {
+    tagline: 'Kindle Unlimited catalog feeling thin? These reading subscriptions have real books.',
+    alts: [
+      { name: 'Audible', why: 'Audiobooks plus a growing library of reads. One credit per month plus included titles.', price: 14.95 },
+      { name: 'Scribd (Everand)', why: 'Books, audiobooks, magazines, and documents in one subscription.', price: 11.99 },
+      { name: 'Libby', why: 'Free with a library card. Borrow ebooks and audiobooks from your local library.', price: 0 },
+      { name: 'Hoopla', why: 'Also free with a library card. Includes movies, music, and comics.', price: 0 },
+      { name: 'Audible Plus', why: 'Cheaper Audible tier with unlimited included listens (no credits).', price: 7.95 },
+    ]
+  },
+  'New York Times': {
+    tagline: 'Paying for the NYT but barely reading it? These alternatives fit other news habits.',
+    alts: [
+      { name: 'The Washington Post', why: 'Political coverage rivals NYT. Often 50% off promos.', price: 4 },
+      { name: 'The Wall Street Journal', why: 'Best for business and markets. Opinion section leans right.', price: 9.99 },
+      { name: 'The Economist', why: 'Weekly global analysis. No daily churn to keep up with.', price: 20.83 },
+      { name: 'Apple News+', why: 'Bundle of 300+ publications including some NYT content. One price.', price: 12.99 },
+      { name: 'Ground News', why: 'Shows political bias for each story. Great for balanced media diets.', price: 9.99 },
+    ]
+  },
+  'ExpressVPN': {
+    tagline: 'ExpressVPN expensive? These VPNs offer similar speeds for less.',
+    alts: [
+      { name: 'NordVPN', why: 'Similar features at lower long-term prices. Meshnet and dedicated IPs.', price: 3.09 },
+      { name: 'Surfshark', why: 'Unlimited devices on one plan. Cheapest 2-year deals.', price: 2.49 },
+      { name: 'Mullvad VPN', why: 'Flat €5/mo. No email required. Best privacy stance.', price: 5 },
+      { name: 'ProtonVPN', why: 'Free tier with unlimited data. Swiss jurisdiction. Strong audited privacy.', price: 4.99 },
+    ]
+  },
+  'Duolingo Plus': {
+    tagline: 'Duolingo not moving the needle? Actual fluency requires different tools.',
+    alts: [
+      { name: 'Busuu', why: 'Community corrections from native speakers. Grammar focus.', price: 13.95 },
+      { name: 'Babbel', why: 'Conversational lessons. Strong for European languages. Lifetime option available.', price: 13.95 },
+      { name: 'italki', why: 'Real 1-on-1 lessons with native speakers. Pay per lesson ($5-20).', price: 10 },
+      { name: 'Pimsleur', why: 'Audio-first. Great for commutes. Builds real speaking ability.', price: 14.95 },
+      { name: 'Anki', why: 'Free (desktop) spaced-repetition flashcards. Pair with any immersion source.', price: 0 },
+    ]
+  },
+  'Walmart+': {
+    tagline: 'Walmart+ not earning its keep? These memberships might be a better fit.',
+    alts: [
+      { name: 'Amazon Prime', why: 'Bigger shipping selection plus Prime Video and Music. The default benchmark.', price: 14.99 },
+      { name: 'Target Circle 360', why: 'Similar benefits for Target shoppers. Same-day delivery via Shipt.', price: 8.25 },
+      { name: 'Costco Gold Star', why: 'Annual fee pays for itself if you buy groceries in bulk.', price: 5 },
+      { name: 'Sam\'s Club', why: 'Owned by Walmart. Bulk shopping with included gas discounts.', price: 4.17 },
+    ]
+  },
+  'Instacart+': {
+    tagline: 'Not using Instacart+ enough to justify it? These grocery delivery options work differently.',
+    alts: [
+      { name: 'Amazon Fresh', why: 'Included with Prime in many cities. No markups on most items.', price: 0 },
+      { name: 'Walmart+', why: 'Free grocery delivery on $35+ orders. Adds gas discounts and Paramount+.', price: 12.95 },
+      { name: 'Target Circle 360', why: 'Same-day grocery delivery via Shipt on $35+ orders.', price: 8.25 },
+      { name: 'Shipt', why: 'Standalone alternative. Delivers from multiple stores.', price: 10.99 },
+      { name: 'Store curbside pickup', why: 'Free at Walmart, Target, Kroger, and most chains. Skip delivery fees entirely.', price: 0 },
+    ]
+  },
+  'DoorDash DashPass': {
+    tagline: 'DashPass worth the $9.99? These food delivery subs may fit your habits better.',
+    alts: [
+      { name: 'Uber One', why: 'Free delivery on Uber Eats plus ride discounts. Bundles two services.', price: 9.99 },
+      { name: 'Grubhub+', why: 'Free delivery on $12+ orders. Often cheaper fees than DoorDash.', price: 9.99 },
+      { name: 'Chase Sapphire Reserve DashPass', why: 'Free DashPass for 1 year with Chase Sapphire Reserve or Preferred.', price: 0 },
+      { name: 'Cook at home more', why: 'Food delivery memberships make ordering easier, not cheaper overall.', price: 0 },
+    ]
+  },
+  'Planet Fitness': {
+    tagline: 'Outgrown Planet Fitness? These gym memberships level up your training.',
+    alts: [
+      { name: 'Anytime Fitness', why: '24/7 access. 5000+ locations worldwide with one membership.', price: 40 },
+      { name: 'LA Fitness', why: 'Pool, sauna, basketball courts, and classes. Mid-tier price.', price: 35 },
+      { name: 'YMCA', why: 'Sliding scale fees. Pool, classes, and family memberships.', price: 55 },
+      { name: 'Home gym (one-time)', why: 'Adjustable dumbbells and a rack pay for themselves in ~1 year vs gym fees.', price: 0 },
+      { name: 'Local independent gym', why: 'Often $20-30/mo for serious lifters. No commercial gym gimmicks.', price: 25 },
+    ]
+  },
+  'Anytime Fitness': {
+    tagline: 'Anytime Fitness locked in a contract? When it ends, consider these options.',
+    alts: [
+      { name: 'Planet Fitness', why: 'Cheapest national chain. Basic equipment. No commitment on some plans.', price: 24.99 },
+      { name: 'LA Fitness', why: 'Fuller amenities (pool, classes, basketball). Month-to-month options.', price: 35 },
+      { name: 'YMCA', why: 'Sliding scale fees by income. Pool and family-friendly.', price: 55 },
+      { name: 'CrossFit gym', why: 'If you like structure and community. More expensive but high engagement.', price: 150 },
+      { name: 'Home gym (one-time)', why: 'Break-even in 12-18 months. Never drive to the gym again.', price: 0 },
+    ]
+  },
 };
 
 // Build slug map
