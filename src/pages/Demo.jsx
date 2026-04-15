@@ -62,10 +62,15 @@ const fO=[{v:"daily",e:"🔥",l:"Daily"},{v:"weekly",e:"👍",l:"Weekly"},{v:"mo
 const fMap={daily:1,weekly:0.75,monthly:0.4,rarely:0.15,never:0};
 
 const gR=s=>{
-  if(!s.freq||!s.sat)return"keep";
-  if((s.freq==="rarely"||s.freq==="never")&&s.sat<=2&&!s.miss)return"cancel";
-  if((s.freq==="rarely"||s.freq==="never")&&s.sat<=3)return"downgrade";
-  if(s.freq==="monthly"&&s.cost>15&&s.sat<=3)return"downgrade";
+  const f=s.freq,sa=s.sat,m=s.miss,c=s.cost;
+  if(!f||!sa)return"keep";
+  if(f==="never")return"cancel";
+  if(f==="rarely"&&(!m||sa<=2))return"cancel";
+  if(!m&&sa<=2)return"cancel";
+  if(f==="rarely")return"downgrade";
+  if(f==="monthly"&&(!m||sa<=3||c>10))return"downgrade";
+  if(!m&&c>10)return"downgrade";
+  if(sa<=2&&c>10)return"downgrade";
   return"keep";
 };
 

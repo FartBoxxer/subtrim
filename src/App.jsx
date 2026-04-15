@@ -993,7 +993,7 @@ export default function App(){
   // ═══ AUDIT ═══
   const aud=act.filter(s=>!s.trial);
   const fO=[{v:"daily",e:"🔥",l:"Daily"},{v:"weekly",e:"👍",l:"Weekly"},{v:"monthly",e:"🤷",l:"Monthly"},{v:"rarely",e:"😬",l:"Rarely"},{v:"never",e:"💀",l:"Never"}];
-  const gR=s=>{const a=aAns[s.id]||{},f=a.frequency||s.freq,sa=a.satisfaction||s.sat,m=a.wouldMiss!==undefined?a.wouldMiss:s.miss;if(!f||!sa)return"keep";if((f==="rarely"||f==="never")&&sa<=2&&!m)return"cancel";if((f==="rarely"||f==="never")&&sa<=3)return"downgrade";if(f==="monthly"&&s.cost>15&&sa<=3)return"downgrade";return"keep"};
+  const gR=s=>{const a=aAns[s.id]||{},f=a.frequency||s.freq,sa=a.satisfaction||s.sat,m=a.wouldMiss!==undefined?a.wouldMiss:s.miss,c=s.cost;if(!f||!sa)return"keep";if(f==="never")return"cancel";if(f==="rarely"&&(!m||sa<=2))return"cancel";if(!m&&sa<=2)return"cancel";if(f==="rarely")return"downgrade";if(f==="monthly"&&(!m||sa<=3||c>10))return"downgrade";if(!m&&c>10)return"downgrade";if(sa<=2&&c>10)return"downgrade";return"keep"};
 
   const Audit=()=>{
     if(aStep===-1){
