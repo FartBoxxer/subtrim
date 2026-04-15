@@ -14,13 +14,6 @@ const RECEIPT_ITEMS=[
 ];
 
 export default function Landing(){
-  const glowRef=useRef(null);
-  useEffect(()=>{
-    if(window.matchMedia('(hover:none)').matches)return;
-    const move=e=>{if(glowRef.current)glowRef.current.style.transform=`translate(${e.clientX-70}px,${e.clientY-70}px)`};
-    window.addEventListener('mousemove',move);
-    return()=>window.removeEventListener('mousemove',move);
-  },[]);
   const[cfName,setCfName]=useState('');
   const[cfEmail,setCfEmail]=useState('');
   const[cfMsg,setCfMsg]=useState('');
@@ -70,7 +63,6 @@ export default function Landing(){
 
   return(
   <div style={{background:BG,minHeight:"100vh",color:TX,fontFamily:"'Inter',system-ui,sans-serif",position:"relative"}}>
-    <div ref={glowRef} aria-hidden="true" style={{position:"fixed",top:0,left:0,width:140,height:140,borderRadius:"50%",background:"radial-gradient(circle, rgba(0,212,138,0.07) 0%, rgba(0,212,138,0.02) 45%, transparent 70%)",pointerEvents:"none",zIndex:1,transition:"transform 0.12s cubic-bezier(0.2,0.8,0.2,1)",willChange:"transform",mixBlendMode:"screen"}}/>
     <style>{`@keyframes cutLine{from{width:0}to{width:100%}}@keyframes fadeIn{from{opacity:0}to{opacity:1}}@keyframes dropIn{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}.lp-cta{box-shadow:0 4px 14px rgba(0,212,138,0.28);transition:transform 0.15s ease,box-shadow 0.15s ease}.lp-cta:hover{transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,212,138,0.4)}.lp-cta:active{transform:translateY(0)}.lp-marquee{display:flex;width:max-content;animation:marquee 40s linear infinite}.lp-marquee:hover{animation-play-state:paused}.lp-marquee-mask{mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);-webkit-mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent)}@media(max-width:600px){.lp-nav-links{display:none!important}.lp-hamburger{display:flex!important}}@media(min-width:601px){.lp-mobile-menu{display:none!important}}`}</style>
     {/* Nav */}
     <nav style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"18px clamp(16px,4vw,32px)",maxWidth:1100,margin:"0 auto",position:"relative"}}>

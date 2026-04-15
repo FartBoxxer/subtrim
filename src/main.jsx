@@ -2,6 +2,7 @@ import { StrictMode, Component, lazy, Suspense } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Analytics } from "@vercel/analytics/react";
+import { CursorGlow } from "./components/CursorGlow";
 const App = lazy(() => import("./App.jsx"));
 const Landing = lazy(() => import("./pages/Landing.jsx"));
 const CancelGuide = lazy(() => import("./pages/CancelGuide.jsx"));
@@ -62,6 +63,7 @@ createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ErrorBoundary>
       <BrowserRouter>
+        <CursorGlow />
         <Suspense fallback={<Loading />}>
           <Routes>
             <Route path="/" element={<Landing />} />
