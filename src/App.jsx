@@ -1000,6 +1000,11 @@ export default function App(){
     if(aStep===-1){
       const recs=aud.map(s=>({...s,rec:gR(s)}));const has=aud.some(s=>aAns[s.id]||s.sat);
       const cuts=recs.filter(r=>r.rec==="cancel"),cS=cuts.reduce((a,r)=>a+r.cost,0);
+      const downgrades=recs.filter(r=>r.rec==="downgrade").map(r=>{const dg=getDowngrade(r.name,r.cost);return{...r,dg,save:dg?dg.save:0}});
+      const dgSave=downgrades.reduce((a,r)=>a+r.save,0);
+      const curMonthly=aud.reduce((a,s)=>a+s.cost,0);
+      const newMonthly=curMonthly-cS-dgSave;
+      const totalSave=cS+dgSave;
       return(<div style={{display:"flex",flexDirection:"column",gap:d?18:14,maxWidth:d?900:undefined,margin:d?"0 auto":undefined}}>
         <div style={{textAlign:"center",padding:d?"24px 0":"16px 0"}}>
           <Ring s={score} size={d?130:100} bg={t.bd} tc={t.tx}/>
@@ -1014,20 +1019,72 @@ export default function App(){
         </div>
 
         {has&&<>
-          <div ref={reportRef} style={{background:t.sf,borderRadius:16,padding:d?32:24,textAlign:"center"}}>
-            <div style={{fontSize:d?12:10,color:t.dm,letterSpacing:1.5,textTransform:"uppercase",marginBottom:14}}>✂️ Audit Report</div>
-            <div style={{fontSize:d?52:42,fontWeight:700,lineHeight:1}}>{score}</div>
-            <div style={{fontSize:d?14:12,color:t.mt,fontWeight:500,marginTop:6,marginBottom:20}}>SubScore</div>
-            <div style={{display:"flex",justifyContent:"center",gap:d?32:24,marginBottom:14}}>
-              <div><div style={{fontSize:d?24:20,fontWeight:700,color:t.acc}}>{fm(cS)}</div><div style={{fontSize:d?12:10,color:t.mt}}>monthly</div></div>
-              <div><div style={{fontSize:d?24:20,fontWeight:700,color:t.acc}}>{fm(cS*12)}</div><div style={{fontSize:d?12:10,color:t.mt}}>annual</div></div>
+          <div ref={reportRef} style={{background:"#0f0f0f",border:"1px solid #1a1a1a",borderRadius:2,padding:d?"36px clamp(20px,4vw,40px)":"26px 20px",maxWidth:d?560:undefined,margin:d?"0 auto":undefined,boxShadow:"0 20px 60px rgba(0,0,0,0.5)",width:"100%",boxSizing:"border-box"}}>
+            <div style={{textAlign:"center",marginBottom:22}}>
+              <div style={{fontSize:d?13:11,fontWeight:800,letterSpacing:3,textTransform:"uppercase",color:"#555"}}>Audit Statement</div>
+              <div style={{fontSize:d?28:22,fontWeight:800,marginTop:8}}>✂️ SubTrim</div>
+              <div style={{fontSize:d?12:10,color:"#333",marginTop:6,fontFamily:"monospace"}}>— — — — — — — — — — — —</div>
             </div>
-            <div style={{display:"flex",justifyContent:"center",gap:10}}>
-              {[{l:"Keep",n:recs.filter(r=>r.rec==="keep").length,c:"#00d48a"},{l:"Cut",n:cuts.length,c:"#ef4444"},{l:"Downgrade",n:recs.filter(r=>r.rec==="downgrade").length,c:"#f59e0b"}].map((x,i)=>(
-                <span key={i} style={{fontSize:d?13:11,fontWeight:600,color:x.c,background:x.c+"18",padding:d?"4px 14px":"3px 10px",borderRadius:20}}>{x.l} {x.n}</span>
-              ))}
+            <div style={{fontFamily:"'Inter',monospace"}}>
+              {recs.map((r,i)=>{
+                const isCut=r.rec==="cancel",isDown=r.rec==="downgrade";
+                const rowC=isCut?"#666":isDown?"#f59e0b":"#ccc";
+                const deco=isCut?"line-through":"none";
+                const dot=isCut?"#ef4444":isDown?"#f59e0b":t.acc;
+                const dgInfo=isDown?getDowngrade(r.name,r.cost):null;
+                return(
+                  <div key={r.id} style={{padding:"10px 0",borderBottom:"1px dashed #1a1a1a"}}>
+                    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:10}}>
+                      <div style={{display:"flex",alignItems:"center",gap:8,flex:1,minWidth:0}}>
+                        <span style={{width:7,height:7,borderRadius:"50%",background:dot,flexShrink:0}}/>
+                        <span style={{fontSize:d?14:12,color:rowC,textDecoration:deco,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{r.name}</span>
+                      </div>
+                      <span style={{fontSize:d?14:12,fontWeight:600,fontVariantNumeric:"tabular-nums",color:rowC,textDecoration:deco,flexShrink:0}}>{fm(r.cost)}</span>
+                    </div>
+                    {isDown&&dgInfo&&(
+                      <div style={{display:"flex",justifyContent:"space-between",paddingTop:3,paddingLeft:15,fontSize:d?11:10}}>
+                        <span style={{color:"#f59e0b"}}>→ {dgInfo.name}</span>
+                        <span style={{color:"#f59e0b",fontWeight:600}}>{fm(dgInfo.price)}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
-            <div style={{fontSize:d?10:8,color:t.dm,marginTop:14}}>subtrim.dev</div>
+            <div style={{fontFamily:"monospace",fontSize:d?12:10,color:"#333",textAlign:"center",margin:"14px 0",letterSpacing:2}}>— — — — — — — — — — — —</div>
+            <div style={{display:"flex",justifyContent:"space-between",padding:"6px 0"}}>
+              <span style={{fontSize:d?13:11,color:t.mt}}>Current monthly</span>
+              <span style={{fontSize:d?13:11,color:t.mt,fontVariantNumeric:"tabular-nums"}}>{fm(curMonthly)}</span>
+            </div>
+            {cS>0&&(
+              <div style={{display:"flex",justifyContent:"space-between",padding:"6px 0"}}>
+                <span style={{fontSize:d?13:11,color:"#ef4444",fontWeight:600}}>✂️ Cuts ({cuts.length})</span>
+                <span style={{fontSize:d?13:11,color:"#ef4444",fontWeight:700,fontVariantNumeric:"tabular-nums"}}>-{fm(cS)}</span>
+              </div>
+            )}
+            {dgSave>0&&(
+              <div style={{display:"flex",justifyContent:"space-between",padding:"6px 0"}}>
+                <span style={{fontSize:d?13:11,color:"#f59e0b",fontWeight:600}}>↓ Downgrades ({downgrades.length})</span>
+                <span style={{fontSize:d?13:11,color:"#f59e0b",fontWeight:700,fontVariantNumeric:"tabular-nums"}}>-{fm(dgSave)}</span>
+              </div>
+            )}
+            <div style={{display:"flex",justifyContent:"space-between",padding:"12px 0 4px",borderTop:"2px solid #222",marginTop:8}}>
+              <span style={{fontSize:d?18:15,fontWeight:800}}>New monthly</span>
+              <span style={{fontSize:d?18:15,fontWeight:800,color:t.acc,fontVariantNumeric:"tabular-nums"}}>{fm(newMonthly)}</span>
+            </div>
+            {totalSave>0&&<div style={{textAlign:"right",fontSize:d?12:11,color:t.acc,fontWeight:600,paddingTop:2}}>You save {fm(totalSave*12)}/year</div>}
+            <div style={{marginTop:22,paddingTop:16,borderTop:"1px dashed #1a1a1a",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+              <div>
+                <div style={{fontSize:d?10:9,color:"#555",letterSpacing:1.5,textTransform:"uppercase",marginBottom:2}}>SubScore</div>
+                <div style={{fontSize:d?30:24,fontWeight:800,lineHeight:1,fontVariantNumeric:"tabular-nums"}}>{score}<span style={{fontSize:d?14:11,color:"#555"}}>/100</span></div>
+              </div>
+              <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"flex-end"}}>
+                {[{l:"Keep",n:recs.filter(r=>r.rec==="keep").length,c:t.acc},{l:"Downgrade",n:downgrades.length,c:"#f59e0b"},{l:"Cut",n:cuts.length,c:"#ef4444"}].map((x,i)=>(
+                  <span key={i} style={{fontSize:d?11:10,fontWeight:600,color:x.c,background:x.c+"18",padding:"2px 10px",borderRadius:20}}>{x.l} {x.n}</span>
+                ))}
+              </div>
+            </div>
+            <div style={{fontSize:d?10:9,color:"#444",marginTop:16,textAlign:"center",letterSpacing:1}}>subtrim.dev</div>
           </div>
 
           <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap",margin:isMobile?"14px 0 4px":"18px 0 4px"}}>
