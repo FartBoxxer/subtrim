@@ -155,11 +155,11 @@ export default function Landing(){
           {[...Array(2)].map((_,dup)=>(
             <div key={dup} style={{display:"flex",gap:56,alignItems:"center",padding:"0 28px",flexShrink:0}}>
               {[
-                {s:'netflix',n:'Netflix'},{s:'spotify',n:'Spotify'},{s:'hulu',n:'Hulu'},
-                {s:'amazonprimevideo',n:'Prime Video'},{s:'youtube',n:'YouTube'},{s:'adobe',n:'Adobe'},
-                {s:'openai',n:'ChatGPT'},{s:'notion',n:'Notion'},{s:'dropbox',n:'Dropbox'},
+                {s:'netflix',n:'Netflix'},{s:'spotify',n:'Spotify'},{s:'max',n:'HBO Max'},
+                {s:'youtube',n:'YouTube'},{s:'appletv',n:'Apple TV+'},{s:'paramountplus',n:'Paramount+'},
+                {s:'notion',n:'Notion'},{s:'dropbox',n:'Dropbox'},{s:'figma',n:'Figma'},
                 {s:'nordvpn',n:'NordVPN'},{s:'1password',n:'1Password'},{s:'crunchyroll',n:'Crunchyroll'},
-                {s:'playstation',n:'PlayStation'},{s:'apple',n:'Apple'},{s:'hbo',n:'HBO Max'},
+                {s:'playstation',n:'PlayStation'},{s:'claude',n:'Claude'},{s:'duolingo',n:'Duolingo'},
               ].map((b,i)=>(
                 <div key={i} style={{display:"flex",alignItems:"center",gap:10,opacity:0.45,flexShrink:0}}>
                   <img src={`https://cdn.simpleicons.org/${b.s}/ffffff`} alt={b.n} width={24} height={24} loading="lazy" style={{filter:"grayscale(1)"}}/>
