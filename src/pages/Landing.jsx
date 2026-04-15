@@ -208,7 +208,7 @@ export default function Landing(){
           {e:"💰",t:"Promo Aggregator",d:"Active deals and discounts for stuff you already pay for. We pull them so you don't have to Google it."},
           {e:"📅",t:"Renewal Calendar",d:"See what's charging you next and when. No more \"wait, when did I get billed for that?\""},
           {e:"🏠",t:"Household Sharing",d:"Split tracking with roommates or family. See who's paying for what across the house."},
-          {e:"📈",t:"SubScore",d:"A single 0–100 score for how well you're managing your subs. Basically a credit score, but for subscriptions."},
+          {e:"💸",t:"Savings Tracker",d:"See the exact dollar amount you've saved since starting. Counts canceled subs, downgrades, and promo redemptions."},
         ].map((f,i)=>(
           <div key={i} style={{background:SF,borderRadius:16,padding:28}}>
             <div style={{fontSize:28,marginBottom:12}}>{f.e}</div>

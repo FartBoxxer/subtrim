@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from '../components/Helmet';
 import { TIERS, SERVICE_CATS } from '../data/serviceData';
@@ -59,7 +59,6 @@ const getCat=n=>EXTRAS[n]?.cat||SERVICE_CATS[n]||'productivity';
 const getPrice=n=>EXTRAS[n]?.price??TIERS[n]?.[0]?.p??9.99;
 
 const fO=[{v:"daily",e:"🔥",l:"Daily"},{v:"weekly",e:"👍",l:"Weekly"},{v:"monthly",e:"🤷",l:"Monthly"},{v:"rarely",e:"😬",l:"Rarely"},{v:"never",e:"💀",l:"Never"}];
-const fMap={daily:1,weekly:0.75,monthly:0.4,rarely:0.15,never:0};
 
 const gR=s=>{
   const f=s.freq,sa=s.sat,m=s.miss,c=s.cost;
@@ -124,14 +123,6 @@ export default function Demo(){
   const resetAll=()=>{setPicks({});setSubs([]);setDone(false);setStep(-2);setSearch("");setCustomOpen(false);setCustomName("");setCustomPrice("")};
 
   const update=(id,field,val)=>setSubs(prev=>prev.map(s=>s.id===id?{...s,[field]:val}:s));
-
-  const score=useMemo(()=>{
-    const audited=subs.filter(s=>s.freq&&s.sat);
-    if(!audited.length)return 0;
-    const totalCost=audited.reduce((a,s)=>a+s.cost,0)||1;
-    const perSub=audited.map(s=>{const f=fMap[s.freq]??0.5,sa=(s.sat||3)/5,m=s.miss?1:0;return{eff:f*0.4+sa*0.3+m*0.3,w:s.cost/totalCost}});
-    return Math.max(0,Math.min(100,Math.round(perSub.reduce((a,v)=>a+v.eff*v.w,0)*100)));
-  },[subs]);
 
   const recs=subs.map(s=>({...s,rec:gR(s)}));
   const cuts=recs.filter(r=>r.rec==="cancel");
@@ -296,13 +287,15 @@ export default function Demo(){
       {/* Results */}
       {done&&(
         <div style={{textAlign:"center"}}>
-          <div style={{fontSize:52,fontWeight:700,marginBottom:4}}>{score}</div>
-          <div style={{fontSize:14,color:MT,fontWeight:500,marginBottom:20}}>SubScore</div>
-
-          {cS>0&&<div style={{display:"flex",justifyContent:"center",gap:24,marginBottom:20}}>
-            <div><div style={{fontSize:22,fontWeight:700,color:G}}>{fm(cS)}</div><div style={{fontSize:12,color:MT}}>saved/mo</div></div>
-            <div><div style={{fontSize:22,fontWeight:700,color:G}}>{fm(cS*12)}</div><div style={{fontSize:12,color:MT}}>saved/yr</div></div>
-          </div>}
+          {cS>0?(
+            <>
+              <div style={{fontSize:12,color:MT,letterSpacing:1.5,textTransform:"uppercase",marginBottom:6,fontWeight:700}}>You could save</div>
+              <div style={{fontSize:52,fontWeight:800,color:G,lineHeight:1,fontVariantNumeric:"tabular-nums",marginBottom:4}}>{fm(cS*12)}</div>
+              <div style={{fontSize:14,color:MT,fontWeight:500,marginBottom:20}}>per year ({fm(cS)}/mo)</div>
+            </>
+          ):(
+            <div style={{fontSize:14,color:MT,fontWeight:500,marginBottom:20}}>Nothing to cut. You're all set.</div>
+          )}
 
           <div style={{display:"flex",justifyContent:"center",gap:10,marginBottom:28}}>
             {[{l:"Keep",n:recs.filter(r=>r.rec==="keep").length,c:"#00d48a"},{l:"Cut",n:cuts.length,c:"#ef4444"},{l:"Downgrade",n:recs.filter(r=>r.rec==="downgrade").length,c:"#f59e0b"}].map((x,i)=>(

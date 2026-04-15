@@ -80,7 +80,7 @@ export default function Privacy(){
         <h2 style={h2Style}>2. How We Use Your Data</h2>
         <p style={pStyle}>We use your information exclusively to:</p>
         <ul style={ulStyle}>
-          <li style={liStyle}>Provide and operate the SubTrim service (tracking subscriptions, generating audit recommendations, calculating your SubScore)</li>
+          <li style={liStyle}>Provide and operate the SubTrim service (tracking subscriptions, generating audit recommendations, and calculating your savings)</li>
           <li style={liStyle}>Authenticate your identity and maintain your session</li>
           <li style={liStyle}>Enable household sharing features when you opt in</li>
           <li style={liStyle}>Respond to your support inquiries and feedback</li>

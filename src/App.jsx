@@ -4,7 +4,7 @@ import { createClient } from '@supabase/supabase-js';
 import { CANCEL_GUIDES } from './data/cancelGuides';
 import { ALTERNATIVES } from './data/alternatives';
 import { CATS, LABELS, AUTO_PROMOS, TH, CURRENCIES, B, SB_W, dU, mS, mkFmt, genPalettes } from './data/appConstants';
-import { Ring, Confetti, Av } from './components/shared';
+import { Confetti, Av } from './components/shared';
 
 let supabase = null;
 try {
@@ -101,7 +101,6 @@ export default function App(){
   const[customName,setCustomName]=useState("");
   const[customCat,setCustomCat]=useState("streaming");
   const[customCost,setCustomCost]=useState("");
-  const[latestScore,setLatestScore]=useState(0);
   const[savedAmt,setSavedAmt]=useState(0);
   const[dismissedPC,setDismissedPC]=useState(new Set());
   const[showSavedTip,setShowSavedTip]=useState(false);
@@ -158,7 +157,7 @@ export default function App(){
 
   // Fetch data when user logs in
   useEffect(()=>{
-    if(!user){setSubs([]);setLatestScore(0);setSavedAmt(0);setHousehold(null);setHhMembers([]);setDataLoading(false);return}
+    if(!user){setSubs([]);setSavedAmt(0);setHousehold(null);setHhMembers([]);setDataLoading(false);return}
     setDataLoading(true);
     const load=async()=>{
       // Fetch subs with tags for overlap detection
@@ -184,11 +183,6 @@ export default function App(){
         labels:s.custom_tags||[],notes:s.notes||'',
       }}):[];
       setSubs(mapped);
-      // Fetch latest score
-      const{data:sc}=await supabase.from('score_history')
-        .select('score').eq('user_id',user.id)
-        .order('calculated_at',{ascending:false}).limit(1).maybeSingle();
-      if(sc) setLatestScore(sc.score);
       // Fetch archived subs for saved counter
       const{data:arch}=await supabase.from('subscriptions')
         .select('monthly_cost, archived_at').eq('user_id',user.id).not('archived_at','is',null);
@@ -449,7 +443,7 @@ export default function App(){
   // --- INFLATE: set SAVED_BOOST to 0 when real savings are higher ---
   const SAVED_BOOST=35;
   // -----------------------------------------------------------------
-  const saved=savedAmt+SAVED_BOOST;const score=latestScore;
+  const saved=savedAmt+SAVED_BOOST;
   const hasAudit=act.some(s=>!s.trial&&s.audit);
   const _now=new Date();const todayDay=_now.getDate();const calMonth=_now.getMonth();const calYear=_now.getFullYear();const calDays=new Date(calYear,calMonth+1,0).getDate();const calStart=new Date(calYear,calMonth,1).getDay();const calLabel=_now.toLocaleString('en-US',{month:'long',year:'numeric'});
   // Overlap detection from tags (memoized) — includes cross-household
@@ -502,17 +496,6 @@ export default function App(){
     notify(`✅ ${customName.trim()} added`);setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setCustomMode(false);setCustomName("");setCustomCost("");setAddTrial(false);setAddTrialEnd("");
   };
 
-  const fMap={daily:1,weekly:0.75,monthly:0.4,rarely:0.15,never:0};
-  const calcScore=(subsArr,olCount)=>{
-    if(!subsArr.length)return 0;
-    const totalCost=subsArr.reduce((a,s)=>a+(s.cost||0),0)||1;
-    const perSub=subsArr.map(s=>{const f=fMap[s.freq]??0.5,sa=(s.sat||3)/5,m=s.miss?1:0;return{eff:f*0.4+sa*0.3+m*0.3,w:(s.cost||0)/totalCost}});
-    let sc=Math.round(perSub.reduce((a,v)=>a+v.eff*v.w,0)*100);
-    sc-=(olCount||0)*2;
-    if(subsArr.every(s=>s.audit&&dU(s.audit)>-60))sc+=5;
-    return Math.max(0,Math.min(100,sc));
-  };
-
   const saveAudit=async()=>{
     const now=new Date().toISOString();
     const audited=aud.filter(s=>aAns[s.id]);
@@ -528,9 +511,7 @@ export default function App(){
     // Update local state
     const updated=aud.map(s=>{const a=aAns[s.id]||{};return{...s,freq:a.frequency||s.freq,sat:a.satisfaction||s.sat,miss:a.wouldMiss!==undefined?a.wouldMiss:s.miss,audit:now.split('T')[0]}});
     setSubs(prev=>prev.map(s=>{const u=updated.find(x=>x.id===s.id);return u||s}));
-    const newScore=calcScore(updated,allOL.length);
-    await supabase.from('score_history').insert({user_id:user.id,score:newScore,total_monthly_spend:mTot,total_subscriptions:act.length,overlap_count:allOL.length,unused_count:updated.filter(s=>s.freq==='rarely'||s.freq==='never').length});
-    setLatestScore(newScore);setAS(-1);setAA({});pop();notify("🎉 Audit complete! Score: "+newScore);
+    setAS(-1);setAA({});pop();notify("🎉 Audit complete");
   };
 
   // Downgrade path finder
@@ -656,7 +637,7 @@ export default function App(){
       {/* Minimal features below receipt */}
       <section style={{maxWidth:d?800:400,margin:"0 auto",padding:d?"20px 20px 60px":"16px 20px 40px"}}>
         <div style={d?{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}:{display:"flex",flexDirection:"column",gap:8}}>
-          {[{e:"🧠",t:"Smart Audit",d:"3 questions per sub. We tell you what to cut."},{e:"🔍",t:"Overlap Finder",d:"Spots when you're double-paying for the same thing."},{e:"📊",t:"SubScore",d:"One number that shows how well you're doing."}].map((f,i)=>
+          {[{e:"🧠",t:"Smart Audit",d:"3 questions per sub. We tell you what to cut."},{e:"🔍",t:"Overlap Finder",d:"Spots when you're double-paying for the same thing."},{e:"💸",t:"Savings Tracker",d:"Running total of every dollar you've saved."}].map((f,i)=>
             <div key={i} style={{background:t.sf,borderRadius:10,padding:d?"20px":"14px 16px",display:"flex",gap:d?0:12,flexDirection:d?"column":"row",alignItems:d?"flex-start":"center"}}>
               <div style={{fontSize:d?24:20,marginBottom:d?8:0}}>{f.e}</div>
               <div><div style={{fontSize:d?15:13,fontWeight:700}}>{f.t}</div><div style={{fontSize:d?13:11,color:t.mt,marginTop:2}}>{f.d}</div></div>
@@ -850,9 +831,6 @@ export default function App(){
         </div>
       </div>}
 
-      {hasAudit&&<div style={{display:"flex",justifyContent:"center",marginTop:d?16:12}}>
-        <Ring s={score} size={d?110:80} bg={t.bd} tc={t.tx}/>
-      </div>}
     </div>
 
     {/* Alerts */}
@@ -1007,8 +985,12 @@ export default function App(){
       const totalSave=cS+dgSave;
       return(<div style={{display:"flex",flexDirection:"column",gap:d?18:14,maxWidth:d?900:undefined,margin:d?"0 auto":undefined}}>
         <div style={{textAlign:"center",padding:d?"24px 0":"16px 0"}}>
-          <Ring s={score} size={d?130:100} bg={t.bd} tc={t.tx}/>
-          <p style={{fontSize:d?15:13,color:t.mt,marginTop:12,maxWidth:400,marginLeft:"auto",marginRight:"auto"}}>{!has&&aud.length>0?"Run your first audit to get your SubScore and personalized recommendations":score>=80?"Looking good. Let's confirm nothing changed":"A few tweaks could boost your score"}</p>
+          {aud.length>0&&<>
+            <div style={{fontSize:d?12:10,color:t.dm,letterSpacing:1.5,textTransform:"uppercase",marginBottom:6}}>You currently spend</div>
+            <div style={{fontSize:d?52:38,fontWeight:800,lineHeight:1,fontVariantNumeric:"tabular-nums"}}>{fm(aud.reduce((a,s)=>a+s.cost,0)*12)}<span style={{fontSize:d?18:14,color:t.mt,fontWeight:600}}>/year</span></div>
+            <div style={{fontSize:d?14:12,color:t.mt,fontWeight:500,marginTop:6}}>across {aud.length} subscription{aud.length!==1?"s":""}</div>
+          </>}
+          <p style={{fontSize:d?15:13,color:t.mt,marginTop:aud.length>0?16:0,maxWidth:420,marginLeft:"auto",marginRight:"auto",lineHeight:1.5}}>{!has&&aud.length>0?"Run the audit to see exactly what to cancel and how much you'd save.":has?"Your last audit is ready. Run it again to update your savings.":""}</p>
           {aud.length>0?<button onClick={()=>setAS(0)} style={{...B,background:t.acc,color:"#000",padding:d?"14px 32px":"12px 28px",fontSize:d?16:14,fontWeight:700,borderRadius:10,marginTop:14}}>Start Audit · {aud.length} subs</button>
           :<div style={{background:t.sf,borderRadius:14,padding:d?32:24,marginTop:14,textAlign:"center"}}>
             <div style={{fontSize:d?36:28,marginBottom:10}}>📋</div>
@@ -1072,24 +1054,23 @@ export default function App(){
               <span style={{fontSize:d?18:15,fontWeight:800}}>New monthly</span>
               <span style={{fontSize:d?18:15,fontWeight:800,color:t.acc,fontVariantNumeric:"tabular-nums"}}>{fm(newMonthly)}</span>
             </div>
-            {totalSave>0&&<div style={{textAlign:"right",fontSize:d?12:11,color:t.acc,fontWeight:600,paddingTop:2}}>You save {fm(totalSave*12)}/year</div>}
-            <div style={{marginTop:22,paddingTop:16,borderTop:"1px dashed #1a1a1a",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-              <div>
-                <div style={{fontSize:d?10:9,color:"#555",letterSpacing:1.5,textTransform:"uppercase",marginBottom:2}}>SubScore</div>
-                <div style={{fontSize:d?30:24,fontWeight:800,lineHeight:1,fontVariantNumeric:"tabular-nums"}}>{score}<span style={{fontSize:d?14:11,color:"#555"}}>/100</span></div>
+            {totalSave>0&&(
+              <div style={{marginTop:14,padding:d?"16px 20px":"12px 16px",background:t.acc+"11",border:`1px solid ${t.acc}33`,borderRadius:8,textAlign:"center"}}>
+                <div style={{fontSize:d?11:10,color:t.acc,letterSpacing:1.5,textTransform:"uppercase",fontWeight:700,marginBottom:4}}>Annual Savings</div>
+                <div style={{fontSize:d?34:26,fontWeight:800,color:t.acc,lineHeight:1,fontVariantNumeric:"tabular-nums"}}>{fm(totalSave*12)}</div>
               </div>
-              <div style={{display:"flex",flexDirection:"column",gap:4,alignItems:"flex-end"}}>
-                {[{l:"Keep",n:recs.filter(r=>r.rec==="keep").length,c:t.acc},{l:"Downgrade",n:downgrades.length,c:"#f59e0b"},{l:"Cut",n:cuts.length,c:"#ef4444"}].map((x,i)=>(
-                  <span key={i} style={{fontSize:d?11:10,fontWeight:600,color:x.c,background:x.c+"18",padding:"2px 10px",borderRadius:20}}>{x.l} {x.n}</span>
-                ))}
-              </div>
+            )}
+            <div style={{marginTop:18,display:"flex",gap:6,justifyContent:"center",flexWrap:"wrap"}}>
+              {[{l:"Keep",n:recs.filter(r=>r.rec==="keep").length,c:t.acc},{l:"Downgrade",n:downgrades.length,c:"#f59e0b"},{l:"Cut",n:cuts.length,c:"#ef4444"}].filter(x=>x.n>0).map((x,i)=>(
+                <span key={i} style={{fontSize:d?12:10,fontWeight:700,color:x.c,background:x.c+"18",padding:"4px 12px",borderRadius:20}}>{x.l} {x.n}</span>
+              ))}
             </div>
-            <div style={{fontSize:d?10:9,color:"#444",marginTop:16,textAlign:"center",letterSpacing:1}}>subtrim.dev</div>
+            <div style={{fontSize:d?10:9,color:"#444",marginTop:14,textAlign:"center",letterSpacing:1}}>subtrim.dev</div>
           </div>
 
           <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap",margin:isMobile?"14px 0 4px":"18px 0 4px"}}>
             <button onClick={exportReport} style={{...B,background:t.acc,color:"#000",fontWeight:700,padding:d?"10px 20px":"8px 16px",fontSize:d?13:11,borderRadius:10}}>📸 Share audit</button>
-            <button onClick={()=>{const text=`My SubScore is ${score}/100. Cutting ${cuts.length} subs saves ${fm(cuts.reduce((a,s)=>a+s.cost,0)*12)}/yr. Audit yours:`;const url='https://subtrim.dev';if(navigator.share){navigator.share({title:'SubTrim audit',text,url}).catch(()=>{})}else{navigator.clipboard.writeText(`${text} ${url}`).then(()=>notify('Copied to clipboard')).catch(()=>{})}}} style={{...B,background:t.el,color:t.mt2,fontWeight:600,padding:d?"10px 20px":"8px 16px",fontSize:d?13:11,borderRadius:10,border:`1px solid ${t.bd2}`}}>🔗 Copy summary</button>
+            <button onClick={()=>{const text=totalSave>0?`SubTrim found me ${fm(totalSave*12)}/year in subscriptions to cut. Audit yours free:`:`Just audited my subscriptions with SubTrim. Check yours:`;const url='https://subtrim.dev';if(navigator.share){navigator.share({title:'SubTrim audit',text,url}).catch(()=>{})}else{navigator.clipboard.writeText(`${text} ${url}`).then(()=>notify('Copied to clipboard')).catch(()=>{})}}} style={{...B,background:t.el,color:t.mt2,fontWeight:600,padding:d?"10px 20px":"8px 16px",fontSize:d?13:11,borderRadius:10,border:`1px solid ${t.bd2}`}}>🔗 Copy summary</button>
           </div>
 
           <div style={isMobile?{}:{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:16}}>
@@ -1199,7 +1180,10 @@ export default function App(){
     <div style={{display:"flex",alignItems:"center",gap:d?16:12,padding:d?"12px 0":"8px 0"}}>
       <Av bg={av.bg} size={d?64:48}/>
       <div style={{flex:1,minWidth:0}}><div style={{fontSize:d?22:16,fontWeight:700,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{userName}</div><div style={{fontSize:d?14:11,color:t.mt,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{user.email}</div></div>
-      {hasAudit&&<Ring s={score} size={d?64:44} sw={d?6:4} bg={t.bd} tc={t.tx}/>}
+      {saved>0&&<div style={{textAlign:"right"}}>
+        <div style={{fontSize:d?22:18,fontWeight:800,color:t.acc,lineHeight:1,fontVariantNumeric:"tabular-nums"}}>{fm(saved)}</div>
+        <div style={{fontSize:d?11:9,color:t.mt,marginTop:3,letterSpacing:0.5,textTransform:"uppercase"}}>Saved</div>
+      </div>}
     </div>
 
     <div style={{display:"flex",background:t.sf,borderRadius:8,padding:2,gap:2}}>
