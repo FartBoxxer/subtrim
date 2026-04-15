@@ -1452,7 +1452,7 @@ export default function App(){
     </div>}
 
     {/* Add Modal */}
-    {addM&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",WebkitBackdropFilter:"blur(4px)",zIndex:100,display:"flex",alignItems:isMobile?"flex-end":"center",justifyContent:"center"}} onClick={()=>{setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setAddLabels([]);setAddNotes("");setAddTrial(false);setAddTrialEnd("");setCustomMode(false);setCustomName("");setCustomCost=""}}>
+    {addM&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",WebkitBackdropFilter:"blur(4px)",zIndex:100,display:"flex",alignItems:isMobile?"flex-end":"center",justifyContent:"center"}} onClick={()=>{setAddM(false);setAddS("");setAddSvc(null);setAddCost("");setAddLabels([]);setAddNotes("");setAddTrial(false);setAddTrialEnd("");setCustomMode(false);setCustomName("");setCustomCost("")}}>
 
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:d?560:480,background:t.sf,borderRadius:isMobile?"16px 16px 0 0":"16px",padding:d?28:18,maxHeight:isMobile?"60vh":"70vh",overflowY:"auto"}}>
         {isMobile&&<div style={{width:32,height:4,borderRadius:2,background:t.bd3,margin:"0 auto 12px"}}/>}
